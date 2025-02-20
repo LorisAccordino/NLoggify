@@ -5,6 +5,40 @@
     /// </summary>
     public abstract class Logger : ILogger, IDisposable
     {
+        private static Logger? _instance;  // Static instance for the Singleton pattern
+        private static readonly object _lock = new object();  // Lock object for thread safety
+
+        /// <summary>
+        /// Gets the singleton instance of the Logger.
+        /// </summary>
+        public static Logger Instance
+        {
+            get
+            {
+                // Ensure that the instance is created only once, and in a thread-safe manner
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        // Concrete classes should initialize the logger instance
+                        _instance = GetLogger();
+                    }
+                    return _instance;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to get a concrete logger instance. This should be implemented by derived classes.
+        /// </summary>
+        /// <returns>The appropriate Logger instance.</returns>
+        protected static Logger GetLogger()
+        {
+            // Default implementation can return null or throw an exception
+            // Since the derived classes must implement it
+            throw new NotImplementedException("Derived class must implement GetLogger.");
+        }
+
         /// <summary>
         /// Logs a message with the specified log level.
         /// </summary>
