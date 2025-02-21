@@ -7,7 +7,7 @@ namespace Nloggify.Tests.Utils.Simulations
     /// A class that simulates the activity of concurrent users performing actions.
     /// Contains methods to simulate multiple users performing actions with random delays in parallel.
     /// </summary>
-    public static class MultithreadSimulation
+    public static class MultithreadSimulations
     {
         /// <summary>
         /// Simulates multiple concurrent users performing actions and logging messages.

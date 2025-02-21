@@ -4,28 +4,28 @@ using NLoggify.Logging.Config;
 namespace Nloggify.Tests.Utils.Simulations
 {
     /// <summary>
-    /// Simula un thread che può generare errori fatali con una probabilità crescente nel tempo.
-    /// L'escalation degli errori segue un modello logaritmico.
+    /// Simulates a thread that can generate fatal errors with an increasingly probability over the time.
+    /// The errors escalation has a logarithmic trend.
     /// </summary>
     public static class ThreadWithFatalErrorSimulation
     {
         private static readonly Random _random = new Random();
 
         /// <summary>
-        /// Simula un thread che rischia di generare un errore fatale con probabilità crescente nel tempo.
-        /// La probabilità di errore aumenta secondo una curva logaritmica.
+        /// Simulate a thread that risks of generating a fatal error with increasingly probability over the time.
+        /// The probability of causing errors raises following a logarithmic curve.
         /// </summary>
-        /// <param name="logger">Il logger utilizzato per registrare i messaggi di log.</param>
-        /// <param name="maxDurationMilliseconds">La durata massima in millisecondi per la simulazione del thread.</param>
-        /// <param name="initialFailureProbability">La probabilità iniziale di errore fatale. (Default è 0.01)</param>
-        /// <param name="failureGrowthFactor">Il fattore di crescita della probabilità di errore (Default è 1000)</param>
-        public static void SimulateThreadWithFatalError(ILogger logger, int maxDurationMilliseconds, double initialFailureProbability = 0.01, double failureGrowthFactor = 1000)
+        /// <param name="logger">The used logger to log the messages.</param>
+        /// <param name="maxDurationMilliseconds">The max duration in milliseconds for the thread simulation.</param>
+        /// <param name="initialFailureProbability">The initial probability of encountering fatal error. (Default is 0.01)</param>
+        /// <param name="failureGrowthFactor">The growth factor of error probability (Default is 1000)</param>
+        public static async Task SimulateThreadWithFatalError(ILogger logger, int maxDurationMilliseconds, double initialFailureProbability = 0.01, double failureGrowthFactor = 1000)
         {
             var startTime = DateTime.Now;
             double failureProbability = initialFailureProbability;
 
-            // Crea il thread che simula un'operazione continua
-            Thread simulationThread = new Thread(() =>
+            // Create a thread that simulates a continuous operation
+            await Task.Run(async () =>
             {
                 try
                 {
@@ -35,21 +35,22 @@ namespace Nloggify.Tests.Utils.Simulations
                     {
                         elapsedTime = (int)(DateTime.Now - startTime).TotalMilliseconds;
 
-                        // Calcola la probabilità di errore crescente logaritmicamente
+                        // Calculate the increasingly error probability logarithmically
                         failureProbability = CalculateFailureProbability(elapsedTime, failureGrowthFactor);
 
-                        // Log del messaggio in base alla probabilità
+                        // Message log based on the probability
                         LogMessageBasedOnProbability(logger, failureProbability);
 
-                        // Se la probabilità è abbastanza alta, generiamo un errore fatale
+                        // If the probability is high enough, generate a fatal error
                         if (_random.NextDouble() < failureProbability)
                         {
                             logger.Log(LogLevel.Fatal, $"CRASH! Errore fatale al {elapsedTime} ms. Il sistema si sta arrestando!");
                             throw new Exception("Errore fatale: il sistema è stato compromesso.");
                         }
 
-                        // Simula il passare del tempo con una breve pausa
-                        Thread.Sleep(100);
+                        // Asynchronous delay to avoid main thread blocking
+                        await Task.Delay(100);
+
                     }
 
                     logger.Log(LogLevel.Info, "La simulazione ha terminato senza errori fatali.");
@@ -57,29 +58,27 @@ namespace Nloggify.Tests.Utils.Simulations
                 catch (Exception ex)
                 {
                     logger.Log(LogLevel.Fatal, $"Il thread ha terminato a causa di un errore fatale: {ex.Message}");
+                    Environment.Exit(-1);
                 }
             });
-
-            // Avvia il thread
-            simulationThread.Start();
         }
 
         /// <summary>
-        /// Calcola la probabilità di errore fatale in base al tempo trascorso, seguendo una curva logaritmica.
+        /// Calculate the fatal error probability based on elapsed time, following a logarithmic trend.
         /// </summary>
-        /// <param name="elapsedTime">Il tempo trascorso in millisecondi.</param>
-        /// <param name="growthFactor">Il fattore che controlla la crescita della probabilità.</param>
-        /// <returns>La probabilità di errore calcolata.</returns>
+        /// <param name="elapsedTime">The elapsed time in milliseconds.</param>
+        /// <param name="growthFactor">The growth factor that controls the growth of probability.</param>
+        /// <returns>The calculated error probability.</returns>
         private static double CalculateFailureProbability(int elapsedTime, double growthFactor)
         {
             return Math.Log(elapsedTime + 1) / growthFactor;
         }
 
         /// <summary>
-        /// Registra i messaggi di log in base alla probabilità di errore.
+        /// Log the messages based on error probability.
         /// </summary>
-        /// <param name="logger">Il logger utilizzato per registrare i messaggi.</param>
-        /// <param name="failureProbability">La probabilità di errore calcolata.</param>
+        /// <param name="logger">The used logger to log messages.</param>
+        /// <param name="failureProbability">The calculated probability error.</param>
         private static void LogMessageBasedOnProbability(ILogger logger, double failureProbability)
         {
             if (failureProbability < 0.05)

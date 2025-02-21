@@ -1,28 +1,39 @@
-﻿
-using Nloggify.Tests.Utils;
+﻿using Nloggify.Tests.Utils.Simulations;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Loggers;
 
 public class Program
 {
-
     public static void Main(string[] args)
     {
-        Console.WriteLine("===== ConsoleLogger Test Started =====\n");
-
         // Configure the logger to use ConsoleLogger with the minimum log level set to Trace.
         LoggingConfig.Configure(LogLevel.Trace, LoggerType.Console);
-        var logger = Logger.GetLogger();
 
+        // ConsoleLogger test
+        Console.WriteLine("===== ConsoleLogger Test Started =====\n");
+        Test(Logger.GetLogger());
+        Console.WriteLine("\n===== ConsoleLogger Test Completed =====");
+
+        // DebugLogger test
+        LoggingConfig.Configure(LogLevel.Trace, LoggerType.Debug); // Change configuration
+        Console.WriteLine("===== ConsoleLogger Test Started =====\n");
+        Test(Logger.GetLogger());
+        Console.WriteLine("\n===== ConsoleLogger Test Completed =====");
+    }
+
+    public static void Test(ILogger logger)
+    {
         logger.Log(LogLevel.Info, "Application started successfully.");
+
+        ThreadWithFatalErrorSimulation.SimulateThreadWithFatalError(logger, 100000);
 
         // Start multiple concurrent operations to simulate a real system
         Task[] tasks =
         [
-            Task.Run(() => Simulation.SimulateSystemInitialization(logger)),
-            Task.Run(() => Simulation.SimulateDatabaseConnection(logger)),
-            Task.Run(() => Simulation.SimulateDataProcessing(logger)),
-            Task.Run(() => Simulation.SimulateConcurrentUserActivity(logger))
+            Task.Run(() => GenericSimulations.SimulateSystemInitialization(logger)),
+            Task.Run(() => GenericSimulations.SimulateDatabaseConnection(logger)),
+            Task.Run(() => GenericSimulations.SimulateDataProcessing(logger)),
+            Task.Run(() => MultithreadSimulations.SimulateConcurrentUserActivity(logger))
         ];
 
         // Wait for all tasks to complete
@@ -31,7 +42,7 @@ public class Program
         // Simulate an unexpected error and log the exception.
         try
         {
-            Simulation.ThrowRandomException();
+            GenericSimulations.SimulateFailure(50);
         }
         catch (Exception ex)
         {
@@ -39,6 +50,5 @@ public class Program
         }
 
         logger.Log(LogLevel.Info, "Application shutting down...");
-        Console.WriteLine("\n===== ConsoleLogger Test Completed =====");
     }
 }

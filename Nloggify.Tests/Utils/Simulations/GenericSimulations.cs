@@ -1,12 +1,12 @@
 ﻿using NLoggify.Logging.Config;
 using NLoggify.Logging.Loggers;
 
-namespace Nloggify.Tests.Utils
+namespace Nloggify.Tests.Utils.Simulations
 {
     /// <summary>
     /// Provides utility methods for simulating random failures, delays, and uncertainty in tests.
     /// </summary>
-    public static class Simulation
+    public static class GenericSimulations
     {
         private static readonly Random _random = new Random();
 
@@ -96,7 +96,14 @@ namespace Nloggify.Tests.Utils
                 if (_random.Next(1, 101) <= retryFailureChance) // Failure on retry based on the configured chance
                 {
                     logger.Log(LogLevel.Critical, "Database connection could not be established.");
-                    throw new Exception("Database connection failure.");
+                    try
+                    {
+                        throw new Exception("Database connection failure.");
+                    } catch (Exception ex)
+                    {
+                        logger.Log(LogLevel.Critical, ex.Message);
+                    }
+                    
                 }
                 else
                     logger.Log(LogLevel.Info, "Database connection established successfully on retry.");
