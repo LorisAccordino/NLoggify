@@ -6,7 +6,7 @@ namespace NLoggify.Tests
     /// <summary>
     /// Unit tests for the <see cref="Logger"/> singleton behavior.
     /// </summary>
-    public class LoggerTests
+    public class LoggerInstanceTests
     {
         /// <summary>
         /// Ensures that <see cref="Logger.GetLogger"/> always returns a not null value,

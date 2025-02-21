@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="NLoggify.Logging.Loggers.Output.ConsoleLogger">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\Output\ConsoleLogger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLoggify.Logging.Loggers.Logger">
+    <Position X="2.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAACAAAAAgAEAAgAAAAAgAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\Logger.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NLoggify.Logging.Loggers.Output.DebugLogger">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\Output\DebugLogger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLoggify.Logging.Loggers.Storage.FileLogger">
+    <Position X="5.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\Storage\FileLogger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLoggify.Logging.Loggers.Storage.JsonLogger">
+    <Position X="4.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\Storage\JsonLogger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLoggify.Logging.Loggers.Storage.PlainTextLogger">
+    <Position X="6.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\Storage\PlainTextLogger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NLoggify.Logging.Loggers.LoggerProxy">
+    <Position X="9.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAACAAAAAAAAAAAAAAIAgAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\LoggerProxy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="NLoggify.Logging.Loggers.ILogger">
+    <Position X="7.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Loggers\ILogger.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

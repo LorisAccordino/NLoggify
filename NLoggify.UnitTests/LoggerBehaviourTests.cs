@@ -3,8 +3,17 @@ using NLoggify.Logging.Config;
 
 namespace NLoggify.Tests
 {
+    /// <summary>
+    /// Unit tests for verifying the behavior of the logger and its configuration.
+    /// </summary>
     public class LoggerBehaviourTests
     {
+        /// <summary>
+        /// Tests if the logger respects the configured log level and logs the message accordingly.
+        /// </summary>
+        /// <param name="configLevel">The log level set in the configuration.</param>
+        /// <param name="messageLevel">The log level of the message being logged.</param>
+        /// <param name="shouldLog">A boolean indicating whether the message should be logged.</param>
         [Theory]
         [InlineData(LogLevel.Info, LogLevel.Debug, false)] // Debug is lower than Info, so it doesn't log
         [InlineData(LogLevel.Warning, LogLevel.Error, true)] // Error is higher than Warning, so it logs

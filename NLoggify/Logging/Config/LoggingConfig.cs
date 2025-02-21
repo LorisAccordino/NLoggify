@@ -84,7 +84,7 @@ namespace NLoggify.Logging.Config
             if (string.IsNullOrEmpty(format)) return false;
 
             // Try parsing a sample DateTime with the provided format to validate it
-            if (!DateTime.TryParseExact(DateTime.Now.ToString(), format, null, System.Globalization.DateTimeStyles.None, out _))
+            if (!DateTime.TryParseExact(DateTime.Now.ToString(format), format, null, System.Globalization.DateTimeStyles.None, out _))
             {
                 // Invalid format, throw an exception
                 throw new ArgumentException("Invalid timestamp format. Please provide a valid DateTime format string.");
