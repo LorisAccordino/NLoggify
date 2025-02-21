@@ -50,7 +50,6 @@ namespace NLoggify.Logging
         /// <returns>An instance of a logger corresponding to the configured <see cref="LoggerType"/>.</returns>
         internal static Logger CreateLogger()
         {
-            /*
             return LoggerType switch
             {
 
@@ -59,8 +58,6 @@ namespace NLoggify.Logging
                 LoggerType.JSON => new JsonLogger(FilePath),
                 _ => throw new NotSupportedException("The specified logger type is not supported.")
             };
-            */
-            return null;
         }
     }
 }

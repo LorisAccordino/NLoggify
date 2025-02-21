@@ -1,0 +1,487 @@
+### YamlMime:ManagedReference
+items:
+- uid: NLoggify.Logging.LoggingConfig
+  commentId: T:NLoggify.Logging.LoggingConfig
+  id: LoggingConfig
+  parent: NLoggify.Logging
+  children:
+  - NLoggify.Logging.LoggingConfig.Configure(NLoggify.Logging.LogLevel,NLoggify.Logging.LoggerType,System.String)
+  - NLoggify.Logging.LoggingConfig.FilePath
+  - NLoggify.Logging.LoggingConfig.LogLevel
+  - NLoggify.Logging.LoggingConfig.LoggerType
+  langs:
+  - csharp
+  - vb
+  name: LoggingConfig
+  nameWithType: LoggingConfig
+  fullName: NLoggify.Logging.LoggingConfig
+  type: Class
+  source:
+    remote:
+      path: NLoggify/Logging/LoggingConfig.cs
+      branch: master
+      repo: https://github.com/LorisAccordino/NLoggify.git
+    id: LoggingConfig
+    path: ../NLoggify/Logging/LoggingConfig.cs
+    startLine: 7
+  assemblies:
+  - NLoggify
+  namespace: NLoggify.Logging
+  summary: Represents a global configuration settings for the logging system.
+  example: []
+  syntax:
+    content: public static class LoggingConfig
+    content.vb: Public Module LoggingConfig
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: NLoggify.Logging.LoggingConfig.LogLevel
+  commentId: P:NLoggify.Logging.LoggingConfig.LogLevel
+  id: LogLevel
+  parent: NLoggify.Logging.LoggingConfig
+  langs:
+  - csharp
+  - vb
+  name: LogLevel
+  nameWithType: LoggingConfig.LogLevel
+  fullName: NLoggify.Logging.LoggingConfig.LogLevel
+  type: Property
+  source:
+    remote:
+      path: NLoggify/Logging/LoggingConfig.cs
+      branch: master
+      repo: https://github.com/LorisAccordino/NLoggify.git
+    id: LogLevel
+    path: ../NLoggify/Logging/LoggingConfig.cs
+    startLine: 14
+  assemblies:
+  - NLoggify
+  namespace: NLoggify.Logging
+  summary: Gets the current minimum log level required for messages to be recorded.
+  example: []
+  syntax:
+    content: public static LogLevel LogLevel { get; }
+    parameters: []
+    return:
+      type: NLoggify.Logging.LogLevel
+    content.vb: Public Shared Property LogLevel As LogLevel
+  overload: NLoggify.Logging.LoggingConfig.LogLevel*
+- uid: NLoggify.Logging.LoggingConfig.LoggerType
+  commentId: P:NLoggify.Logging.LoggingConfig.LoggerType
+  id: LoggerType
+  parent: NLoggify.Logging.LoggingConfig
+  langs:
+  - csharp
+  - vb
+  name: LoggerType
+  nameWithType: LoggingConfig.LoggerType
+  fullName: NLoggify.Logging.LoggingConfig.LoggerType
+  type: Property
+  source:
+    remote:
+      path: NLoggify/Logging/LoggingConfig.cs
+      branch: master
+      repo: https://github.com/LorisAccordino/NLoggify.git
+    id: LoggerType
+    path: ../NLoggify/Logging/LoggingConfig.cs
+    startLine: 19
+  assemblies:
+  - NLoggify
+  namespace: NLoggify.Logging
+  summary: Gets the currently configured logger type.
+  example: []
+  syntax:
+    content: public static LoggerType LoggerType { get; }
+    parameters: []
+    return:
+      type: NLoggify.Logging.LoggerType
+    content.vb: Public Shared Property LoggerType As LoggerType
+  overload: NLoggify.Logging.LoggingConfig.LoggerType*
+- uid: NLoggify.Logging.LoggingConfig.FilePath
+  commentId: P:NLoggify.Logging.LoggingConfig.FilePath
+  id: FilePath
+  parent: NLoggify.Logging.LoggingConfig
+  langs:
+  - csharp
+  - vb
+  name: FilePath
+  nameWithType: LoggingConfig.FilePath
+  fullName: NLoggify.Logging.LoggingConfig.FilePath
+  type: Property
+  source:
+    remote:
+      path: NLoggify/Logging/LoggingConfig.cs
+      branch: master
+      repo: https://github.com/LorisAccordino/NLoggify.git
+    id: FilePath
+    path: ../NLoggify/Logging/LoggingConfig.cs
+    startLine: 24
+  assemblies:
+  - NLoggify
+  namespace: NLoggify.Logging
+  summary: Gets the file path used for file-based logging (ignored for console logging).
+  example: []
+  syntax:
+    content: public static string FilePath { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Shared Property FilePath As String
+  overload: NLoggify.Logging.LoggingConfig.FilePath*
+- uid: NLoggify.Logging.LoggingConfig.Configure(NLoggify.Logging.LogLevel,NLoggify.Logging.LoggerType,System.String)
+  commentId: M:NLoggify.Logging.LoggingConfig.Configure(NLoggify.Logging.LogLevel,NLoggify.Logging.LoggerType,System.String)
+  id: Configure(NLoggify.Logging.LogLevel,NLoggify.Logging.LoggerType,System.String)
+  parent: NLoggify.Logging.LoggingConfig
+  langs:
+  - csharp
+  - vb
+  name: Configure(LogLevel, LoggerType, string?)
+  nameWithType: LoggingConfig.Configure(LogLevel, LoggerType, string?)
+  fullName: NLoggify.Logging.LoggingConfig.Configure(NLoggify.Logging.LogLevel, NLoggify.Logging.LoggerType, string?)
+  type: Method
+  source:
+    remote:
+      path: NLoggify/Logging/LoggingConfig.cs
+      branch: master
+      repo: https://github.com/LorisAccordino/NLoggify.git
+    id: Configure
+    path: ../NLoggify/Logging/LoggingConfig.cs
+    startLine: 33
+  assemblies:
+  - NLoggify
+  namespace: NLoggify.Logging
+  summary: Updates the logging configuration dynamically at runtime.
+  example: []
+  syntax:
+    content: public static void Configure(LogLevel logLevel, LoggerType loggerType, string? filePath = null)
+    parameters:
+    - id: logLevel
+      type: NLoggify.Logging.LogLevel
+      description: The minimum log level required for messages to be recorded.
+    - id: loggerType
+      type: NLoggify.Logging.LoggerType
+      description: The type of logger to use.
+    - id: filePath
+      type: System.String
+      description: The file path for file-based logging (ignored for console logging).
+    content.vb: Public Shared Sub Configure(logLevel As LogLevel, loggerType As LoggerType, filePath As String = Nothing)
+  overload: NLoggify.Logging.LoggingConfig.Configure*
+  nameWithType.vb: LoggingConfig.Configure(LogLevel, LoggerType, String)
+  fullName.vb: NLoggify.Logging.LoggingConfig.Configure(NLoggify.Logging.LogLevel, NLoggify.Logging.LoggerType, String)
+  name.vb: Configure(LogLevel, LoggerType, String)
+references:
+- uid: NLoggify.Logging
+  commentId: N:NLoggify.Logging
+  href: NLoggify.html
+  name: NLoggify.Logging
+  nameWithType: NLoggify.Logging
+  fullName: NLoggify.Logging
+  spec.csharp:
+  - uid: NLoggify
+    name: NLoggify
+    href: NLoggify.html
+  - name: .
+  - uid: NLoggify.Logging
+    name: Logging
+    href: NLoggify.Logging.html
+  spec.vb:
+  - uid: NLoggify
+    name: NLoggify
+    href: NLoggify.html
+  - name: .
+  - uid: NLoggify.Logging
+    name: Logging
+    href: NLoggify.Logging.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: NLoggify.Logging.LoggingConfig.LogLevel*
+  commentId: Overload:NLoggify.Logging.LoggingConfig.LogLevel
+  href: NLoggify.Logging.LoggingConfig.html#NLoggify_Logging_LoggingConfig_LogLevel
+  name: LogLevel
+  nameWithType: LoggingConfig.LogLevel
+  fullName: NLoggify.Logging.LoggingConfig.LogLevel
+- uid: NLoggify.Logging.LogLevel
+  commentId: T:NLoggify.Logging.LogLevel
+  parent: NLoggify.Logging
+  href: NLoggify.Logging.LogLevel.html
+  name: LogLevel
+  nameWithType: LogLevel
+  fullName: NLoggify.Logging.LogLevel
+- uid: NLoggify.Logging.LoggingConfig.LoggerType*
+  commentId: Overload:NLoggify.Logging.LoggingConfig.LoggerType
+  href: NLoggify.Logging.LoggingConfig.html#NLoggify_Logging_LoggingConfig_LoggerType
+  name: LoggerType
+  nameWithType: LoggingConfig.LoggerType
+  fullName: NLoggify.Logging.LoggingConfig.LoggerType
+- uid: NLoggify.Logging.LoggerType
+  commentId: T:NLoggify.Logging.LoggerType
+  parent: NLoggify.Logging
+  href: NLoggify.Logging.LoggerType.html
+  name: LoggerType
+  nameWithType: LoggerType
+  fullName: NLoggify.Logging.LoggerType
+- uid: NLoggify.Logging.LoggingConfig.FilePath*
+  commentId: Overload:NLoggify.Logging.LoggingConfig.FilePath
+  href: NLoggify.Logging.LoggingConfig.html#NLoggify_Logging_LoggingConfig_FilePath
+  name: FilePath
+  nameWithType: LoggingConfig.FilePath
+  fullName: NLoggify.Logging.LoggingConfig.FilePath
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: NLoggify.Logging.LoggingConfig.Configure*
+  commentId: Overload:NLoggify.Logging.LoggingConfig.Configure
+  href: NLoggify.Logging.LoggingConfig.html#NLoggify_Logging_LoggingConfig_Configure_NLoggify_Logging_LogLevel_NLoggify_Logging_LoggerType_System_String_
+  name: Configure
+  nameWithType: LoggingConfig.Configure
+  fullName: NLoggify.Logging.LoggingConfig.Configure

@@ -1,0 +1,26 @@
+### YamlMime:TableOfContent
+items:
+- uid: NLoggify.Logging
+  name: NLoggify.Logging
+  type: Namespace
+  items:
+  - uid: NLoggify.Logging.LogLevel
+    name: LogLevel
+    type: Enum
+  - uid: NLoggify.Logging.LoggerType
+    name: LoggerType
+    type: Enum
+  - uid: NLoggify.Logging.LoggingConfig
+    name: LoggingConfig
+    type: Class
+- uid: NLoggify.Logging.Loggers
+  name: NLoggify.Logging.Loggers
+  type: Namespace
+  items:
+  - uid: NLoggify.Logging.Loggers.ILogger
+    name: ILogger
+    type: Interface
+  - uid: NLoggify.Logging.Loggers.Logger
+    name: Logger
+    type: Class
+memberLayout: SamePage

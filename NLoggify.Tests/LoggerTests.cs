@@ -9,13 +9,20 @@ namespace NLoggify.Tests
     public class LoggerTests
     {
         /// <summary>
-        /// Ensures that <see cref="Logger.GetLogger"/> always returns a not null value after configuration.
+        /// Ensures that <see cref="Logger.GetLogger"/> always returns a not null value,
+        /// both before and after configuration.
         /// </summary>
-        [Fact]
-        public void LoggerInstance_ShouldNotBeNull_AfterConfiguration()
+        /// <param name="configure">Whether to configure the logger before testing.</param>
+        [Theory]
+        [InlineData(false)] // Test before configuration
+        [InlineData(true)]  // Test after configuration
+        public void LoggerInstance_ShouldNotBeNull(bool configure)
         {
             // Arrange
-            LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
+            if (configure)
+            {
+                LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
+            }
 
             // Act
             var logger = Logger.GetLogger();

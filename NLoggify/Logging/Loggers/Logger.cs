@@ -34,15 +34,7 @@
         /// <returns>Logger instance.</returns>
         public static ILogger GetLogger()
         {
-            return null;
-
-            if (Instance == null)
-            {
-                // You could initialize the logger here if needed
-                throw new InvalidOperationException("Logger has not been configured.");
-            }
-
-            return Instance;
+            return LoggerProxy.Instance;
         }
 
         /// <summary>
