@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLoggify", "NLoggify\NLoggify.csproj", "{11E1C9EE-D523-47DC-9A6C-E0FF310EB916}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLoggify.Tests", "NLoggify.Tests\NLoggify.Tests.csproj", "{3906A5ED-7F1E-4366-9079-DB0CE090916B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{11E1C9EE-D523-47DC-9A6C-E0FF310EB916}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11E1C9EE-D523-47DC-9A6C-E0FF310EB916}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11E1C9EE-D523-47DC-9A6C-E0FF310EB916}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3906A5ED-7F1E-4366-9079-DB0CE090916B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3906A5ED-7F1E-4366-9079-DB0CE090916B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3906A5ED-7F1E-4366-9079-DB0CE090916B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3906A5ED-7F1E-4366-9079-DB0CE090916B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
