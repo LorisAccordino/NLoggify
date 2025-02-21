@@ -1,7 +1,4 @@
-﻿using Xunit;
-using System.IO;
-using NLoggify.Logging.Loggers;
-using System.Diagnostics;
+﻿using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Config;
 
 namespace NLoggify.Tests

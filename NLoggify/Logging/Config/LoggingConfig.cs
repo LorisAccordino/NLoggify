@@ -1,4 +1,6 @@
 ﻿using NLoggify.Logging.Loggers;
+using NLoggify.Logging.Loggers.Output;
+using NLoggify.Logging.Loggers.Storage;
 
 namespace NLoggify.Logging.Config
 {
@@ -62,7 +64,7 @@ namespace NLoggify.Logging.Config
         {
             return LoggerType switch
             {
-
+                LoggerType.Debug => new DebugLogger(),
                 LoggerType.Console => new ConsoleLogger(),
                 LoggerType.PlainText => new PlainTextLogger(FilePath),
                 LoggerType.JSON => new JsonLogger(FilePath),

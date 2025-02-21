@@ -6,6 +6,11 @@
     public enum LoggerType
     {
         /// <summary>
+        /// Logs messages to the debug system (e.g., Output window in Visual Studio).
+        /// </summary>
+        Debug,
+
+        /// <summary>
         /// Logs messages to the system console.
         /// </summary>
         Console,

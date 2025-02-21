@@ -1,4 +1,4 @@
-﻿namespace NLoggify.Logging.Loggers
+﻿namespace NLoggify.Logging.Loggers.Storage
 {
     internal class PlainTextLogger : FileLogger
     {

@@ -62,7 +62,7 @@ namespace NLoggify.Logging.Loggers
                 return;
 
             // Call the concrete implementation of logging
-            WriteLog(level, message, DateTime.Now);
+            WriteLog(level, message, DateTime.Now.ToString(LoggingConfig.TimestampFormat));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace NLoggify.Logging.Loggers
         /// <param name="level">The severity level of the log message.</param>
         /// <param name="message">The log message to be recorded.</param>
         /// <param name="timestamp">The time when the messaged was logged. This allows for accurate logging based on the exact time of logging.</param>
-        protected abstract void WriteLog(LogLevel level, string message, DateTime timestamp);
+        protected abstract void WriteLog(LogLevel level, string message, string timestamp);
 
         /// <summary>
         /// Releases all resources used by the <see cref="Logger"/> class.
