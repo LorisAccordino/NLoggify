@@ -37,6 +37,18 @@ namespace NLoggify.Logging.Loggers
         }
 
         /// <summary>
+        /// Logs an exception with a specified log level.
+        /// </summary>
+        /// <param name="level">The log level for the exception.</param>
+        /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
+        /// <param name="message">The log message to be recorded.</param>
+        /// <returns>True if the exception was thrown, otherwise false</returns>
+        public bool LogException(LogLevel level, Action action, string message)
+        {
+            return CurrentLogger.LogException(level, action, message);
+        }
+
+        /// <summary>
         /// Releases resources held by the current logger.
         /// </summary>
         public void Dispose()

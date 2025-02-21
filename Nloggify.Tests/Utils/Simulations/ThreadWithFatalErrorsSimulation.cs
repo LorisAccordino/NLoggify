@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Config;
+using System.Diagnostics;
 
 namespace Nloggify.Tests.Utils.Simulations
 {
@@ -27,39 +28,39 @@ namespace Nloggify.Tests.Utils.Simulations
             // Create a thread that simulates a continuous operation
             await Task.Run(async () =>
             {
-                try
-                {
-                    int elapsedTime = 0;
+                int elapsedTime = 0;
+                bool thrown = false;
 
-                    while (elapsedTime < maxDurationMilliseconds)
+                while (elapsedTime < maxDurationMilliseconds && !thrown)
+                {
+                    elapsedTime = (int)(DateTime.Now - startTime).TotalMilliseconds;
+
+                    // Calculate the increasingly error probability logarithmically
+                    failureProbability = CalculateFailureProbability(elapsedTime, failureGrowthFactor);
+                    Debug.WriteLine(failureProbability);
+
+                    // Message log based on the probability
+                    LogMessageBasedOnProbability(logger, failureProbability);
+
+                    thrown = logger.LogException(LogLevel.Fatal, () =>
                     {
-                        elapsedTime = (int)(DateTime.Now - startTime).TotalMilliseconds;
-
-                        // Calculate the increasingly error probability logarithmically
-                        failureProbability = CalculateFailureProbability(elapsedTime, failureGrowthFactor);
-
-                        // Message log based on the probability
-                        LogMessageBasedOnProbability(logger, failureProbability);
-
                         // If the probability is high enough, generate a fatal error
-                        if (_random.NextDouble() < failureProbability)
+                        //if (_random.NextDouble() < failureProbability)
+                        if ((_random.NextDouble() < failureProbability / 5 && failureProbability >= 0.2f) || failureProbability >= 1.0f)
                         {
-                            logger.Log(LogLevel.Fatal, $"CRASH! Errore fatale al {elapsedTime} ms. Il sistema si sta arrestando!");
-                            throw new Exception("Errore fatale: il sistema è stato compromesso.");
+                            logger.Log(LogLevel.Fatal, $"CRASH! Fatal error at {elapsedTime} ms. The system is shutting down!");
+                            throw new Exception("Fatal error: the system has been compromised.");
                         }
+                    }, "The thread has ended due to a fatal error:");
 
-                        // Asynchronous delay to avoid main thread blocking
-                        await Task.Delay(100);
-
-                    }
-
-                    logger.Log(LogLevel.Info, "La simulazione ha terminato senza errori fatali.");
+                    // Asynchronous delay to avoid main thread blocking
+                    await Task.Delay(100);
                 }
-                catch (Exception ex)
-                {
-                    logger.Log(LogLevel.Fatal, $"Il thread ha terminato a causa di un errore fatale: {ex.Message}");
+
+                if (!thrown)
+                    logger.Log(LogLevel.Info, "The simulation ended without fatal errors.");
+                else
                     Environment.Exit(-1);
-                }
             });
         }
 
@@ -71,7 +72,7 @@ namespace Nloggify.Tests.Utils.Simulations
         /// <returns>The calculated error probability.</returns>
         private static double CalculateFailureProbability(int elapsedTime, double growthFactor)
         {
-            return Math.Log(elapsedTime + 1) / growthFactor;
+            return Math.Log(elapsedTime + 1) * (growthFactor / 10000);
         }
 
         /// <summary>
@@ -82,13 +83,13 @@ namespace Nloggify.Tests.Utils.Simulations
         private static void LogMessageBasedOnProbability(ILogger logger, double failureProbability)
         {
             if (failureProbability < 0.05)
-                logger.Log(LogLevel.Trace, "Sistema stabile. Nessun problema.");
+                logger.Log(LogLevel.Trace, "System is stable. No issues encountered.");
             else if (failureProbability < 0.1)
-                logger.Log(LogLevel.Info, "Leggeri problemi riscontrati.");
+                logger.Log(LogLevel.Info, "Minor issues encountered.");
             else if (failureProbability < 0.2)
-                logger.Log(LogLevel.Warning, "Anomalie rilevate.");
+                logger.Log(LogLevel.Warning, "Anomalies detected.");
             else if (failureProbability < 0.5)
-                logger.Log(LogLevel.Error, "Problemi gravi in corso.");
+                logger.Log(LogLevel.Error, "Serious problems in progress.");
         }
     }
 }

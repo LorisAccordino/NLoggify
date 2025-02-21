@@ -14,18 +14,20 @@ public class Program
         Test(Logger.GetLogger());
         Console.WriteLine("\n===== ConsoleLogger Test Completed =====");
 
+        /*
         // DebugLogger test
         LoggingConfig.Configure(LogLevel.Trace, LoggerType.Debug); // Change configuration
         Console.WriteLine("===== ConsoleLogger Test Started =====\n");
         Test(Logger.GetLogger());
         Console.WriteLine("\n===== ConsoleLogger Test Completed =====");
+        */
     }
 
     public static void Test(ILogger logger)
     {
         logger.Log(LogLevel.Info, "Application started successfully.");
 
-        ThreadWithFatalErrorSimulation.SimulateThreadWithFatalError(logger, 100000);
+        ThreadWithFatalErrorSimulation.SimulateThreadWithFatalError(logger, 100000, 0.01f, 250);
 
         // Start multiple concurrent operations to simulate a real system
         Task[] tasks =

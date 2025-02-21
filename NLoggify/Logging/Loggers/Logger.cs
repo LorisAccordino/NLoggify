@@ -66,6 +66,29 @@ namespace NLoggify.Logging.Loggers
         }
 
         /// <summary>
+        /// Logs an exception with a specified log level.
+        /// </summary>
+        /// <param name="level">The log level for the exception.</param>
+        /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
+        /// <param name="message">The log message to be recorded.</param>
+        /// <returns>True if the exception was thrown, otherwise false</returns>
+        public bool LogException(LogLevel level, Action action, string message)
+        {
+            // Try to execute the given code
+            try
+            {
+                action();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Log the raised exception
+                Log(level, $"{message}\nException: {ex.Message}\n{ex.StackTrace}");
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Writes the log message to the target output. Must be implemented by derived classes.
         /// </summary>
         /// <param name="level">The severity level of the log message.</param>
