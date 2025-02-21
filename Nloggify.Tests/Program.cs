@@ -17,13 +17,13 @@ public class Program
         logger.Log(LogLevel.Info, "Application started successfully.");
 
         // Start multiple concurrent operations to simulate a real system
-        Task[] tasks = new Task[]
-        {
+        Task[] tasks =
+        [
             Task.Run(() => SimulateSystemInitialization(logger)),
             Task.Run(() => SimulateDatabaseConnection(logger)),
             Task.Run(() => SimulateDataProcessing(logger)),
             Task.Run(() => SimulateConcurrentUserActivity(logger))
-        };
+        ];
 
         // Wait for all tasks to complete
         Task.WaitAll(tasks);
