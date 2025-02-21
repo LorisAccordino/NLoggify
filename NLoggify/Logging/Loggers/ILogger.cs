@@ -1,4 +1,6 @@
-﻿namespace NLoggify.Logging.Loggers
+﻿using NLoggify.Logging.Config;
+
+namespace NLoggify.Logging.Loggers
 {
     /// <summary>
     /// Interface defining the behaviour for loggers.

@@ -1,5 +1,5 @@
 using NLoggify.Logging.Loggers;
-using NLoggify.Logging;
+using NLoggify.Logging.Config;
 
 namespace NLoggify.Tests
 {

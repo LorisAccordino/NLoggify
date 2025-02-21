@@ -1,4 +1,4 @@
-﻿using NLoggify.Logging;
+﻿using NLoggify.Logging.Config;
 
 namespace NLoggify.Tests
 {
@@ -10,13 +10,17 @@ namespace NLoggify.Tests
             // Arrange
             var expectedLevel = LogLevel.Warning;
             var expectedType = LoggerType.PlainText;
+            var expectedPath = "output.log";
+            var expectedTimestamp = "aaa";
 
             // Act
-            LoggingConfig.Configure(expectedLevel, expectedType);
+            LoggingConfig.Configure(expectedLevel, expectedType, expectedPath, expectedTimestamp);
 
             // Assert
-            Assert.Equal(expectedLevel, LoggingConfig.LogLevel);
+            Assert.Equal(expectedLevel, LoggingConfig.MinimumLogLevel);
             Assert.Equal(expectedType, LoggingConfig.LoggerType);
+            Assert.Equal(expectedPath, LoggingConfig.FilePath);
+            Assert.Equal(expectedTimestamp, LoggingConfig.FilePath);
         }
     }
 }

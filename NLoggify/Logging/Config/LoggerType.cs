@@ -1,4 +1,4 @@
-﻿namespace NLoggify.Logging
+﻿namespace NLoggify.Logging.Config
 {
     /// <summary>
     /// Specifies the available types of loggers that can be used in the logging system.

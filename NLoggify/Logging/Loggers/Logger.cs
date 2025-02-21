@@ -1,4 +1,6 @@
-﻿namespace NLoggify.Logging.Loggers
+﻿using NLoggify.Logging.Config;
+
+namespace NLoggify.Logging.Loggers
 {
     /// <summary>
     /// Abstract base class for logger representation. The actual implementation of logging (e.g., console, file, etc.) is done in derived classes.
@@ -56,11 +58,11 @@
         public void Log(LogLevel level, string message)
         {
             // Filtering logic: Only log messages that meet or exceed the configured level
-            if (level < LoggingConfig.LogLevel)
+            if (level < LoggingConfig.MinimumLogLevel)
                 return;
 
             // Call the concrete implementation of logging
-            WriteLog(level, message);
+            WriteLog(level, message, DateTime.Now);
         }
 
         /// <summary>
@@ -68,7 +70,8 @@
         /// </summary>
         /// <param name="level">The severity level of the log message.</param>
         /// <param name="message">The log message to be recorded.</param>
-        protected abstract void WriteLog(LogLevel level, string message);
+        /// <param name="timestamp">The time when the messaged was logged. This allows for accurate logging based on the exact time of logging.</param>
+        protected abstract void WriteLog(LogLevel level, string message, DateTime timestamp);
 
         /// <summary>
         /// Releases all resources used by the <see cref="Logger"/> class.

@@ -1,4 +1,6 @@
-﻿namespace NLoggify.Logging.Loggers
+﻿using NLoggify.Logging.Config;
+
+namespace NLoggify.Logging.Loggers
 {
     /// <summary>
     /// Proxy for the logger instance, ensuring that all references always point to the current logger.

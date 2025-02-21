@@ -1,4 +1,4 @@
-﻿namespace NLoggify.Logging
+﻿namespace NLoggify.Logging.Config
 {
     /// <summary>
     /// Enum representing different log levels for categorizing log messages.

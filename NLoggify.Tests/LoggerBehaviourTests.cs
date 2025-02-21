@@ -1,15 +1,16 @@
 ﻿using Xunit;
-using NLoggify.Logging;
 using System.IO;
 using NLoggify.Logging.Loggers;
+using System.Diagnostics;
+using NLoggify.Logging.Config;
 
 namespace NLoggify.Tests
 {
     public class LoggerBehaviourTests
     {
         [Theory]
-        [InlineData(LogLevel.Info, LogLevel.Debug, false)] // Debug è inferiore a Info, quindi non logga
-        [InlineData(LogLevel.Warning, LogLevel.Error, true)] // Error è superiore a Warning, quindi logga
+        [InlineData(LogLevel.Info, LogLevel.Debug, false)] // Debug is lower than Info, so it doesn't log
+        [InlineData(LogLevel.Warning, LogLevel.Error, true)] // Error is higher than Warning, so it logs
         public void Logger_ShouldRespectLogLevel(LogLevel configLevel, LogLevel messageLevel, bool shouldLog)
         {
             // Arrange
@@ -18,7 +19,7 @@ namespace NLoggify.Tests
 
             using (var sw = new StringWriter())
             {
-                Console.SetOut(sw); // Reindirizza l'output della console per intercettare il log
+                Console.SetOut(sw); // Redirect the output of the console to catch the log
 
                 // Act
                 logger.Log(messageLevel, "Test message");
