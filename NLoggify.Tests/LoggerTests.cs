@@ -3,19 +3,42 @@ using NLoggify.Logging;
 
 namespace NLoggify.Tests
 {
+    /// <summary>
+    /// Unit tests for the <see cref="Logger"/> singleton behavior.
+    /// </summary>
     public class LoggerTests
     {
+        /// <summary>
+        /// Ensures that <see cref="Logger.GetLogger"/> always returns a not null value after configuration.
+        /// </summary>
         [Fact]
         public void LoggerInstance_ShouldNotBeNull_AfterConfiguration()
         {
-            // Configura il logger
-            LoggingConfig.ConfigureLogging(LogLevel.Info, LoggerType.Console);
+            // Arrange
+            LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
 
-            // Ottieni l'istanza
-            var logger = Logger.GetInstance();
+            // Act
+            var logger = Logger.GetLogger();
 
-            // Verifica che l'istanza non sia null
+            // Assert
             Assert.NotNull(logger);
+        }
+
+        /// <summary>
+        /// Ensures that <see cref="Logger.GetLogger"/> always returns the same instance.
+        /// </summary>
+        [Fact]
+        public void LoggerInstance_ShouldReturnSameInstance()
+        {
+            // Arrange
+            LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
+
+            // Act
+            var logger1 = Logger.GetLogger();
+            var logger2 = Logger.GetLogger();
+
+            // Assert
+            Assert.Same(logger1, logger2); // Must be the same instance
         }
     }
 }

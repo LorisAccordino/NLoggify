@@ -5,7 +5,7 @@ namespace NLoggify.Logging
     /// <summary>
     /// Represents a global configuration settings for the logging system.
     /// </summary>
-    internal static class LoggingConfig
+    public static class LoggingConfig
     {
         private static readonly object _lock = new object();
 
@@ -48,7 +48,7 @@ namespace NLoggify.Logging
         /// Creates an instance of the logger based on the current configuration settings.
         /// </summary>
         /// <returns>An instance of a logger corresponding to the configured <see cref="LoggerType"/>.</returns>
-        public static Logger CreateLogger()
+        internal static Logger CreateLogger()
         {
             /*
             return LoggerType switch
