@@ -13,33 +13,7 @@ namespace NLoggify.Logging.Loggers
             string formattedTimestamp = timestamp.ToString(LoggingConfig.TimestampFormat);
 
             // Change the console color based on the log level
-            switch (level)
-            {
-                case LogLevel.Trace:
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    break;
-                case LogLevel.Debug:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    break;
-                case LogLevel.Info:
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    break;
-                case LogLevel.Warning:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    break;
-                case LogLevel.Error:
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    break;
-                case LogLevel.Critical:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                case LogLevel.Fatal:
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    break;
-                default:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    break;
-            }
+            Console.ForegroundColor = LogLevelColorConfig.GetColorForLevel(level);
 
             // Print the log message with the formatted timestamp
             Console.WriteLine($"[{formattedTimestamp}] {level}: {message}");
@@ -49,12 +23,6 @@ namespace NLoggify.Logging.Loggers
         }
 
 
-        public override void Dispose()
-        {
-            // Implement the logic to release resources, e.g.:
-            // - Close any output streams
-            // - Release unmanaged resources
-            throw new NotImplementedException("The Dispose method is not implemented yet.");
-        }
+        public override void Dispose() { }
     }
 }
