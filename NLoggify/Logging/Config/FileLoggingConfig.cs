@@ -1,4 +1,6 @@
-﻿namespace NLoggify.Logging.Config
+﻿using NLoggify.Utils;
+
+namespace NLoggify.Logging.Config
 {
     /// <summary>
     /// Configuration class for file-based logging.
@@ -14,26 +16,22 @@
         public static string FilePath { get; private set; } = Path.Combine(Directory.GetCurrentDirectory(), "logs", "output.log");
 
         /// <summary>
-        /// Sets a new file path for logging after validating its format.
+        /// Sets a new <b>custom</b> file path for logging after validating its format.
         /// </summary>
         /// <param name="filePath">The new log file path.</param>
         /// <exception cref="ArgumentException">Thrown if the path is empty or contains invalid characters.</exception>
-        public static void SetFilePath(string filePath)
+        public static void SetCustomFilePath(string filePath)
         {
             lock (_lock)
             {
-                if (string.IsNullOrWhiteSpace(filePath))
-                    throw new ArgumentException("The file path cannot be empty or contain only spaces.");
-
-                if (filePath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-                    throw new ArgumentException("The file path contains invalid characters.");
+                GenericUtils.ValidatePath(filePath, true);
 
                 FilePath = Path.GetFullPath(filePath);
             }
         }
 
         /// <summary>
-        /// Sets the directory where log files will be stored, using a default filename.
+        /// Sets the directory where log files will be stored, using a <b>default</b> filename.
         /// If the directory does not exist, it is automatically created.
         /// </summary>
         /// <param name="directoryPath">The target log directory.</param>

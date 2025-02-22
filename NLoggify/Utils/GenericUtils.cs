@@ -14,6 +14,8 @@
         /// <returns></returns>
         public static bool ValidatePath(string path, bool IncludeFileName, bool RequireFileName = false)
         {
+            if (string.IsNullOrEmpty(path)) return false;
+
             string? root = null;
             string? directory = null;
             string? filename = null;
