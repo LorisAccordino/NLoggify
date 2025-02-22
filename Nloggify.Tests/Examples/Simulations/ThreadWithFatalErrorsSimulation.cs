@@ -2,7 +2,7 @@
 using NLoggify.Logging.Config;
 using System.Diagnostics;
 
-namespace Nloggify.Tests.Utils.Simulations
+namespace Nloggify.Tests.Examples.Simulations
 {
     /// <summary>
     /// Simulates a thread that can generate fatal errors with an increasingly probability over the time.

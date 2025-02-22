@@ -47,10 +47,11 @@ namespace NLoggify.Tests
             LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
             var logger = Logger.GetLogger();
 
+            // Act
             bool exceptionCaught = await logger.LogException(LogLevel.Error, async () =>
             {
                 await Task.Delay(50);
-                throw new InvalidOperationException("Errore test");
+                throw new InvalidOperationException("Test error");
             });
 
             // Assert

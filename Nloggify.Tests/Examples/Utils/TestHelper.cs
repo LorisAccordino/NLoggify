@@ -1,4 +1,4 @@
-﻿namespace Nloggify.Tests.Utils
+﻿namespace Nloggify.Tests.Examples.Utils
 {
     /// <summary>
     /// A static helper class that provides utility methods for test simulations and logging.

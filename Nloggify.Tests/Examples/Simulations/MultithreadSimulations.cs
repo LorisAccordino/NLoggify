@@ -1,7 +1,8 @@
-﻿using NLoggify.Logging.Config;
+﻿using Nloggify.Tests.Examples.Utils;
+using NLoggify.Logging.Config;
 using NLoggify.Logging.Loggers;
 
-namespace Nloggify.Tests.Utils.Simulations
+namespace Nloggify.Tests.Examples.Simulations
 {
     /// <summary>
     /// A class that simulates the activity of concurrent users performing actions.

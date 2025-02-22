@@ -89,6 +89,29 @@ namespace NLoggify.Logging.Loggers
         }
 
         /// <summary>
+        /// Logs an async exception with a specified log level.
+        /// </summary>
+        /// <param name="level">The log level for the exception.</param>
+        /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
+        /// <param name="message">The log message to be recorded.</param>
+        /// <returns>True if the exception was thrown, otherwise false</returns>
+        public async Task<bool> LogException(LogLevel level, Func<Task> action, string message = "")
+        {
+            try
+            {
+                await action(); // Await the async operation
+                return false; // No exception caught
+            }
+            catch (Exception ex)
+            {
+                // Log the raised exception
+                Log(level, $"{message}\nException: {ex.Message}\n{ex.StackTrace}");
+                return true;
+            }
+        }
+
+
+        /// <summary>
         /// Writes the log message to the target output. Must be implemented by derived classes.
         /// </summary>
         /// <param name="level">The severity level of the log message.</param>

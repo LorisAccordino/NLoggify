@@ -1,4 +1,4 @@
-﻿using Nloggify.Tests.Utils.Simulations;
+﻿using Nloggify.Tests.Examples.Simulations;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Loggers;
 using NLoggify.Utils;
