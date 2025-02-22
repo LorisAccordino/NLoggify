@@ -9,13 +9,10 @@ public class Program
     public static void Main(string[] args)
     {
         // Multi logger configuration
-        LoggingConfig.ConfigureMultiLogger(LoggerType.Debug, LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
-
-        LoggerType[] loggerTypes = { LoggerType.Multi };
+        LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
 
         // Tests every supported type of logger
         foreach (LoggerType type in GenericUtils.GetEnumValues<LoggerType>())
-        //foreach (LoggerType type in loggerTypes)
         {
             if (type == LoggerType.Multi)
             {
