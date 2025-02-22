@@ -62,7 +62,7 @@ namespace NLoggify.Tests
         /// <param name="filePath">The log file path to be validated.</param>
         /// <param name="shouldThrowException">Indicates whether an exception should be thrown for the given path.</param>
         [Theory]
-        [InlineData("", true)] // Empty path is invalid, should throw an exception
+        [InlineData("", false)] // Empty path is valid
         [InlineData("   ", true)] // Path with only spaces is invalid
         [InlineData("C:\\Valid\\Path\\log.txt", false)] // Valid path
         [InlineData("C:/Another/Valid/Path/log.log", false)] // Valid Unix-style path

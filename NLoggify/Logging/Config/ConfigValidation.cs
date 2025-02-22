@@ -1,4 +1,7 @@
-﻿namespace NLoggify.Logging.Config
+﻿using System.IO;
+using System.Text.RegularExpressions;
+
+namespace NLoggify.Logging.Config
 {
     /// <summary>
     /// Static class that provides method to validate configurations parameters
@@ -8,15 +11,37 @@
         /// <summary>
         /// Validates whether the provided path is a valid filepath (it could be either null or inexistent)
         /// </summary>
-        /// <param name="filePath">The path to validate</param>
-        /// <returns></returns>
+        /// <param name="path">The path to validate</param>
+        /// <returns>True if the format is valid, otherwise false.</returns>
         /// <exception cref="IOException">This given path is invalid</exception>
-        public static bool ValidatePath(string filePath)
+        public static bool ValidatePath(string path)
         {
-            if (string.IsNullOrEmpty(filePath)) return false;
-            if (Uri.IsWellFormedUriString(filePath, UriKind.RelativeOrAbsolute)) return true;
-            //if (Path.Exists(filePath)) return true;
-            throw new IOException($"Inexistent path! Cannot access to the given path: {filePath}");
+            if (string.IsNullOrEmpty(path)) return false;
+
+            // Validate the path through a regex
+            if (PathRegexValidation(path)) return true;
+            throw new IOException($"Inexistent path! Cannot access to the given path: {path}");
+        }
+
+        /// <summary>
+        /// Validate a filepath through a regex
+        /// </summary>
+        /// <param name="path">The path to validate</param>
+        /// <returns>True if the format is valid, otherwise false.</returns>
+        private static bool PathRegexValidation(string path)
+        {
+            Regex driveCheck = new Regex(@"^[a-zA-Z]:\\$");
+            if (!driveCheck.IsMatch(path.Substring(0, 3))) return false;
+            string strTheseAreInvalidFileNameChars = new string(Path.GetInvalidPathChars());
+            strTheseAreInvalidFileNameChars += @":/?*" + "\"";
+            Regex containsABadCharacter = new Regex("[" + Regex.Escape(strTheseAreInvalidFileNameChars) + "]");
+            if (containsABadCharacter.IsMatch(path.Substring(3, path.Length - 3)))
+                return false;
+
+            DirectoryInfo dir = new DirectoryInfo(Path.GetFullPath(path));
+            if (!dir.Exists)
+                dir.Create();
+            return true;
         }
 
         /// <summary>
