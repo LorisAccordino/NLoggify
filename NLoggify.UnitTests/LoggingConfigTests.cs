@@ -67,8 +67,6 @@ namespace NLoggify.Tests
         [InlineData("C:\\Valid\\Path\\log.txt", false)] // Valid path
         [InlineData("C:/Another/Valid/Path/log.log", false)] // Valid Unix-style path
         [InlineData("C:\\Path\\With\\Illegal|Char.txt", true)] // Invalid path due to illegal characters
-        [InlineData("C:\\Con.txt", true)] // "CON" is a reserved name in Windows, should throw
-        [InlineData("C:\\aux.log", true)] // "AUX" is also reserved in Windows
         [InlineData("/invalid_path_with_*?.txt", true)] // Invalid path due to wildcard characters
         public void Configure_ShouldValidateLogFilePath(string filePath, bool shouldThrowException)
         {

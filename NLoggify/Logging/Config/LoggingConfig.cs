@@ -24,7 +24,7 @@ namespace NLoggify.Logging.Config
         /// <summary>
         /// Gets the file path used for file-based logging (ignored for console logging).
         /// </summary>
-        public static string FilePath { get; private set; } = "log.txt";
+        public static string FilePath { get; private set; } = Directory.GetCurrentDirectory() + "/logs/output.log";
 
         /// <summary>
         /// Gets or sets the format used to display timestamps in the log messages.
