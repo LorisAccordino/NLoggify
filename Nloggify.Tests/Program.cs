@@ -18,22 +18,6 @@ public class Program
             Test(Logger.GetLogger());
             Console.WriteLine($"\n===== {type} Logger Test Completed =====\n\n\n");
         }
-
-        return;
-
-        // Configure the logger to use ConsoleLogger with the minimum log level set to Trace.
-        LoggingConfig.Configure(LogLevel.Trace, LoggerType.Console);
-
-        // ConsoleLogger test
-        Console.WriteLine("===== ConsoleLogger Test Started =====\n");
-        Test(Logger.GetLogger());
-        Console.WriteLine("\n===== ConsoleLogger Test Completed =====");
-
-        // DebugLogger test
-        LoggingConfig.Configure(LogLevel.Trace, LoggerType.Debug); // Change configuration
-        Console.WriteLine("===== ConsoleLogger Test Started =====\n");
-        Test(Logger.GetLogger());
-        Console.WriteLine("\n===== ConsoleLogger Test Completed =====");
     }
 
     public static void Test(ILogger logger, bool fatalRisk = false)
