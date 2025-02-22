@@ -14,7 +14,8 @@
         public static bool ValidatePath(string filePath)
         {
             if (string.IsNullOrEmpty(filePath)) return false;
-            if (Path.Exists(filePath)) return true;
+            if (Uri.IsWellFormedUriString(filePath, UriKind.RelativeOrAbsolute)) return true;
+            //if (Path.Exists(filePath)) return true;
             throw new IOException($"Inexistent path! Cannot access to the given path: {filePath}");
         }
 

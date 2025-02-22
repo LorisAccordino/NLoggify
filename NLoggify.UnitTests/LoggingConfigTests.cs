@@ -57,18 +57,39 @@ namespace NLoggify.Tests
         }
 
         /// <summary>
-        /// Tests if an exception is (as expected) thrown if the given path doesn't exist
+        /// Tests if the log file path is validated correctly during logger configuration.
         /// </summary>
-        [Fact]
-        public void Configure_ShouldThrowException_IfLogFilePathIsInvalid()
+        /// <param name="filePath">The log file path to be validated.</param>
+        /// <param name="shouldThrowException">Indicates whether an exception should be thrown for the given path.</param>
+        [Theory]
+        [InlineData("", true)] // Empty path is invalid, should throw an exception
+        [InlineData("   ", true)] // Path with only spaces is invalid
+        [InlineData("C:\\Valid\\Path\\log.txt", false)] // Valid path
+        [InlineData("C:/Another/Valid/Path/log.log", false)] // Valid Unix-style path
+        [InlineData("C:\\Path\\With\\Illegal|Char.txt", true)] // Invalid path due to illegal characters
+        [InlineData("C:\\Con.txt", true)] // "CON" is a reserved name in Windows, should throw
+        [InlineData("C:\\aux.log", true)] // "AUX" is also reserved in Windows
+        [InlineData("/invalid_path_with_*?.txt", true)] // Invalid path due to wildcard characters
+        public void Configure_ShouldValidateLogFilePath(string filePath, bool shouldThrowException)
         {
-            // Arrange
-            string invalidFilePath = "Z:\\cartella\\inesistente\\log.txt";
+            // Act
+            try
+            {
+                LoggingConfig.Configure(LogLevel.Info, LoggerType.PlainText, filePath);
 
-            // Act & Assert
-            var ex = Assert.Throws<IOException>(() => LoggingConfig.Configure(LogLevel.Info, LoggerType.PlainText, invalidFilePath));
-            Assert.Contains("Cannot access to the given path", ex.Message);
+                // Assert
+                if (shouldThrowException)
+                {
+                    Assert.Fail("Expected exception not thrown.");
+                }
+            }
+            catch (ArgumentException)
+            {
+                if (!shouldThrowException)
+                {
+                    Assert.Fail("Unexpected exception thrown.");
+                }
+            }
         }
-
     }
 }

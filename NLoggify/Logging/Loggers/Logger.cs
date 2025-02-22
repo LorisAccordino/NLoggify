@@ -110,7 +110,6 @@ namespace NLoggify.Logging.Loggers
             }
         }
 
-
         /// <summary>
         /// Writes the log message to the target output. Must be implemented by derived classes.
         /// </summary>
