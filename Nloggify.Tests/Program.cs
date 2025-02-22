@@ -8,7 +8,7 @@ public class Program
     public static void Main(string[] args)
     {
         // Tests every supported type of logger
-        foreach (LoggerType type in EnumUtil.GetValues<LoggerType>())
+        foreach (LoggerType type in GenericUtils.GetEnumValues<LoggerType>())
         {
             // Configure the logger to use the current logger type to with the minimum log level set to Trace.
             LoggingConfig.Configure(LogLevel.Trace, type);

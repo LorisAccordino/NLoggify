@@ -22,11 +22,6 @@ namespace NLoggify.Logging.Config
         public static LoggerType LoggerType { get; private set; } = LoggerType.Console;
 
         /// <summary>
-        /// Gets the file path used for file-based logging (ignored for console logging).
-        /// </summary>
-        public static string FilePath { get; private set; } = Directory.GetCurrentDirectory() + "/logs/output.log";
-
-        /// <summary>
         /// Gets or sets the format used to display timestamps in the log messages.
         /// The default format is "yyyy-MM-dd HH:mm:ss", but it can be changed to any valid DateTime format string.
         /// </summary>
