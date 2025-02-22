@@ -23,6 +23,11 @@
         /// <summary>
         /// Logs messages in a structured JSON format.
         /// </summary>
-        JSON
+        JSON,
+
+        /// <summary>
+        /// Logs messages in multiples, specified, logs
+        /// </summary>
+        Multi
     }
 }

@@ -10,6 +10,7 @@ namespace NLoggify.Logging.Loggers.Storage
     {
         //private readonly string _filePath;
         private readonly object _fileLock = new(); // Lock for thread-safe writing
+        protected string _filePath = ""; // Local copy of FileLoggingConfig.FilePath for local manipulation
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogger"/> class.
@@ -19,6 +20,7 @@ namespace NLoggify.Logging.Loggers.Storage
         {
             // File logging configuration
             FileLoggingConfig.EnableTimestampedLogFile();
+            _filePath = FileLoggingConfig.FilePath;
             FileLoggingConfig.EnsureLogDirectoryExists();
         }
 
@@ -28,7 +30,7 @@ namespace NLoggify.Logging.Loggers.Storage
 
             lock (_fileLock) // Ensure thread-safety when writing to the file
             {
-                File.AppendAllText(FileLoggingConfig.FilePath, logEntry + Environment.NewLine);
+                File.AppendAllText(_filePath, logEntry + Environment.NewLine);
             }
         }
 

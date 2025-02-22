@@ -1,4 +1,5 @@
-﻿using Nloggify.Tests.Examples.Simulations;
+﻿using Nloggify.Tests.Examples;
+using Nloggify.Tests.Examples.Simulations;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Loggers;
 using NLoggify.Utils;
@@ -7,41 +8,28 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        // Multi logger configuration
+        LoggingConfig.ConfigureMultiLogger(LoggerType.Debug, LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
+
+        LoggerType[] loggerTypes = { LoggerType.Multi };
+
         // Tests every supported type of logger
         foreach (LoggerType type in GenericUtils.GetEnumValues<LoggerType>())
+        //foreach (LoggerType type in loggerTypes)
         {
+            if (type == LoggerType.Multi)
+            {
+                int a = 5;
+                a++;
+            }
+
             // Configure the logger to use the current logger type to with the minimum log level set to Trace.
             LoggingConfig.Configure(LogLevel.Trace, type);
 
             // Current logger test
             Console.WriteLine($"===== {type} Logger Test Started =====\n");
-            Test(Logger.GetLogger());
+            NLoggifyExample.Test(Logger.GetLogger());
             Console.WriteLine($"\n===== {type} Logger Test Completed =====\n\n\n");
         }
-    }
-
-    public static void Test(ILogger logger, bool fatalRisk = false)
-    {
-        logger.Log(LogLevel.Info, "Application started successfully.");
-
-        if (fatalRisk) ThreadWithFatalErrorSimulation.SimulateThreadWithFatalError(logger, 100000, 0.01f, 250);
-
-        // Start multiple concurrent operations to simulate a real system
-        Task[] tasks =
-        [
-            Task.Run(() => GenericSimulations.SimulateSystemInitialization(logger)),
-            Task.Run(() => GenericSimulations.SimulateDatabaseConnection(logger)),
-            Task.Run(() => GenericSimulations.SimulateDataProcessing(logger)),
-            Task.Run(() => MultithreadSimulations.SimulateConcurrentUserActivity(logger))
-        ];
-
-        // Wait for all tasks to complete
-        Task.WaitAll(tasks);
-
-        // Simulate an unexpected error and log the exception.
-        logger.LogException(LogLevel.Error, () => GenericSimulations.SimulateFailure(50), "An error occurred:");
-
-        // End the simulation
-        logger.Log(LogLevel.Info, "Application shutting down...");
     }
 }

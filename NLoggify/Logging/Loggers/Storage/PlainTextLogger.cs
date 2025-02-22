@@ -7,6 +7,12 @@ namespace NLoggify.Logging.Loggers.Storage
     /// </summary>
     internal class PlainTextLogger : FileLogger
     {
+        public PlainTextLogger() : base()
+        {
+            // Change the extension to .log
+            _filePath = Path.ChangeExtension(_filePath, "log");
+        }
+
         /// <summary>
         /// Formats the log entry as plain text.
         /// </summary>
