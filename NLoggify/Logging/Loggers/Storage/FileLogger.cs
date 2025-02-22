@@ -6,7 +6,7 @@ namespace NLoggify.Logging.Loggers.Storage
     /// Base class for file-based loggers, handling file writing operations.
     /// Specific log formats (e.g., PlainText, JSON) should extend this class.
     /// </summary>
-    internal class FileLogger : Logger
+    internal abstract class FileLogger : Logger
     {
         private readonly string _filePath;
         private readonly object _fileLock = new(); // Lock for thread-safe writing
@@ -30,14 +30,26 @@ namespace NLoggify.Logging.Loggers.Storage
             }
         }
 
-        protected override void WriteLog(LogLevel level, string message, string timestamp)
+        protected override sealed void WriteLog(LogLevel level, string message, string timestamp)
         {
-            throw new NotImplementedException();
+            var logEntry = FormatLog(level, message, timestamp);
+
+            lock (_fileLock) // Ensure thread-safety when writing to the file
+            {
+                File.AppendAllText(_filePath, logEntry + Environment.NewLine);
+            }
         }
 
-        public override void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Defines how the log entry should be formatted.
+        /// Implemented by subclasses.
+        /// </summary>
+        /// <param name="level">The log level.</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="timestamp">The formatted timestamp.</param>
+        /// <returns>The formatted log entry.</returns>
+        protected abstract string FormatLog(LogLevel level, string message, string timestamp);
+
+        public override void Dispose() { }
     }
 }
