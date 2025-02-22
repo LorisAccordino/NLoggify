@@ -38,5 +38,23 @@ namespace NLoggify.Tests
                     Assert.DoesNotContain("Test message", output);
             }
         }
+
+
+        [Fact]
+        public async Task LogException_ShouldCatchAsyncExceptions()
+        {
+            // Arrange
+            LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
+            var logger = Logger.GetLogger();
+
+            bool exceptionCaught = await logger.LogException(LogLevel.Error, async () =>
+            {
+                await Task.Delay(50);
+                throw new InvalidOperationException("Errore test");
+            });
+
+            // Assert
+            Assert.True(exceptionCaught);
+        }
     }
 }

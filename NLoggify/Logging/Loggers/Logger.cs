@@ -72,7 +72,7 @@ namespace NLoggify.Logging.Loggers
         /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
         /// <param name="message">The log message to be recorded.</param>
         /// <returns>True if the exception was thrown, otherwise false</returns>
-        public bool LogException(LogLevel level, Action action, string message)
+        public bool LogException(LogLevel level, Action action, string message = "")
         {
             // Try to execute the given code
             try

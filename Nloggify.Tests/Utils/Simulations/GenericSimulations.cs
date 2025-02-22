@@ -96,13 +96,7 @@ namespace Nloggify.Tests.Utils.Simulations
                 if (_random.Next(1, 101) <= retryFailureChance) // Failure on retry based on the configured chance
                 {
                     logger.Log(LogLevel.Critical, "Database connection could not be established.");
-                    try
-                    {
-                        throw new Exception("Database connection failure.");
-                    } catch (Exception ex)
-                    {
-                        logger.Log(LogLevel.Critical, ex.Message);
-                    }
+                    logger.LogException(LogLevel.Critical, () => throw new Exception("Database connection failure."));
                     
                 }
                 else

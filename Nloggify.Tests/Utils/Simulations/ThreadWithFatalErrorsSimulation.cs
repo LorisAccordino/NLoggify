@@ -29,9 +29,8 @@ namespace Nloggify.Tests.Utils.Simulations
             await Task.Run(async () =>
             {
                 int elapsedTime = 0;
-                bool thrown = false;
 
-                while (elapsedTime < maxDurationMilliseconds && !thrown)
+                while (elapsedTime < maxDurationMilliseconds)
                 {
                     elapsedTime = (int)(DateTime.Now - startTime).TotalMilliseconds;
 
@@ -42,25 +41,19 @@ namespace Nloggify.Tests.Utils.Simulations
                     // Message log based on the probability
                     LogMessageBasedOnProbability(logger, failureProbability);
 
-                    thrown = logger.LogException(LogLevel.Fatal, () =>
+                    // If the probability is high enough, generate a fatal error
+                    //if (_random.NextDouble() < failureProbability)
+                    if ((_random.NextDouble() < failureProbability / 5 && failureProbability >= 0.2f) || failureProbability >= 1.0f)
                     {
-                        // If the probability is high enough, generate a fatal error
-                        //if (_random.NextDouble() < failureProbability)
-                        if ((_random.NextDouble() < failureProbability / 5 && failureProbability >= 0.2f) || failureProbability >= 1.0f)
-                        {
-                            logger.Log(LogLevel.Fatal, $"CRASH! Fatal error at {elapsedTime} ms. The system is shutting down!");
-                            throw new Exception("Fatal error: the system has been compromised.");
-                        }
-                    }, "The thread has ended due to a fatal error:");
+                        logger.Log(LogLevel.Fatal, $"CRASH! Fatal error at {elapsedTime} ms. The system is shutting down!");
+                        logger.LogException(LogLevel.Fatal, () => throw new Exception("Fatal error: the system has been compromised."), "The thread has ended due to a fatal error:");
+                        Environment.Exit(-1);
+                    }
 
                     // Asynchronous delay to avoid main thread blocking
                     await Task.Delay(100);
                 }
-
-                if (!thrown)
-                    logger.Log(LogLevel.Info, "The simulation ended without fatal errors.");
-                else
-                    Environment.Exit(-1);
+                logger.Log(LogLevel.Info, "The simulation ended without fatal errors.");
             });
         }
 

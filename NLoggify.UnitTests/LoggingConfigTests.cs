@@ -8,7 +8,7 @@ namespace NLoggify.Tests
         /// Tests if the logger is correctly configured with the specified settings.
         /// </summary>
         [Fact]
-        public void ConfigureLogging_ShouldSetCorrectValues()
+        public void Configure_ShouldSetCorrectValues()
         {
             // Arrange
             var expectedLevel = LogLevel.Warning;
@@ -34,7 +34,7 @@ namespace NLoggify.Tests
         [InlineData("WrongFormat", true)] // Invalid format, should throw an exception
         [InlineData("d/M/yyyy H:m", false)] // Valid format, no exception should be thrown
         [InlineData("yyyy-MM-dd HH:mm:ss", false)] // Valid format, no exception should be thrown
-        public void ConfigureLogging_ShouldValidateTimestamp(string timestampFormat, bool shouldThrowException)
+        public void Configure_ShouldValidateTimestamp(string timestampFormat, bool shouldThrowException)
         {
             // Act
             try
@@ -55,5 +55,20 @@ namespace NLoggify.Tests
                 }
             }
         }
+
+        /// <summary>
+        /// Tests if an exception is (as expected) thrown if the given path doesn't exist
+        /// </summary>
+        [Fact]
+        public void Configure_ShouldThrowException_IfLogFilePathIsInvalid()
+        {
+            // Arrange
+            string invalidFilePath = "Z:\\cartella\\inesistente\\log.txt";
+
+            // Act & Assert
+            var ex = Assert.Throws<IOException>(() => LoggingConfig.Configure(LogLevel.Info, LoggerType.PlainText, invalidFilePath));
+            Assert.Contains("Cannot access to the given path", ex.Message);
+        }
+
     }
 }

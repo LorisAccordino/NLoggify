@@ -40,16 +40,19 @@ namespace NLoggify.Logging.Config
         /// <param name="loggerType">The type of logger to use.</param>
         /// <param name="filePath">The file path for file-based logging (ignored for console logging).</param>
         /// <param name="timestampFormat">The format to use for logging timestamps (optional).</param>
-        public static void Configure(LogLevel minimumLogLevel, LoggerType loggerType, string? filePath = null, string timestampFormat = "")
+        public static void Configure(LogLevel minimumLogLevel, LoggerType loggerType, string filePath = "", string timestampFormat = "")
         {
             lock (_lock)
             {
+                // Assign log level and type
                 MinimumLogLevel = minimumLogLevel;
                 LoggerType = loggerType;
-                FilePath = filePath ?? FilePath;
 
-                // Validate the timestamp format if provided
-                if (IsValidTimestampFormat(timestampFormat)) TimestampFormat = timestampFormat;
+                // Validate the path
+                if (ConfigValidation.ValidatePath(filePath)) FilePath = filePath;
+
+                // Validate the timestamp format
+                if (ConfigValidation.ValidateTimestampFormat(timestampFormat)) TimestampFormat = timestampFormat;
 
                 // Reconfigure the logger
                 Logger.Reconfigure();
@@ -70,28 +73,6 @@ namespace NLoggify.Logging.Config
                 LoggerType.JSON => new JsonLogger(FilePath),
                 _ => throw new NotSupportedException("The specified logger type is not supported.")
             };
-        }
-
-        /// <summary>
-        /// Validates whether the provided timestamp format is a valid DateTime format string.
-        /// </summary>
-        /// <param name="format">The format string to validate.</param>
-        /// <exception cref="ArgumentException">This given format is invalid.</exception>
-        /// <returns>True if the format is valid, otherwise false.</returns>
-        private static bool IsValidTimestampFormat(string format)
-        {
-            // Empty format, skip
-            if (string.IsNullOrEmpty(format)) return false;
-
-            // Try parsing a sample DateTime with the provided format to validate it
-            if (!DateTime.TryParseExact(DateTime.Now.ToString(format), format, null, System.Globalization.DateTimeStyles.None, out _))
-            {
-                // Invalid format, throw an exception
-                throw new ArgumentException("Invalid timestamp format. Please provide a valid DateTime format string.");
-            }
-
-            // Valid format
-            return true;
         }
     }
 }
