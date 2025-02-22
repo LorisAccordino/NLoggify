@@ -1,5 +1,4 @@
 ﻿using NLoggify.Utils;
-using System.Text.RegularExpressions;
 
 namespace NLoggify.Logging.Config
 {
@@ -12,9 +11,11 @@ namespace NLoggify.Logging.Config
         /// Validates whether the provided path is a valid filepath (it could be either null or inexistent)
         /// </summary>
         /// <param name="path">The path to validate</param>
+        /// <param name="IncludeFileName">Does the path include filename?</param>
+        /// <param name="RequireFileName">Is the filename required?</param>
         /// <returns>True if the format is valid, otherwise false.</returns>
         /// <exception cref="IOException">This given path is invalid</exception>
-        public static bool ValidatePath(string path)
+        public static bool ValidatePath(string path, bool IncludeFileName, bool RequireFileName = false)
         {
             if (string.IsNullOrEmpty(path)) return false;
 

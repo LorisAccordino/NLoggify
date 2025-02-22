@@ -7,8 +7,6 @@ namespace NLoggify.Logging.Loggers.Storage
     /// </summary>
     internal class PlainTextLogger : FileLogger
     {
-        public PlainTextLogger(string filePath) : base(filePath) { }
-
         /// <summary>
         /// Formats the log entry as plain text.
         /// </summary>

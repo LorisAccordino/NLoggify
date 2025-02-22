@@ -8,26 +8,18 @@ namespace NLoggify.Logging.Loggers.Storage
     /// </summary>
     internal abstract class FileLogger : Logger
     {
-        private readonly string _filePath;
+        //private readonly string _filePath;
         private readonly object _fileLock = new(); // Lock for thread-safe writing
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogger"/> class.
         /// </summary>
-        /// <param name="filePath">The file path where logs will be written.</param>
-        protected FileLogger(string filePath)
+        ///// <param name="filePath">The file path where logs will be written.</param>
+        protected FileLogger()
         {
-            // Validate path
-            ConfigValidation.ValidatePath(filePath);
-
-            _filePath = filePath;
-
-            // Ensure the directory exists
-            var directory = Path.GetDirectoryName(filePath);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            // File logging configuration
+            FileLoggingConfig.EnableTimestampedLogFile();
+            FileLoggingConfig.EnsureLogDirectoryExists();
         }
 
         protected override sealed void WriteLog(LogLevel level, string message, string timestamp)
@@ -36,7 +28,7 @@ namespace NLoggify.Logging.Loggers.Storage
 
             lock (_fileLock) // Ensure thread-safety when writing to the file
             {
-                File.AppendAllText(_filePath, logEntry + Environment.NewLine);
+                File.AppendAllText(FileLoggingConfig.FilePath, logEntry + Environment.NewLine);
             }
         }
 

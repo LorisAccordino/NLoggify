@@ -15,7 +15,7 @@ public class Program
 
             // Current logger test
             Console.WriteLine($"===== {type} Logger Test Started =====\n");
-            Logger.GetLogger().LogException(LogLevel.Fatal, () => Test(Logger.GetLogger()), "AHHH, ECCEZIONEE");
+            Test(Logger.GetLogger());
             Console.WriteLine($"\n===== {type} Logger Test Completed =====\n\n\n");
         }
 

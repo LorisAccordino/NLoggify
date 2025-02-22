@@ -11,7 +11,7 @@
         /// <param name="path">Path to validate</param>
         /// <param name="IncludeFileName">Does the path include filename?</param>
         /// <param name="RequireFileName">Is the filename required?</param>
-        /// <returns></returns>
+        /// <returns>True if the format is valid, otherwise false.</returns>
         public static bool ValidatePath(string path, bool IncludeFileName, bool RequireFileName = false)
         {
             if (string.IsNullOrEmpty(path)) return false;

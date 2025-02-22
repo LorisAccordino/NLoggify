@@ -8,7 +8,11 @@ namespace NLoggify.Logging.Loggers.Storage
     /// </summary>
     internal class JsonLogger : FileLogger
     {
-        public JsonLogger(string filePath) : base(filePath) { }
+        public JsonLogger() : base()
+        {
+            // Change the extension to .json
+            FileLoggingConfig.SetCustomFilePath(Path.ChangeExtension(FileLoggingConfig.FilePath, "json"));
+        }
 
         /// <summary>
         /// Formats the log entry as a JSON object.

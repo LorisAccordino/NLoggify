@@ -60,8 +60,8 @@ namespace NLoggify.Logging.Config
             {
                 LoggerType.Debug => new DebugLogger(),
                 LoggerType.Console => new ConsoleLogger(),
-                LoggerType.PlainText => new PlainTextLogger(FileLoggingConfig.FilePath),
-                LoggerType.JSON => new JsonLogger(FileLoggingConfig.FilePath),
+                LoggerType.PlainText => new PlainTextLogger(),
+                LoggerType.JSON => new JsonLogger(),
                 _ => throw new NotSupportedException("The specified logger type is not supported.")
             };
         }

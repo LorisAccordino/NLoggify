@@ -6,7 +6,7 @@ namespace NLoggify.Logging.Config
     /// Configuration class for file-based logging.
     /// Provides methods to set and validate log file paths and directories.
     /// </summary>
-    public class FileLoggingConfig
+    public static class FileLoggingConfig
     {
         private static readonly object _lock = new();
 
@@ -24,7 +24,7 @@ namespace NLoggify.Logging.Config
         {
             lock (_lock)
             {
-                ConfigValidation.ValidatePath(filePath);
+                ConfigValidation.ValidatePath(filePath, true);
                 FilePath = Path.GetFullPath(filePath);
             }
         }
@@ -37,11 +37,7 @@ namespace NLoggify.Logging.Config
         /// <exception cref="ArgumentException">Thrown if the directory path is invalid.</exception>
         public static void SetLogDirectory(string directoryPath)
         {
-            if (string.IsNullOrWhiteSpace(directoryPath))
-                throw new ArgumentException("Directory path cannot be empty.");
-
-            if (directoryPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-                throw new ArgumentException("Directory path contains invalid characters.");
+            ConfigValidation.ValidatePath(directoryPath, false);
 
             // Ensure the directory exists
             Directory.CreateDirectory(directoryPath);
@@ -56,12 +52,12 @@ namespace NLoggify.Logging.Config
         /// Enables timestamped log files with the format "log_yyyy-MM-dd_HH-mm-ss.log".
         /// This allows logs to be stored with unique filenames based on creation time.
         /// </summary>
-        public static void EnableTimestampedLogFile()
+        internal static void EnableTimestampedLogFile()
         {
             lock (_lock)
             {
                 string directory = Path.GetDirectoryName(FilePath) ?? Directory.GetCurrentDirectory();
-                string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                string timestamp = DateTime.Now.ToString(LoggingConfig.TimestampFormat);
                 FilePath = Path.Combine(directory, $"log_{timestamp}.log");
             }
         }
@@ -70,7 +66,7 @@ namespace NLoggify.Logging.Config
         /// Ensures that the directory containing the log file exists.
         /// If the directory does not exist, it is automatically created.
         /// </summary>
-        public static void EnsureLogDirectoryExists()
+        internal static void EnsureLogDirectoryExists()
         {
             string directory = Path.GetDirectoryName(FilePath) ?? Directory.GetCurrentDirectory();
             Directory.CreateDirectory(directory);
