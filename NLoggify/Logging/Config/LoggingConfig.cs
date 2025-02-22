@@ -33,18 +33,14 @@ namespace NLoggify.Logging.Config
         /// </summary>
         /// <param name="minimumLogLevel">The minimum log level required for messages to be recorded.</param>
         /// <param name="loggerType">The type of logger to use.</param>
-        /// <param name="filePath">The file path for file-based logging (ignored for console logging).</param>
         /// <param name="timestampFormat">The format to use for logging timestamps (optional).</param>
-        public static void Configure(LogLevel minimumLogLevel, LoggerType loggerType, string filePath = "", string timestampFormat = "")
+        public static void Configure(LogLevel minimumLogLevel, LoggerType loggerType, string timestampFormat = "")
         {
             lock (_lock)
             {
                 // Assign log level and type
                 MinimumLogLevel = minimumLogLevel;
                 LoggerType = loggerType;
-
-                // Validate the path
-                if (ConfigValidation.ValidatePath(filePath)) FilePath = filePath;
 
                 // Validate the timestamp format
                 if (ConfigValidation.ValidateTimestampFormat(timestampFormat)) TimestampFormat = timestampFormat;
@@ -64,8 +60,8 @@ namespace NLoggify.Logging.Config
             {
                 LoggerType.Debug => new DebugLogger(),
                 LoggerType.Console => new ConsoleLogger(),
-                LoggerType.PlainText => new PlainTextLogger(FilePath),
-                LoggerType.JSON => new JsonLogger(FilePath),
+                LoggerType.PlainText => new PlainTextLogger(FileLoggingConfig.FilePath),
+                LoggerType.JSON => new JsonLogger(FileLoggingConfig.FilePath),
                 _ => throw new NotSupportedException("The specified logger type is not supported.")
             };
         }

@@ -24,8 +24,7 @@ namespace NLoggify.Logging.Config
         {
             lock (_lock)
             {
-                GenericUtils.ValidatePath(filePath, true);
-
+                ConfigValidation.ValidatePath(filePath);
                 FilePath = Path.GetFullPath(filePath);
             }
         }

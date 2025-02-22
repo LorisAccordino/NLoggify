@@ -13,15 +13,13 @@ namespace NLoggify.Tests
             // Arrange
             var expectedLevel = LogLevel.Warning;
             var expectedType = LoggerType.PlainText;
-            var expectedPath = "output.log";
 
             // Act
-            LoggingConfig.Configure(expectedLevel, expectedType, expectedPath);
+            LoggingConfig.Configure(expectedLevel, expectedType);
 
             // Assert
             Assert.Equal(expectedLevel, LoggingConfig.MinimumLogLevel);
             Assert.Equal(expectedType, LoggingConfig.LoggerType);
-            Assert.Equal(expectedPath, LoggingConfig.FilePath);
         }
 
         /// <summary>
@@ -39,20 +37,14 @@ namespace NLoggify.Tests
             // Act
             try
             {
-                LoggingConfig.Configure(LogLevel.Info, LoggerType.Console, "", timestampFormat);
+                LoggingConfig.Configure(LogLevel.Info, LoggerType.Console, timestampFormat);
 
                 // Assert
-                if (shouldThrowException)
-                {
-                    Assert.Fail("Expected exception not thrown.");
-                }
+                if (shouldThrowException) Assert.Fail("Expected exception not thrown.");
             }
             catch (ArgumentException)
             {
-                if (!shouldThrowException)
-                {
-                    Assert.Fail("Unexpected exception thrown.");
-                }
+                if (!shouldThrowException) Assert.Fail("Unexpected exception thrown.");
             }
         }
 
@@ -62,7 +54,7 @@ namespace NLoggify.Tests
         /// <param name="filePath">The log file path to be validated.</param>
         /// <param name="shouldThrowException">Indicates whether an exception should be thrown for the given path.</param>
         [Theory]
-        [InlineData("", false)] // Empty path is valid
+        [InlineData("", true)] // Empty path is invalid
         [InlineData("   ", true)] // Path with only spaces is invalid
         [InlineData("C:\\Valid\\Path\\log.txt", false)] // Valid path
         [InlineData("C:/Another/Valid/Path/log.log", false)] // Valid Unix-style path
@@ -73,20 +65,14 @@ namespace NLoggify.Tests
             // Act
             try
             {
-                LoggingConfig.Configure(LogLevel.Info, LoggerType.PlainText, filePath);
+                FileLoggingConfig.SetCustomFilePath(filePath);
 
                 // Assert
-                if (shouldThrowException)
-                {
-                    Assert.Fail("Expected exception not thrown.");
-                }
+                if (shouldThrowException) Assert.Fail("Expected exception not thrown.");
             }
             catch (ArgumentException)
             {
-                if (!shouldThrowException)
-                {
-                    Assert.Fail("Unexpected exception thrown.");
-                }
+                if (!shouldThrowException) Assert.Fail("Unexpected exception thrown.");
             }
         }
     }
