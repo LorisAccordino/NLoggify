@@ -6,6 +6,7 @@ namespace NLoggify.Tests
     /// <summary>
     /// Unit tests for the <see cref="Logger"/> singleton behavior.
     /// </summary>
+    [Collection("SequentialTests")]
     public class LoggerInstanceTests
     {
         /// <summary>

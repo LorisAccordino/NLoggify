@@ -6,6 +6,7 @@ namespace NLoggify.Tests
     /// <summary>
     /// Unit tests for verifying the behavior of the logger and its configuration.
     /// </summary>
+    [Collection("SequentialTests")]
     public class LoggerBehaviourTests
     {
         /// <summary>
@@ -23,19 +24,30 @@ namespace NLoggify.Tests
             LoggingConfig.Configure(configLevel, LoggerType.Console);
             var logger = Logger.GetLogger();
 
+            // Save the original output stream
+            var originalOutput = Console.Out;
+
             using (var sw = new StringWriter())
             {
                 Console.SetOut(sw); // Redirect the output of the console to catch the log
 
-                // Act
-                logger.Log(messageLevel, "Test message");
+                try
+                {
+                    // Act
+                    logger.Log(messageLevel, "Test message");
 
-                // Assert
-                var output = sw.ToString();
-                if (shouldLog)
-                    Assert.Contains("Test message", output);
-                else
-                    Assert.DoesNotContain("Test message", output);
+                    // Assert
+                    var output = sw.ToString();
+                    if (shouldLog)
+                        Assert.Contains("Test message", output);
+                    else
+                        Assert.DoesNotContain("Test message", output);
+                }
+                finally
+                {
+                    // Restore the original output stream
+                    Console.SetOut(originalOutput);
+                }
             }
         }
 

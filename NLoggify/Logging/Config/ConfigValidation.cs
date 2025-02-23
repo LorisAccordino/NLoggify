@@ -20,7 +20,7 @@ namespace NLoggify.Logging.Config
             if (string.IsNullOrEmpty(path)) return false;
 
             // Validate the path following the best logic
-            if (GenericUtils.ValidatePath(path, true, true)) return true;
+            if (GenericUtils.ValidatePath(path, IncludeFileName, RequireFileName)) return true;
             throw new ArgumentException("Invalid path! Invalid format", path);
         }
 

@@ -1,8 +1,6 @@
 ﻿using Nloggify.Tests.Examples;
-using Nloggify.Tests.Examples.Simulations;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Loggers;
-using NLoggify.Utils;
 
 public class Program
 {
@@ -12,7 +10,7 @@ public class Program
         LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
 
         // Tests every supported type of logger
-        foreach (LoggerType type in GenericUtils.GetEnumValues<LoggerType>())
+        foreach (LoggerType type in Enum.GetValues<LoggerType>())
         {
             if (type == LoggerType.Multi)
             {

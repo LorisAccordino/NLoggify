@@ -3,7 +3,7 @@
     /// <summary>
     /// Utility class that provides miscellanous utility methods.
     /// </summary>
-    public static class GenericUtils
+    internal static class GenericUtils
     {
         /// <summary>
         /// Validate a given path with a robust series of checks

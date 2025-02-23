@@ -8,7 +8,9 @@ namespace NLoggify.Logging.Loggers
     public abstract class Logger : ILogger, IDisposable
     {
         private static Logger? _instance;  // Static instance for the Singleton pattern
-        private static readonly object _lock = new object();  // Lock object for thread safety
+        private static readonly object _lock = new object();            // Lock object for thread safety
+        private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
+        private static readonly object _masterLock = new();             // Master lock for complex operations
 
         /// <summary>
         /// Gets the singleton instance of the Logger.
@@ -30,13 +32,46 @@ namespace NLoggify.Logging.Loggers
             }
         }
 
+
+        /// <summary>
+        /// Executes the given action with exclusive access to the logger.
+        /// No other logging operations will be allowed while this executes.
+        /// </summary>
+        /// <param name="action">The action to execute exclusively.</param>
+        public static void RunExclusive(Action action)
+        {
+            lock (_masterLock)
+            {
+                action();
+            }
+        }
+
+        /// <summary>
+        /// Executes the given function with exclusive access to the logger.
+        /// Ensures no other logging operations run concurrently.
+        /// </summary>
+        /// <typeparam name="T">The return type of the function.</typeparam>
+        /// <param name="func">The function to execute exclusively.</param>
+        /// <returns>The result of the executed function.</returns>
+        public static T RunExclusive<T>(Func<T> func)
+        {
+            lock (_masterLock)
+            {
+                return func();
+            }
+        }
+
+
         /// <summary>
         /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
         /// </summary>
         /// <returns>Logger instance.</returns>
         public static ILogger GetLogger()
         {
-            return LoggerProxy.Instance;
+            lock(_lock)
+            {
+                return LoggerProxy.Instance;
+            }
         }
 
         /// <summary>
@@ -57,12 +92,15 @@ namespace NLoggify.Logging.Loggers
         /// <param name="message">The log message to be recorded.</param>
         public void Log(LogLevel level, string message)
         {
-            // Filtering logic: Only log messages that meet or exceed the configured level
-            if (level < LoggingConfig.MinimumLogLevel)
-                return;
+            lock (_lock)
+            {
+                // Filtering logic: Only log messages that meet or exceed the configured level
+                if (level < LoggingConfig.MinimumLogLevel)
+                    return;
 
-            // Call the concrete implementation of logging
-            WriteLog(level, message, DateTime.Now.ToString(LoggingConfig.TimestampFormat));
+                // Call the concrete implementation of logging
+                WriteLog(level, message, DateTime.Now.ToString(LoggingConfig.TimestampFormat));
+            }
         }
 
         /// <summary>
@@ -74,17 +112,20 @@ namespace NLoggify.Logging.Loggers
         /// <returns>True if the exception was thrown, otherwise false</returns>
         public bool LogException(LogLevel level, Action action, string message = "")
         {
-            // Try to execute the given code
-            try
+            lock (_lock)
             {
-                action();
-                return false;
-            }
-            catch (Exception ex)
-            {
-                // Log the raised exception
-                Log(level, $"{message}\nException: {ex.Message}\n{ex.StackTrace}");
-                return true;
+                // Try to execute the given code
+                try
+                {
+                    action();
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    // Log the raised exception
+                    Log(level, $"{message}\nException: {ex.Message}\n{ex.StackTrace}");
+                    return true;
+                }
             }
         }
 
@@ -97,6 +138,8 @@ namespace NLoggify.Logging.Loggers
         /// <returns>True if the exception was thrown, otherwise false</returns>
         public async Task<bool> LogException(LogLevel level, Func<Task> action, string message = "")
         {
+            await _asyncLock.WaitAsync(); // Wait that no threads are executing the method
+
             try
             {
                 await action(); // Await the async operation
@@ -107,6 +150,10 @@ namespace NLoggify.Logging.Loggers
                 // Log the raised exception
                 Log(level, $"{message}\nException: {ex.Message}\n{ex.StackTrace}");
                 return true;
+            }
+            finally
+            {
+                _asyncLock.Release(); // Release the lock for the next thread
             }
         }
 

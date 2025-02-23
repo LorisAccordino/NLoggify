@@ -2,6 +2,10 @@
 
 namespace NLoggify.Tests
 {
+    /// <summary>
+    /// Unit tests for verifying the logging configuration.
+    /// </summary>
+    [Collection("SequentialTests")]
     public class LoggingConfigTests
     {
         /// <summary>
@@ -53,6 +57,7 @@ namespace NLoggify.Tests
         /// </summary>
         /// <param name="filePath">The log file path to be validated.</param>
         /// <param name="shouldThrowException">Indicates whether an exception should be thrown for the given path.</param>
+        /// <param name="hasFilename">Indicates whether to test even the filename or not.</param>
         [Theory]
         [InlineData("", true)] // Empty path is invalid
         [InlineData("   ", true)] // Path with only spaces is invalid
