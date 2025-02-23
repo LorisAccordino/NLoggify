@@ -1,6 +1,4 @@
-﻿using NLoggify.Utils;
-
-namespace NLoggify.Logging.Config
+﻿namespace NLoggify.Logging.Config
 {
     /// <summary>
     /// Configuration class for file-based logging.
@@ -53,7 +51,12 @@ namespace NLoggify.Logging.Config
         /// Ensures that the timestamp format is compatible with file naming.
         /// </summary>
         /// <exception cref="ArgumentException">Thrown if the timestamp format cannot be used in a file name.</exception>
+        /// 
+        #if DEBUG
+        public static void EnableTimestampedLogFile()
+        #else
         internal static void EnableTimestampedLogFile()
+        #endif
         {
             lock (_lock)
             {
@@ -77,7 +80,11 @@ namespace NLoggify.Logging.Config
         /// </summary>
         /// <param name="filename">The filename to validate.</param>
         /// <returns>A valid filename or an empty string if the correction is impossible.</returns>
-        private static string MakeValidFilename(string filename)
+        #if DEBUG
+        public static string MakeValidFilename(string filename)
+        #else
+        internal static string MakeValidFilename(string filename)
+        #endif
         {
             if (string.IsNullOrWhiteSpace(filename)) return string.Empty;
 
@@ -91,7 +98,11 @@ namespace NLoggify.Logging.Config
         /// Ensures that the directory containing the log file exists.
         /// If the directory does not exist, it is automatically created.
         /// </summary>
+        #if DEBUG
+        public static void EnsureLogDirectoryExists()
+        #else
         internal static void EnsureLogDirectoryExists()
+        #endif
         {
             string directory = Path.GetDirectoryName(FilePath) ?? Directory.GetCurrentDirectory();
             Directory.CreateDirectory(directory);

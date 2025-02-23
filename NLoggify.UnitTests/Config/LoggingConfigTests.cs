@@ -1,6 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 
-namespace NLoggify.Tests
+namespace NLoggify.UnitTests.Config
 {
     /// <summary>
     /// Unit tests for verifying the logging configuration.

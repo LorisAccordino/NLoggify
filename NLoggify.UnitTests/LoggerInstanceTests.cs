@@ -1,7 +1,7 @@
 using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Config;
 
-namespace NLoggify.Tests
+namespace NLoggify.UnitTests
 {
     /// <summary>
     /// Unit tests for the <see cref="Logger"/> singleton behavior.
