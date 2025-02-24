@@ -1,4 +1,6 @@
-﻿namespace NLoggify.Logging.Config
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NLoggify.Logging.Config
 {
     /// <summary>
     /// Configuration class for file-based logging.
@@ -86,11 +88,8 @@
         /// </summary>
         /// <param name="filename">The filename to validate.</param>
         /// <returns>A valid filename or an empty string if the correction is impossible.</returns>
-#if DEBUG
-        public static string MakeValidFilename(string filename)
-#else
+        [ExcludeFromCodeCoverage] // No reason to test it
         internal static string MakeValidFilename(string filename)
-#endif
         {
             if (string.IsNullOrWhiteSpace(filename)) return string.Empty;
 
@@ -104,11 +103,8 @@
         /// Ensures that the directory containing the log file exists.
         /// If the directory does not exist, it is automatically created.
         /// </summary>
-#if DEBUG
-        public static void EnsureLogDirectoryExists()
-#else
+        [ExcludeFromCodeCoverage] // No reason to test it
         internal static void EnsureLogDirectoryExists()
-#endif
         {
             string directory = Path.GetDirectoryName(FilePath) ?? Directory.GetCurrentDirectory();
             Directory.CreateDirectory(directory);

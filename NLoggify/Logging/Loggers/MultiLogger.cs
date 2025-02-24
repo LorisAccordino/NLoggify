@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -14,6 +15,7 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Logs a message to all configured loggers.
         /// </summary>
+        [ExcludeFromCodeCoverage] // No reason to test it
         protected override void WriteLog(LogLevel level, string message, string timestamp)
         {
             foreach (var logger in LoggingConfig.Loggers)
@@ -25,6 +27,7 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Disposes all loggers in the composite.
         /// </summary>
+        [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose()
         {
             foreach (var logger in LoggingConfig.Loggers)

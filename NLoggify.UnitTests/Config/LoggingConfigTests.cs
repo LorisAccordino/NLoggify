@@ -3,6 +3,7 @@ using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
 using NLoggify.UnitTests.Utils;
+using NLoggify.Utils;
 
 namespace NLoggify.UnitTests.Config
 {
@@ -64,18 +65,25 @@ namespace NLoggify.UnitTests.Config
         /// <param name="shouldThrowException">Indicates whether an exception should be thrown for the given path.</param>
         /// <param name="hasFilename">Indicates whether to test even the filename or not.</param>
         [Theory]
+        [InlineData(null, true)] // Path is null
         [InlineData("", true)] // Empty path is invalid
         [InlineData("   ", true)] // Path with only spaces is invalid
         [InlineData("C:\\Valid\\Path\\log.txt", false)] // Valid path
+        [InlineData("C:\\Valid\\Path", false)]  // Valid path without filename required
         [InlineData("C:/Another/Valid/Path/log.log", false)] // Valid Unix-style path
         [InlineData("C:\\Path\\With\\Illegal|Char.txt", true)] // Invalid path due to illegal characters
         [InlineData("/invalid_path_with_*?.txt", true)] // Invalid path due to wildcard characters
+        [InlineData("C:\\Folder\\", true)] // Empty filename
+        [InlineData("C:\\", true)] // Empty folder (only root)
+        [InlineData(@"C:/Folder\InvalidPath", false)] // Mixed path
+        //[InlineData(new string('a', 270), false)] // Too long name
         public void Configure_ShouldValidateLogFilePath(string filePath, bool shouldThrowException)
         {
             // Act
             try
             {
                 FileLoggingConfig.SetCustomFilePath(filePath);
+                GenericUtils.ValidatePath(filePath, true, true);
 
                 // Assert
                 if (shouldThrowException) Assert.Fail("Expected exception not thrown.");

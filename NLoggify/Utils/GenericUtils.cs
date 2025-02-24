@@ -3,7 +3,11 @@
     /// <summary>
     /// Utility class that provides miscellanous utility methods.
     /// </summary>
+    #if DEBUG
+    public static class GenericUtils
+    #else
     internal static class GenericUtils
+    #endif
     {
         /// <summary>
         /// Validate a given path with a robust series of checks
@@ -19,22 +23,16 @@
             string? root = null;
             string? directory = null;
             string? filename = null;
-            try
-            {
-                // Throw ArgumentException - The path parameter contains invalid characters, is empty, or contains only white spaces.
-                root = Path.GetPathRoot(path);
 
-                // Throw ArgumentException - path contains one or more of the invalid characters defined in GetInvalidPathChars.
-                // -OR- String.Empty was passed to path.
-                directory = Path.GetDirectoryName(path);
+            // Throw ArgumentException - The path parameter contains invalid characters, is empty, or contains only white spaces.
+            root = Path.GetPathRoot(path);
 
-                // Path contains one or more of the invalid characters defined in GetInvalidPathChars
-                if (IncludeFileName) { filename = Path.GetFileName(path); }
-            }
-            catch (ArgumentException)
-            {
-                return false;
-            }
+            // Throw ArgumentException - path contains one or more of the invalid characters defined in GetInvalidPathChars.
+            // -OR- String.Empty was passed to path.
+            directory = Path.GetDirectoryName(path);
+
+            // Path contains one or more of the invalid characters defined in GetInvalidPathChars
+            if (IncludeFileName) { filename = Path.GetFileName(path); }
 
             // Null if path is null, or an empty string if path does not contain root directory information
             if (string.IsNullOrEmpty(root)) { return false; }

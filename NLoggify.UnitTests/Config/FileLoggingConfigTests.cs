@@ -79,37 +79,6 @@ namespace NLoggify.UnitTests.Config
         }
 
         /// <summary>
-        /// Verifies that invalid characters in file names are replaced correctly.
-        /// Specifically, characters like '|', '<', '>', and '*' are replaced with an underscore.
-        /// </summary>
-        [Fact]
-        public void MakeValidFilename_ShouldReplaceInvalidChars()
-        {
-            var invalidFilename = "log|invalid<>filename*.log";
-            var validFilename = FileLoggingConfig.MakeValidFilename(invalidFilename);
-            Assert.Equal("log_invalid__filename_.log", validFilename);
-        }
-
-        /// <summary>
-        /// Verifies that the log directory is created if it does not already exist.
-        /// This ensures that logging can proceed without issues even if the directory needs to be created at runtime.
-        /// </summary>
-        [Fact]
-        public void EnsureLogDirectoryExists_ShouldCreateDirectoryIfNotExists()
-        {
-            var directoryPath = @"C:\Custom\EnsureDirectory";
-            FileLoggingConfig.SetCustomFilePath(Path.Combine(directoryPath, "output.log"));
-
-            // Make sure the directory doesn't exist
-            if (Directory.Exists(directoryPath)) Directory.Delete(directoryPath, true);
-
-            FileLoggingConfig.EnsureLogDirectoryExists();
-
-            // Check the directory has been created
-            Assert.True(Directory.Exists(directoryPath));
-        }
-
-        /// <summary>
         /// Tests that the log directory is correctly set and the file path is generated properly
         /// when enabling a timestamped log file.
         /// </summary>

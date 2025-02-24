@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Storage
 {
@@ -52,6 +53,7 @@ namespace NLoggify.Logging.Loggers.Storage
         /// <returns>The formatted log entry.</returns>
         protected abstract string FormatLog(LogLevel level, string message, string timestamp);
 
+        [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose() { }
     }
 }

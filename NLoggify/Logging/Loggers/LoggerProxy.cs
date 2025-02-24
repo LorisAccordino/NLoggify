@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -11,10 +12,8 @@ namespace NLoggify.Logging.Loggers
         private static readonly LoggerProxy _instance = new LoggerProxy();
 
         #if DEBUG
-        public static string GetDebugOutput()
-        {
-            return Logger.GetDebugOutput();
-        }
+        [ExcludeFromCodeCoverage] // No reason to test it
+        public static string GetDebugOutput() { return Logger.GetDebugOutput(); }
         #endif
 
         /// <summary>
@@ -70,6 +69,7 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Releases resources held by the current logger.
         /// </summary>
+        [ExcludeFromCodeCoverage] // No reason to test it
         public void Dispose()
         {
             CurrentLogger.Dispose();

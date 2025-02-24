@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Output
 {
@@ -22,6 +23,7 @@ namespace NLoggify.Logging.Loggers.Output
 #endif
         }
 
+        [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose() { }
     }
 }

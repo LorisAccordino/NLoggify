@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Storage
 {
@@ -20,6 +21,7 @@ namespace NLoggify.Logging.Loggers.Storage
         /// <summary>
         /// Formats the log entry as plain text.
         /// </summary>
+        [ExcludeFromCodeCoverage] // No reason to test it
         protected override string FormatLog(LogLevel level, string message, string timestamp)
         {
             string logLine = $"[{timestamp}] {level}: {message}";

@@ -189,7 +189,7 @@ namespace NLoggify.UnitTests
         }
 
         /// <summary>
-        /// 
+        /// Tests that logger runs exclusively an operation to protect a resource
         /// </summary>
         [Fact]
         public async Task Logger_RunExclusive_ShouldExecuteActionExclusively()
@@ -224,6 +224,10 @@ namespace NLoggify.UnitTests
             Assert.Equal(10, executionOrder.Count); // All actions should be executed, but exclusively
         }
 
+        /// <summary>
+        /// Tests that logger runs exclusively an operation to protect a resource it returns the correct result
+        /// </summary>
+        /// <returns>Result of the operation</returns>
         [Fact]
         public async Task Logger_RunExclusive_ShouldExecuteFunctionExclusively()
         {
