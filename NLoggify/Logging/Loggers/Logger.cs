@@ -7,7 +7,7 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     public abstract class Logger : ILogger, IDisposable
     {
-        private static Logger? _instance;  // Static instance for the Singleton pattern
+        private static Logger? _instance = null;  // Static instance for the Singleton pattern
         private static readonly object _lock = new object();            // Lock object for thread safety
         private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
         private static readonly object _masterLock = new();             // Master lock for complex operations
@@ -25,7 +25,11 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Gets the singleton instance of the Logger.
         /// </summary>
+        #if DEBUG
+        public static Logger Instance
+        #else
         internal static Logger Instance
+        #endif
         {
             get
             {
@@ -40,6 +44,13 @@ namespace NLoggify.Logging.Loggers
                     return _instance;
                 }
             }
+
+            #if DEBUG
+            set
+            {
+                _instance = value;
+            }
+            #endif
         }
 
 

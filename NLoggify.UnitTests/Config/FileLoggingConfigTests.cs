@@ -140,7 +140,5 @@ namespace NLoggify.UnitTests.Config
             }
 
         }
-
-
     }
 }

@@ -52,6 +52,24 @@ namespace NLoggify.UnitTests
         }
 
         /// <summary>
+        /// Tests the instance (directly) to check its behaviour
+        /// </summary>
+        [Fact]
+        public void Instance_ShouldCreateNewInstance_WhenFirstAccessed()
+        {
+            // Arrange
+            Logger.Instance = null; // Make it null, for debug its behaviour
+            var initialInstance = Logger.Instance;  // First access, should initialize the instance
+
+            // Act
+            var secondInstance = Logger.Instance;  // Second access, should return the same instance
+
+            // Assert
+            Assert.NotNull(initialInstance);  // Make sure the instance is not null
+            Assert.Same(initialInstance, secondInstance);  // Make sure both the access return the same instance
+        }
+
+        /// <summary>
         /// Tests if the logger respects the configured log level and logs the message accordingly.
         /// This test runs on multiple logger types.
         /// </summary>
@@ -84,9 +102,53 @@ namespace NLoggify.UnitTests
                 Assert.DoesNotContain("Test message", output);
         }
 
+        /// <summary>
+        /// Test if the logger has the expected behaviour during catching exceptions
+        /// </summary>
+        /// <param name="throwException">Should throw exception?</param>
+        [Theory]
+        [InlineData(false)]  // No exception (false)
+        [InlineData(true)]   // Exception thrown (true)
+        public void LogException_ShouldReturnExpectedResult_WhenActionIsExecuted(bool throwException)
+        {
+            // Arrange
+            bool actionExecuted = false;
 
-        [Fact]
-        public async Task LogException_ShouldCatchAsyncExceptions()
+            Action action = () =>
+            {
+                actionExecuted = true;
+                if (throwException) throw new InvalidOperationException("Test exception");
+            };
+
+            // Act
+            var result = Logger.GetLogger().LogException(LogLevel.Error, action, "An error occurred");
+
+            // Assert
+            Assert.True(actionExecuted);  // Ensure the action was executed
+
+            if (throwException)
+            {
+                var output = Logger.GetDebugOutput();
+                // Scenario with exception
+                Assert.True(result);  // Ensure the method returns true when an exception is thrown
+                Assert.Contains("Test exception", output);  // Ensure the exception message is in the log
+                Assert.Contains("An error occurred", output);  // Ensure the custom message is in the log
+            }
+            else
+            {
+                // Scenario without exception
+                Assert.False(result);  // Ensure the method returns false when no exception is thrown
+            }
+        }
+
+        /// <summary>
+        /// Tests if the logger catches properly either sync or async exception during operations
+        /// </summary>
+        /// /// <param name="throwException">Should throw exception?</param>
+        [Theory]
+        [InlineData(false)]  // No exception (false)
+        [InlineData(true)]   // Exception thrown (true)
+        public async Task LogException_ShouldCatchAsyncExceptions(bool throwException)
         {
             // Arrange
             LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
@@ -96,11 +158,105 @@ namespace NLoggify.UnitTests
             bool exceptionCaught = await logger.LogException(LogLevel.Error, async () =>
             {
                 await Task.Delay(50);
-                throw new InvalidOperationException("Test error");
+                if (throwException) throw new InvalidOperationException("Test error");
             });
 
             // Assert
-            Assert.True(exceptionCaught);
+            if (throwException)
+                Assert.True(exceptionCaught);
+            else
+                Assert.False(exceptionCaught);
+        }
+
+        /// <summary>
+        /// Tests if the logger singleton behaviour is thread safe
+        /// </summary>
+        [Fact]
+        public void Logger_Instance_ShouldBeThreadSafeAndSingleton()
+        {
+            // Arrange
+            Logger logger1 = null;
+            Logger logger2 = null;
+
+            // Act
+            Parallel.Invoke(
+                () => { logger1 = Logger.Instance; }, // First thread
+                () => { logger2 = Logger.Instance; }  // Second thread
+            );
+
+            // Assert
+            Assert.Same(logger1, logger2); // Ensure the same instance is returned across threads
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Fact]
+        public async Task Logger_RunExclusive_ShouldExecuteActionExclusively()
+        {
+            // Arrange
+            var executionOrder = new List<int>();
+            var lockObject = new object(); // Used to track thread execution order
+            var tasks = new List<Task>();
+
+            Action action = () =>
+            {
+                lock (lockObject) // Ensure that the order of execution is tracked
+                {
+                    // Simulate some exclusive action
+                    executionOrder.Add(1);
+                    Thread.Sleep(50); // Simulate some work being done (e.g., logging)
+                }
+            };
+
+            // Act - Run multiple tasks in parallel
+            for (int i = 0; i < 10; i++)
+            {
+                tasks.Add(Task.Run(() => Logger.RunExclusive(action)));
+            }
+
+            // Wait for all tasks to complete
+            await Task.WhenAll(tasks);
+
+            // Assert
+            // Since the RunExclusive method ensures that only one action can be executed at a time,
+            // we should have 10 actions executed, but only one at a time.
+            Assert.Equal(10, executionOrder.Count); // All actions should be executed, but exclusively
+        }
+
+        [Fact]
+        public async Task Logger_RunExclusive_ShouldExecuteFunctionExclusively()
+        {
+            // Arrange
+            var results = new List<int>();
+            var lockObject = new object(); // Used to track thread execution order
+            var tasks = new List<Task>();
+
+            Func<int> func = () =>
+            {
+                lock (lockObject) // Ensure that the order of execution is tracked
+                {
+                    // Simulate some work and return a result
+                    results.Add(42);
+                    Thread.Sleep(50); // Simulate some work being done
+                    return 42; // The result
+                }
+            };
+
+            // Act - Run multiple tasks in parallel
+            for (int i = 0; i < 10; i++)
+            {
+                tasks.Add(Task.Run(() => Logger.RunExclusive(func)));
+            }
+
+            // Wait for all tasks to complete
+            await Task.WhenAll(tasks);
+
+            // Assert
+            // Since the RunExclusive method ensures that only one function can be executed at a time,
+            // we should have 10 function calls, but only one at a time.
+            Assert.Equal(10, results.Count); // All functions should be executed, but exclusively
+            Assert.All(results, result => Assert.Equal(42, result)); // All results should be 42
         }
     }
 }
