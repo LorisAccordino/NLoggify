@@ -6,6 +6,11 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        string ascii_art = "\r\n  _   _ _                      _  __       \r\n | \\ | | |    ___   __ _  __ _(_)/ _|_   _ \r\n |  \\| | |   / _ \\ / _` |/ _` | | |_| | | |\r\n | |\\  | |__| (_) | (_| | (_| | |  _| |_| |\r\n |_| \\_|_____\\___/ \\__, |\\__, |_|_|  \\__, |\r\n                   |___/ |___/       |___/ \r\n";
+
+
+        Console.WriteLine(ascii_art);
+
         // Multi logger configuration
         LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
 

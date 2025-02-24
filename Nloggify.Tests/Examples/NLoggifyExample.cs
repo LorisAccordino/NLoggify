@@ -16,17 +16,17 @@ namespace Nloggify.Tests.Examples
         /// <param name="fatalRisk">Where d'you wanna go? How much you wanna risk? ;)</param>
         public static void Test(ILogger logger, bool fatalRisk = false)
         {
-            logger.Log(LogLevel.Info, "Application started successfully.");
+            //logger.Log(LogLevel.Info, "Application started successfully.");
 
             if (fatalRisk) ThreadWithFatalErrorSimulation.SimulateThreadWithFatalError(logger, 100000, 0.01f, 250);
 
             // Start multiple concurrent operations to simulate a real system
             Task[] tasks =
             [
-                Task.Run(() => GenericSimulations.SimulateSystemInitialization(logger)),
+                //Task.Run(() => GenericSimulations.SimulateSystemInitialization(logger, 2)),
             Task.Run(() => GenericSimulations.SimulateDatabaseConnection(logger)),
-            Task.Run(() => GenericSimulations.SimulateDataProcessing(logger)),
-            Task.Run(() => MultithreadSimulations.SimulateConcurrentUserActivity(logger))
+            //Task.Run(() => GenericSimulations.SimulateDataProcessing(logger, 2)),
+            Task.Run(() => MultithreadSimulations.SimulateConcurrentUserActivity(logger, 2, 2))
             ];
 
             // Wait for all tasks to complete

@@ -1,5 +1,4 @@
-﻿using NLoggify.Loggers;
-using NLoggify.Logging.Loggers;
+﻿using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
 using NLoggify.Utils;
