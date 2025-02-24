@@ -1,4 +1,6 @@
 # NLoggify
+![Description](Imgs/preview2.png)
+
 NLoggify is a lightweight, customizable logging library for .NET that supports multiple log levels (Info, Warning, Error) and outputs logs to JSON/TXT files. It provides a singleton-based logger with event handling for easy integration into your projects. Ideal for logging in .NET applications, with a focus on simplicity and flexibility.
 
 ## Features
