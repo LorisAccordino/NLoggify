@@ -60,7 +60,11 @@ namespace NLoggify.Logging.Config
         /// Configures logging to multiple destinations (Console, File, Debug, etc.)
         /// </summary>
         /// <param name="loggers">The types of loggers to be used</param>
+        #if DEBUG
+        public static List<Logger> ConfigureMultiLogger(params LoggerType[] loggers)
+        #else
         public static void ConfigureMultiLogger(params LoggerType[] loggers)
+        #endif
         {
             // Clear the loggers list
             Loggers.Clear();
@@ -86,6 +90,7 @@ namespace NLoggify.Logging.Config
                 Loggers.Add(GetLoggerBasedOnType(loggerType));
                 addedLoggerTypes.Add(loggerType);
             }
+            return Loggers;
         }
 
         /// <summary>
@@ -103,7 +108,11 @@ namespace NLoggify.Logging.Config
         /// <param name="type">Type of logger</param>
         /// <returns>An instance of the logger based on the given <see cref="LoggerType"/></returns>
         /// <exception cref="NotSupportedException">The logger is not supported</exception>
+        #if DEBUG
+        public static Logger GetLoggerBasedOnType(LoggerType type)
+        #else
         private static Logger GetLoggerBasedOnType(LoggerType type)
+        #endif
         {
             return type switch
             {

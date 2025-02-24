@@ -5,7 +5,11 @@ namespace NLoggify.Logging.Loggers
     /// <summary>
     /// A logger that combines multiple loggers and writes logs to all of them.
     /// </summary>
+    #if DEBUG
+    public class MultiLogger : Logger
+    #else
     internal class MultiLogger : Logger
+    #endif
     {
         /// <summary>
         /// Logs a message to all configured loggers.

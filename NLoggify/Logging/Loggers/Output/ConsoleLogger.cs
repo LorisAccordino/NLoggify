@@ -5,7 +5,11 @@ namespace NLoggify.Logging.Loggers.Output
     /// <summary>
     /// A logger that writes log messages to the console (standard output).
     /// </summary>
+    #if DEBUG
+    public class ConsoleLogger : Logger
+    #else
     internal class ConsoleLogger : Logger
+    #endif
     {
         protected override void WriteLog(LogLevel level, string message, string timestamp)
         {
@@ -15,9 +19,9 @@ namespace NLoggify.Logging.Loggers.Output
             // Print the log message with the formatted timestamp
             string logLine = $"[{timestamp}] {level}: {message}";
             Console.WriteLine(logLine);
-            #if DEBUG
+#if DEBUG
             debugOutputRedirect = logLine;
-            #endif
+#endif
 
             // Reset the console color back to the default
             Console.ResetColor();

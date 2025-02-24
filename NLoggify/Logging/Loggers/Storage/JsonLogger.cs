@@ -6,7 +6,11 @@ namespace NLoggify.Logging.Loggers.Storage
     /// <summary>
     /// Logger that writes logs in JSON format.
     /// </summary>
+    #if DEBUG
+    public class JsonLogger : FileLogger
+    #else
     internal class JsonLogger : FileLogger
+    #endif
     {
         public JsonLogger() : base()
         {
@@ -27,9 +31,9 @@ namespace NLoggify.Logging.Loggers.Storage
             };
 
             string logLine = JsonSerializer.Serialize(logEntry);
-            #if DEBUG
+#if DEBUG
             debugOutputRedirect = logLine;
-            #endif
+#endif
             return logLine;
         }
     }
