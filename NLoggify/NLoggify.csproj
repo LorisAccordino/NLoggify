@@ -9,6 +9,7 @@
   <PropertyGroup>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<DocumentationFile>bin\Debug\net8.0\NLoggify.xml</DocumentationFile>
+	<PackageReleaseNotes>This is the first beta release of the NLoggify library. It's intended for developers who want to test the new functionality and provide feedback before the stable release.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
