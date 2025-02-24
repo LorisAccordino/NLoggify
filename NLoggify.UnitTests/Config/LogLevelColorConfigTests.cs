@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 using NLoggify.UnitTests.Utils;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.UnitTests.Config
 {
@@ -8,6 +9,7 @@ namespace NLoggify.UnitTests.Config
     /// </summary>
     [Collection("SequentialTests")]
     [DebugOnly]
+    [ExcludeFromCodeCoverage]
     public class LogLevelColorConfigTests
     {
         /// <summary>

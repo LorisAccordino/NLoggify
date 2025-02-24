@@ -4,6 +4,7 @@ using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
 using NLoggify.UnitTests.Utils;
 using NLoggify.Utils;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.UnitTests.Config
 {
@@ -12,6 +13,7 @@ namespace NLoggify.UnitTests.Config
     /// </summary>
     [Collection("SequentialTests")]
     [DebugOnly]
+    [ExcludeFromCodeCoverage]
     public class LoggingConfigTests
     {
         /// <summary>
@@ -82,8 +84,8 @@ namespace NLoggify.UnitTests.Config
             // Act
             try
             {
-                FileLoggingConfig.SetCustomFilePath(filePath);
                 GenericUtils.ValidatePath(filePath, true, true);
+                FileLoggingConfig.SetCustomFilePath(filePath);
 
                 // Assert
                 if (shouldThrowException) Assert.Fail("Expected exception not thrown.");

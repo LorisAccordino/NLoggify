@@ -1,6 +1,7 @@
 ﻿using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Config;
 using NLoggify.UnitTests.Utils;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.UnitTests
 {
@@ -9,7 +10,8 @@ namespace NLoggify.UnitTests
     /// </summary>
     [Collection("SequentialTests")]
     [DebugOnly]
-    public class LoggerBehaviourTests
+    [ExcludeFromCodeCoverage]
+    public class LoggerTests
     {
         /// <summary>
         /// Ensures that <see cref="Logger.GetLogger"/> always returns a not null value,
