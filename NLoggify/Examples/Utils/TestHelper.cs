@@ -15,7 +15,7 @@
         /// <remarks>
         /// The delay duration is chosen randomly within the specified range.
         /// </remarks>
-        /// <returns>The number of milliseconds <see cref="Thread.Sleep"/> slept for</returns>
+        /// <returns>The number of milliseconds <see cref="Thread.Sleep(int)"/> slept for</returns>
         public static int RandomDelay(int minMilliseconds, int maxMilliseconds)
         {
             if (minMilliseconds > maxMilliseconds) throw new ArgumentException("minMilliseconds cannot be greater than maxMilliseconds.");

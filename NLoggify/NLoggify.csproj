@@ -22,6 +22,11 @@
 	<PackageIcon>icon.png</PackageIcon>
 	<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	<PackageProjectUrl>https://lorisaccordino.github.io/NLoggify</PackageProjectUrl>
+	<Company>Loris Accordino</Company>
+	<Authors>Loris Accordino</Authors>
+	<AssemblyVersion>1.0.1</AssemblyVersion>
+	<FileVersion>1.0.1</FileVersion>
+	<Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
