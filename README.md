@@ -47,7 +47,7 @@ For detailed usage instructions, configuration options, and advanced features, p
 Full documentation will be available soon. Stay tuned for updates!
 
 ## Project URL
-https://lorisaccordino.github.io/
+https://lorisaccordino.github.io/NLoggify
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE.txt) file for details.
