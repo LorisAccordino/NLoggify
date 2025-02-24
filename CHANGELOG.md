@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.2] - 2025-02-24
+### Fixed
+- Updated the preview image in the README to ensure proper display on NuGet.
+
 ## [1.0.1] - 2025-02-24  
 ### Fixed  
 - Fixed missing README in the NuGet package.  
