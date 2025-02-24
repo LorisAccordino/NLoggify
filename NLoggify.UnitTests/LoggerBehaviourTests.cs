@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Config;
+using NLoggify.UnitTests.Utils;
 
 namespace NLoggify.UnitTests
 {
@@ -7,6 +8,7 @@ namespace NLoggify.UnitTests
     /// Unit tests for verifying the behavior of the logger and its configuration.
     /// </summary>
     [Collection("SequentialTests")]
+    [DebugOnly]
     public class LoggerBehaviourTests
     {
         /// <summary>

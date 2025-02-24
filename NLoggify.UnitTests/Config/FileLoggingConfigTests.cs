@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using NLoggify.UnitTests.Utils;
 
 namespace NLoggify.UnitTests.Config
 {
@@ -8,6 +9,7 @@ namespace NLoggify.UnitTests.Config
     /// and ensuring the existence of necessary directories.
     /// </summary>
     [Collection("SequentialTests")]
+    [DebugOnly]
     public class FileLoggingConfigTests
     {
         /// <summary>

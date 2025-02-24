@@ -1,9 +1,8 @@
-﻿namespace NLoggify.UnitTests
+﻿namespace NLoggify.UnitTests.Utils
 {
     [CollectionDefinition("SequentialTests", DisableParallelization = true)]
     public class SequentialTestCollection
     {
-        // Questa classe serve solo a segnare la collection e disabilitare il parallelismo
+        // This class is only used to mark the collection and to disable the parallelism
     }
-
 }
