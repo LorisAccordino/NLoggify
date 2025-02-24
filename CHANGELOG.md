@@ -1,8 +1,9 @@
 # Changelog
 
-## [1.0.3] - 2025-02-24
+## [1.0.3] - YYYY-MM-DD
 ### Fixed
-- Updated the README links to ensure proper display on NuGet.
+- Corrected license details for better compliance.
+- Adjusted links in the README to improve display on NuGet.
 
 ## [1.0.2] - 2025-02-24
 ### Fixed
