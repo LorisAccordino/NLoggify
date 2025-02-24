@@ -12,12 +12,6 @@ public class Program
         // Tests every supported type of logger
         foreach (LoggerType type in Enum.GetValues<LoggerType>())
         {
-            if (type == LoggerType.Multi)
-            {
-                int a = 5;
-                a++;
-            }
-
             // Configure the logger to use the current logger type to with the minimum log level set to Trace.
             LoggingConfig.Configure(LogLevel.Trace, type);
 
