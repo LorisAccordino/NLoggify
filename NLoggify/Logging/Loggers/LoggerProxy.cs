@@ -11,10 +11,10 @@ namespace NLoggify.Logging.Loggers
     {
         private static readonly LoggerProxy _instance = new LoggerProxy();
 
-        #if DEBUG
+#if DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
         public static string GetDebugOutput() { return Logger.GetDebugOutput(); }
-        #endif
+#endif
 
         /// <summary>
         /// Gets the singleton instance of <see cref="LoggerProxy"/>.
@@ -37,9 +37,9 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         /// <param name="level">The log level of the message.</param>
         /// <param name="message">The message to be logged.</param>
-        #if !DEBUG
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-        #endif
+#endif
         public void Log(LogLevel level, string message)
         {
             CurrentLogger.Log(level, message);
@@ -52,9 +52,9 @@ namespace NLoggify.Logging.Loggers
         /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
         /// <param name="message">The log message to be recorded.</param>
         /// <returns>True if the exception was thrown, otherwise false</returns>
-        #if !DEBUG
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-        #endif
+#endif
         public bool LogException(LogLevel level, Action action, string message = "")
         {
             return CurrentLogger.LogException(level, action, message);

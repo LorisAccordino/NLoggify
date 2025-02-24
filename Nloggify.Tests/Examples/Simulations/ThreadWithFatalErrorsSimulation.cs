@@ -1,6 +1,6 @@
-﻿using NLoggify.Logging.Loggers;
+﻿using System.Diagnostics;
 using NLoggify.Logging.Config;
-using System.Diagnostics;
+using NLoggify.Logging.Loggers;
 
 namespace Nloggify.Tests.Examples.Simulations
 {

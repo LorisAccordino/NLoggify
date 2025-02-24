@@ -7,9 +7,9 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     public interface ILogger
     {
-        #if DEBUG
+#if DEBUG
         public abstract static string GetDebugOutput(); // Used for debug
-        #endif
+#endif
 
         /// <summary>
         /// Logs a message with the specified log level.

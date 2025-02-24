@@ -1,6 +1,6 @@
-﻿using NLoggify.Logging.Loggers;
+﻿using System.Diagnostics.CodeAnalysis;
 using NLoggify.Logging.Config;
-using System.Diagnostics.CodeAnalysis;
+using NLoggify.Logging.Loggers;
 
 namespace NLoggify.UnitTests
 {

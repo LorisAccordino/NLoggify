@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Loggers;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Storage
@@ -25,9 +26,9 @@ namespace NLoggify.Logging.Loggers.Storage
             FileLoggingConfig.EnsureLogDirectoryExists();
         }
 
-        #if !DEBUG
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-        #endif
+#endif
         protected override sealed void WriteLog(LogLevel level, string message, string timestamp)
         {
             var logEntry = FormatLog(level, message, timestamp);

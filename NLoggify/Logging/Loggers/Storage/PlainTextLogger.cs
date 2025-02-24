@@ -22,9 +22,9 @@ namespace NLoggify.Logging.Loggers.Storage
         protected override string FormatLog(LogLevel level, string message, string timestamp)
         {
             string logLine = $"[{timestamp}] {level}: {message}";
-            #if DEBUG
+#if DEBUG
             debugOutputRedirect = logLine;
-            #endif
+#endif
             return logLine;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Loggers;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Output

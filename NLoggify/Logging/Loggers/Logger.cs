@@ -26,9 +26,9 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Gets the singleton instance of the Logger.
         /// </summary>
-        #if !DEBUG
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-        #endif
+#endif
         internal static Logger Instance
         {
             get
@@ -45,9 +45,9 @@ namespace NLoggify.Logging.Loggers
                 }
             }
 
-            #if DEBUG
+#if DEBUG
             set { _instance = value; }
-            #endif
+#endif
         }
 
 
@@ -86,7 +86,7 @@ namespace NLoggify.Logging.Loggers
         /// <returns>Logger instance.</returns>
         public static ILogger GetLogger()
         {
-            lock(_lock)
+            lock (_lock)
             {
                 return LoggerProxy.Instance;
             }
@@ -108,9 +108,9 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         /// <param name="level">The log level that categorizes the importance of the message.</param>
         /// <param name="message">The log message to be recorded.</param>
-        #if !DEBUG
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-        #endif
+#endif
         public void Log(LogLevel level, string message)
         {
             lock (_lock)
@@ -131,9 +131,9 @@ namespace NLoggify.Logging.Loggers
         /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
         /// <param name="message">The log message to be recorded.</param>
         /// <returns>True if the exception was thrown, otherwise false</returns>
-        #if !DEBUG
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-        #endif
+#endif
         public bool LogException(LogLevel level, Action action, string message = "")
         {
             lock (_lock)

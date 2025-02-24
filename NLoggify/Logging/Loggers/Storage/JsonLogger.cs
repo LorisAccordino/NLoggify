@@ -18,9 +18,9 @@ namespace NLoggify.Logging.Loggers.Storage
         /// <summary>
         /// Formats the log entry as a JSON object.
         /// </summary>
-        #if !DEBUG
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-        #endif
+#endif
         protected override string FormatLog(LogLevel level, string message, string timestamp)
         {
             var logEntry = new
