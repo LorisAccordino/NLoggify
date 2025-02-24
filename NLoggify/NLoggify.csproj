@@ -10,10 +10,36 @@
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<DocumentationFile>bin\Debug\net8.0\NLoggify.xml</DocumentationFile>
 	<PackageReleaseNotes>This is the first beta release of the NLoggify library. It's intended for developers who want to test the new functionality and provide feedback before the stable release.</PackageReleaseNotes>
+	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Title>NLoggify</Title>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/LorisAccordino/NLoggify</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<Description>NLoggify is a lightweight, customizable logging library for .NET that supports multiple log levels (Info, Warning, Error) and outputs logs to JSON/TXT files. It provides a singleton-based logger with event handling for easy integration into your projects. Ideal for logging in .NET applications, with a focus on simplicity and flexibility.</Description>
+	<PackageTags>logging;logger;.NET;performance-logging;logger-wrapper;logging-framework</PackageTags>
+	<PackageIcon>icon.png</PackageIcon>
+	<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="NLoggify.UnitTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 
