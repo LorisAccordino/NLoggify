@@ -10,6 +10,13 @@ namespace NLoggify.Logging.Loggers
     {
         private static readonly LoggerProxy _instance = new LoggerProxy();
 
+        #if DEBUG
+        public static string GetDebugOutput()
+        {
+            return Logger.GetDebugOutput();
+        }
+        #endif
+
         /// <summary>
         /// Gets the singleton instance of <see cref="LoggerProxy"/>.
         /// </summary>

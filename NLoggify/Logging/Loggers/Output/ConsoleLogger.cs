@@ -13,7 +13,11 @@ namespace NLoggify.Logging.Loggers.Output
             Console.ForegroundColor = LogLevelColorConfig.GetColorForLevel(level);
 
             // Print the log message with the formatted timestamp
-            Console.WriteLine($"[{timestamp}] {level}: {message}");
+            string logLine = $"[{timestamp}] {level}: {message}";
+            Console.WriteLine(logLine);
+            #if DEBUG
+            debugOutputRedirect = logLine;
+            #endif
 
             // Reset the console color back to the default
             Console.ResetColor();

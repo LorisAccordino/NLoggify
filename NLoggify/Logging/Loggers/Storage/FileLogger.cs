@@ -19,7 +19,11 @@ namespace NLoggify.Logging.Loggers.Storage
         protected FileLogger()
         {
             // File logging configuration
+            #if DEBUG
+            FileLoggingConfig.EnableTimestampedLogFile(FileLoggingConfig.FilePath, DateTime.Now.ToString(LoggingConfig.TimestampFormat));
+            #else
             FileLoggingConfig.EnableTimestampedLogFile();
+            #endif
             _filePath = FileLoggingConfig.FilePath;
             FileLoggingConfig.EnsureLogDirectoryExists();
         }

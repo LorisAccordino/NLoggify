@@ -11,7 +11,11 @@ namespace NLoggify.Logging.Loggers.Output
         protected override void WriteLog(LogLevel level, string message, string timestamp)
         {
             // Print the log message with the formatted timestamp
-            Debug.WriteLine($"[{timestamp}] {level}: {message}");
+            string logLine = $"[{timestamp}] {level}: {message}";
+            Debug.WriteLine(logLine);
+            #if DEBUG
+            debugOutputRedirect = logLine;
+            #endif
         }
 
         public override void Dispose() { }

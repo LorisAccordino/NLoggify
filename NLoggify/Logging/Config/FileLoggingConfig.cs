@@ -53,15 +53,21 @@
         /// <exception cref="ArgumentException">Thrown if the timestamp format cannot be used in a file name.</exception>
         /// 
         #if DEBUG
-        public static void EnableTimestampedLogFile()
+        public static void EnableTimestampedLogFile(string filePath, string timestampFormat)
         #else
         internal static void EnableTimestampedLogFile()
         #endif
         {
             lock (_lock)
             {
+                #if DEBUG
+                string directory = Path.GetDirectoryName(filePath) ?? Directory.GetCurrentDirectory();
+                // string timestamp = DateTime.Now.ToString(timestampFormat);
+                string timestamp = timestampFormat;
+                #else
                 string directory = Path.GetDirectoryName(FilePath) ?? Directory.GetCurrentDirectory();
                 string timestamp = DateTime.Now.ToString(LoggingConfig.TimestampFormat);
+                #endif
 
                 // Ensure the timestamp is valid for filenames
                 string validTimestamp = MakeValidFilename(timestamp);
@@ -80,11 +86,11 @@
         /// </summary>
         /// <param name="filename">The filename to validate.</param>
         /// <returns>A valid filename or an empty string if the correction is impossible.</returns>
-        #if DEBUG
+#if DEBUG
         public static string MakeValidFilename(string filename)
-        #else
+#else
         internal static string MakeValidFilename(string filename)
-        #endif
+#endif
         {
             if (string.IsNullOrWhiteSpace(filename)) return string.Empty;
 
@@ -98,11 +104,11 @@
         /// Ensures that the directory containing the log file exists.
         /// If the directory does not exist, it is automatically created.
         /// </summary>
-        #if DEBUG
+#if DEBUG
         public static void EnsureLogDirectoryExists()
-        #else
+#else
         internal static void EnsureLogDirectoryExists()
-        #endif
+#endif
         {
             string directory = Path.GetDirectoryName(FilePath) ?? Directory.GetCurrentDirectory();
             Directory.CreateDirectory(directory);

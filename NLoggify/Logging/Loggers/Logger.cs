@@ -12,6 +12,16 @@ namespace NLoggify.Logging.Loggers
         private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
         private static readonly object _masterLock = new();             // Master lock for complex operations
 
+        #if DEBUG
+        public static string debugOutputRedirect = ""; // Used for debug
+        public static string GetDebugOutput() 
+        {
+            var output = debugOutputRedirect;
+            debugOutputRedirect = "";
+            return output; 
+        }
+        #endif
+
         /// <summary>
         /// Gets the singleton instance of the Logger.
         /// </summary>

@@ -18,7 +18,11 @@ namespace NLoggify.Logging.Loggers.Storage
         /// </summary>
         protected override string FormatLog(LogLevel level, string message, string timestamp)
         {
-            return $"[{timestamp}] [{level}] {message}";
+            string logLine = $"[{timestamp}] {level}: {message}";
+            #if DEBUG
+            debugOutputRedirect = logLine;
+            #endif
+            return logLine;
         }
     }
 }

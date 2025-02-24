@@ -67,7 +67,7 @@ namespace NLoggify.UnitTests.Config
         public void EnableTimestampedLogFile_ShouldSetFileNameWithTimestamp()
         {
             var originalFilePath = FileLoggingConfig.FilePath;
-            FileLoggingConfig.EnableTimestampedLogFile();
+            FileLoggingConfig.EnableTimestampedLogFile(FileLoggingConfig.FilePath, LoggingConfig.TimestampFormat);
             var newFilePath = FileLoggingConfig.FilePath;
 
             Assert.DoesNotContain("output.log", newFilePath); // The filename should be changed
@@ -106,5 +106,39 @@ namespace NLoggify.UnitTests.Config
             // Check the directory has been created
             Assert.True(Directory.Exists(directoryPath));
         }
+
+        /// <summary>
+        /// Tests that the log directory is correctly set and the file path is generated properly
+        /// when enabling a timestamped log file.
+        /// </summary>
+        /// <param name="filePath">The custom file path provided, or null to use the default.</param>
+        /// <param name="timestampFormat">The format used for the timestamp in the log file name.</param>
+        [Theory]
+        [InlineData(null, "yyyy-MM-dd_HH-mm-ss")] // Uses default path with a valid timestamp format
+        [InlineData(null, "")] // Uses default path but with an empty timestamp format
+        public void EnsureLogDirectoryExists_ValidPath_FilePathIsSetCorrectly(string filePath, string timestampFormat)
+        {
+            // Arrange
+            string expectedDirectory = Directory.GetCurrentDirectory(); // Default log directory
+
+            // Act & Assert
+            if (string.IsNullOrWhiteSpace(timestampFormat))
+            {
+                // If the timestamp format is empty, an exception is expected
+                Assert.Throws<ArgumentException>(() => FileLoggingConfig.EnableTimestampedLogFile(filePath, timestampFormat));
+            }
+            else
+            {
+                // If the format is valid, the method should work propertly
+                FileLoggingConfig.EnableTimestampedLogFile(filePath, timestampFormat);
+
+                // Assert
+                Assert.StartsWith(Path.Combine(expectedDirectory, "log_"), FileLoggingConfig.FilePath); // Check if log file is in the correct directory
+                Assert.EndsWith(".log", FileLoggingConfig.FilePath); // Ensure the log file has the correct extension
+            }
+
+        }
+
+
     }
 }

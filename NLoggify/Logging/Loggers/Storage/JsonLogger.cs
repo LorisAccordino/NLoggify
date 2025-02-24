@@ -26,7 +26,11 @@ namespace NLoggify.Logging.Loggers.Storage
                 message
             };
 
-            return JsonSerializer.Serialize(logEntry);
+            string logLine = JsonSerializer.Serialize(logEntry);
+            #if DEBUG
+            debugOutputRedirect = logLine;
+            #endif
+            return logLine;
         }
     }
 }
