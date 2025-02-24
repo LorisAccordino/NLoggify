@@ -23,10 +23,10 @@ namespace Nloggify.Tests.Examples
             // Start multiple concurrent operations to simulate a real system
             Task[] tasks =
             [
-                //Task.Run(() => GenericSimulations.SimulateSystemInitialization(logger, 2)),
+                Task.Run(() => GenericSimulations.SimulateSystemInitialization(logger)),
             Task.Run(() => GenericSimulations.SimulateDatabaseConnection(logger)),
-            //Task.Run(() => GenericSimulations.SimulateDataProcessing(logger, 2)),
-            Task.Run(() => MultithreadSimulations.SimulateConcurrentUserActivity(logger, 2, 2))
+            Task.Run(() => GenericSimulations.SimulateDataProcessing(logger)),
+            Task.Run(() => MultithreadSimulations.SimulateConcurrentUserActivity(logger))
             ];
 
             // Wait for all tasks to complete

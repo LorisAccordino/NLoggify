@@ -10,7 +10,7 @@ public class Program
         Console.WriteLine(ascii_art);
 
         // Multi logger configuration
-        LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
+        LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
 
         // Tests every supported type of logger
         foreach (LoggerType type in Enum.GetValues<LoggerType>())

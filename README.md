@@ -13,7 +13,7 @@ NLoggify is a lightweight, customizable logging library for .NET that supports m
 You can install NLoggify via [NuGet](https://www.nuget.org/packages/NLoggify) using the following command:
 
 ```bash
-dotnet add package NLoggify --version 1.0.0
+dotnet add package NLoggify --version 1.0.3
 ```
 
 Alternatively, you can use the NuGet Package Manager in Visual Studio to search for NLoggify and install it.
@@ -44,7 +44,7 @@ We welcome contributions to NLoggify! If you have suggestions, improvements, or 
 If you encounter any issues or bugs, please report them in the [GitHub issues](https://github.com/LorisAccordino/NLoggify/issues).
 
 ## Changelog  
-See the [CHANGELOG](CHANGELOG.md) for details on past and upcoming changes.
+See the [CHANGELOG](https://github.com/LorisAccordino/NLoggify/blob/master/CHANGELOG.md) for details on past and upcoming changes.
 
 ## Documentation
 For detailed usage instructions, configuration options, and advanced features, please refer to the [NLoggify Documentation](https://github.com/LorisAccordino/NLoggify/wiki).
@@ -55,7 +55,7 @@ Full documentation will be available soon. Stay tuned for updates!
 https://lorisaccordino.github.io/NLoggify
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE.txt) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/LorisAccordino/NLoggify/blob/master/LICENSE.txt) file for details.
 
 ## Authors
 - **Loris Accordino** - Developer and creator of NLoggify.
