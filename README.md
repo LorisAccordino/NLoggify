@@ -43,6 +43,9 @@ We welcome contributions to NLoggify! If you have suggestions, improvements, or 
 ## Issues
 If you encounter any issues or bugs, please report them in the [GitHub issues](https://github.com/LorisAccordino/NLoggify/issues).
 
+## Changelog  
+See the [CHANGELOG](CHANGELOG.md) for details on past and upcoming changes.
+
 ## Documentation
 For detailed usage instructions, configuration options, and advanced features, please refer to the [NLoggify Documentation](https://github.com/LorisAccordino/NLoggify/wiki).
 
