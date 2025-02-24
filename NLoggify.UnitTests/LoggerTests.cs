@@ -1,6 +1,5 @@
 ﻿using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Config;
-using NLoggify.UnitTests.Utils;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.UnitTests
@@ -9,7 +8,6 @@ namespace NLoggify.UnitTests
     /// Unit tests for verifying the behavior of the logger and its configuration.
     /// </summary>
     [Collection("SequentialTests")]
-    [DebugOnly]
     [ExcludeFromCodeCoverage]
     public class LoggerTests
     {
@@ -53,6 +51,7 @@ namespace NLoggify.UnitTests
             Assert.Same(logger1, logger2); // Must be the same instance
         }
 
+#if DEBUG
         /// <summary>
         /// Tests the instance (directly) to check its behaviour
         /// </summary>
@@ -142,6 +141,7 @@ namespace NLoggify.UnitTests
                 Assert.False(result);  // Ensure the method returns false when no exception is thrown
             }
         }
+#endif
 
         /// <summary>
         /// Tests if the logger catches properly either sync or async exception during operations

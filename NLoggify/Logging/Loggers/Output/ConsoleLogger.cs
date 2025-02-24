@@ -6,11 +6,7 @@ namespace NLoggify.Logging.Loggers.Output
     /// <summary>
     /// A logger that writes log messages to the console (standard output).
     /// </summary>
-    #if DEBUG
-    public class ConsoleLogger : Logger
-    #else
     internal class ConsoleLogger : Logger
-    #endif
     {
         protected override void WriteLog(LogLevel level, string message, string timestamp)
         {

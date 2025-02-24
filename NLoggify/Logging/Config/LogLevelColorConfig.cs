@@ -23,11 +23,7 @@
         /// </summary>
         /// <param name="level">The log level for which the color is needed.</param>
         /// <returns>The console color associated with the given log level. Returns <see cref="ConsoleColor.White"/> if the level is not found.</returns>
-        #if DEBUG
-        public static ConsoleColor GetColorForLevel(LogLevel level)
-        #else
         internal static ConsoleColor GetColorForLevel(LogLevel level)
-        #endif
         {
             return _logLevelColors.ContainsKey(level) ? _logLevelColors[level] : ConsoleColor.White;
         }

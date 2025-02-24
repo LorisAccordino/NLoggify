@@ -11,5 +11,9 @@
 	<DocumentationFile>bin\Debug\net8.0\NLoggify.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="NLoggify.UnitTests" />
+  </ItemGroup>
+
 
 </Project>

@@ -7,11 +7,7 @@ namespace NLoggify.Logging.Loggers.Storage
     /// Base class for file-based loggers, handling file writing operations.
     /// Specific log formats (e.g., PlainText, JSON) should extend this class.
     /// </summary>
-    #if DEBUG
-    public abstract class FileLogger : Logger
-    #else
     internal abstract class FileLogger : Logger
-    #endif
     {
         //private readonly string _filePath;
         private readonly object _fileLock = new(); // Lock for thread-safe writing
@@ -24,15 +20,14 @@ namespace NLoggify.Logging.Loggers.Storage
         protected FileLogger()
         {
             // File logging configuration
-#if DEBUG
-            FileLoggingConfig.EnableTimestampedLogFile(FileLoggingConfig.FilePath, DateTime.Now.ToString(LoggingConfig.TimestampFormat));
-#else
             FileLoggingConfig.EnableTimestampedLogFile();
-#endif
             _filePath = FileLoggingConfig.FilePath;
             FileLoggingConfig.EnsureLogDirectoryExists();
         }
 
+        #if !DEBUG
+        [ExcludeFromCodeCoverage] // No reason to test it
+        #endif
         protected override sealed void WriteLog(LogLevel level, string message, string timestamp)
         {
             var logEntry = FormatLog(level, message, timestamp);

@@ -2,7 +2,6 @@
 using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
-using NLoggify.UnitTests.Utils;
 using NLoggify.Utils;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,7 +11,6 @@ namespace NLoggify.UnitTests.Config
     /// Unit tests for verifying the logging configuration.
     /// </summary>
     [Collection("SequentialTests")]
-    [DebugOnly]
     [ExcludeFromCodeCoverage]
     public class LoggingConfigTests
     {
@@ -103,7 +101,7 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_AddsMultipleLoggers()
         {
             // Act
-            var loggers = LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
+            var loggers = LoggingConfig._ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
 
             // Assert
             Assert.Equal(2, loggers.Count);
@@ -146,7 +144,7 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_NoLoggers_ResultsInEmptyList()
         {
             // Act
-            var loggers = LoggingConfig.ConfigureMultiLogger();
+            var loggers = LoggingConfig._ConfigureMultiLogger();
 
             // Assert
             Assert.Empty(loggers);
@@ -159,11 +157,11 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_ClearsPreviousLoggers()
         {
             // Arrange
-            var loggers = LoggingConfig.ConfigureMultiLogger(LoggerType.Console);
+            var loggers = LoggingConfig._ConfigureMultiLogger(LoggerType.Console);
             Assert.Single(loggers); // Verify there's one logger
 
             // Act
-            loggers = LoggingConfig.ConfigureMultiLogger(LoggerType.PlainText); // Reconfigure with a different logger
+            loggers = LoggingConfig._ConfigureMultiLogger(LoggerType.PlainText); // Reconfigure with a different logger
 
             // Assert
             Assert.Single(loggers); // Should still have only one logger

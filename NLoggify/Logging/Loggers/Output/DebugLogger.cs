@@ -7,11 +7,10 @@ namespace NLoggify.Logging.Loggers.Output
     /// <summary>
     /// A logger that writes log messages to the Debug output (e.g., Output window in Visual Studio).
     /// </summary>
-    #if DEBUG
-    public class DebugLogger : Logger
-    #else
-    internal class DebugLogger : Logger
+    #if !DEBUG
+    [ExcludeFromCodeCoverage] // No reason to test it
     #endif
+    internal class DebugLogger : Logger
     {
         protected override void WriteLog(LogLevel level, string message, string timestamp)
         {

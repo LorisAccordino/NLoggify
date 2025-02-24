@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -12,7 +13,7 @@ namespace NLoggify.Logging.Loggers
         private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
         private static readonly object _masterLock = new();             // Master lock for complex operations
 
-        #if DEBUG
+#if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
         public static string GetDebugOutput() 
         {
@@ -20,16 +21,15 @@ namespace NLoggify.Logging.Loggers
             debugOutputRedirect = "";
             return output; 
         }
-        #endif
+#endif
 
         /// <summary>
         /// Gets the singleton instance of the Logger.
         /// </summary>
-        #if DEBUG
-        public static Logger Instance
-        #else
-        internal static Logger Instance
+        #if !DEBUG
+        [ExcludeFromCodeCoverage] // No reason to test it
         #endif
+        internal static Logger Instance
         {
             get
             {
@@ -46,10 +46,7 @@ namespace NLoggify.Logging.Loggers
             }
 
             #if DEBUG
-            set
-            {
-                _instance = value;
-            }
+            set { _instance = value; }
             #endif
         }
 
@@ -111,6 +108,9 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         /// <param name="level">The log level that categorizes the importance of the message.</param>
         /// <param name="message">The log message to be recorded.</param>
+        #if !DEBUG
+        [ExcludeFromCodeCoverage] // No reason to test it
+        #endif
         public void Log(LogLevel level, string message)
         {
             lock (_lock)
@@ -131,6 +131,9 @@ namespace NLoggify.Logging.Loggers
         /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
         /// <param name="message">The log message to be recorded.</param>
         /// <returns>True if the exception was thrown, otherwise false</returns>
+        #if !DEBUG
+        [ExcludeFromCodeCoverage] // No reason to test it
+        #endif
         public bool LogException(LogLevel level, Action action, string message = "")
         {
             lock (_lock)

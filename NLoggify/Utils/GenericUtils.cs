@@ -3,11 +3,7 @@
     /// <summary>
     /// Utility class that provides miscellanous utility methods.
     /// </summary>
-    #if DEBUG
-    public static class GenericUtils
-    #else
     internal static class GenericUtils
-    #endif
     {
         /// <summary>
         /// Validate a given path with a robust series of checks

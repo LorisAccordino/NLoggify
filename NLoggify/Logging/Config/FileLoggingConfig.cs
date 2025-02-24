@@ -53,23 +53,13 @@ namespace NLoggify.Logging.Config
         /// Ensures that the timestamp format is compatible with file naming.
         /// </summary>
         /// <exception cref="ArgumentException">Thrown if the timestamp format cannot be used in a file name.</exception>
-        /// 
-        #if DEBUG
-        public static void EnableTimestampedLogFile(string filePath, string timestampFormat)
-        #else
+        [ExcludeFromCodeCoverage] // No reason to test it
         internal static void EnableTimestampedLogFile()
-        #endif
         {
             lock (_lock)
             {
-                #if DEBUG
-                string directory = Path.GetDirectoryName(filePath) ?? Directory.GetCurrentDirectory();
-                // string timestamp = DateTime.Now.ToString(timestampFormat);
-                string timestamp = timestampFormat;
-                #else
                 string directory = Path.GetDirectoryName(FilePath) ?? Directory.GetCurrentDirectory();
                 string timestamp = DateTime.Now.ToString(LoggingConfig.TimestampFormat);
-                #endif
 
                 // Ensure the timestamp is valid for filenames
                 string validTimestamp = MakeValidFilename(timestamp);

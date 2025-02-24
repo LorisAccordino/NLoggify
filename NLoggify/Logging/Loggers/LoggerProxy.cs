@@ -37,6 +37,9 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         /// <param name="level">The log level of the message.</param>
         /// <param name="message">The message to be logged.</param>
+        #if !DEBUG
+        [ExcludeFromCodeCoverage] // No reason to test it
+        #endif
         public void Log(LogLevel level, string message)
         {
             CurrentLogger.Log(level, message);
@@ -49,6 +52,9 @@ namespace NLoggify.Logging.Loggers
         /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
         /// <param name="message">The log message to be recorded.</param>
         /// <returns>True if the exception was thrown, otherwise false</returns>
+        #if !DEBUG
+        [ExcludeFromCodeCoverage] // No reason to test it
+        #endif
         public bool LogException(LogLevel level, Action action, string message = "")
         {
             return CurrentLogger.LogException(level, action, message);

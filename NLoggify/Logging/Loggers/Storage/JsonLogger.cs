@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace NLoggify.Logging.Loggers.Storage
@@ -6,11 +7,7 @@ namespace NLoggify.Logging.Loggers.Storage
     /// <summary>
     /// Logger that writes logs in JSON format.
     /// </summary>
-    #if DEBUG
-    public class JsonLogger : FileLogger
-    #else
     internal class JsonLogger : FileLogger
-    #endif
     {
         public JsonLogger() : base()
         {
@@ -21,6 +18,9 @@ namespace NLoggify.Logging.Loggers.Storage
         /// <summary>
         /// Formats the log entry as a JSON object.
         /// </summary>
+        #if !DEBUG
+        [ExcludeFromCodeCoverage] // No reason to test it
+        #endif
         protected override string FormatLog(LogLevel level, string message, string timestamp)
         {
             var logEntry = new

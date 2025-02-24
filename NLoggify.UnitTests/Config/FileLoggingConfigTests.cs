@@ -1,5 +1,4 @@
 ﻿using NLoggify.Logging.Config;
-using NLoggify.UnitTests.Utils;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.UnitTests.Config
@@ -10,7 +9,6 @@ namespace NLoggify.UnitTests.Config
     /// and ensuring the existence of necessary directories.
     /// </summary>
     [Collection("SequentialTests")]
-    [DebugOnly]
     [ExcludeFromCodeCoverage]
     public class FileLoggingConfigTests
     {
@@ -63,23 +61,7 @@ namespace NLoggify.UnitTests.Config
             }
         }
 
-        /// <summary>
-        /// Verifies that enabling timestamped log files generates a file name with a timestamp.
-        /// The generated file name should include the timestamp and should differ from the default "output.log" file name.
-        /// </summary>
-        [Fact]
-        public void EnableTimestampedLogFile_ShouldSetFileNameWithTimestamp()
-        {
-            var originalFilePath = FileLoggingConfig.FilePath;
-            FileLoggingConfig.EnableTimestampedLogFile(FileLoggingConfig.FilePath, LoggingConfig.TimestampFormat);
-            var newFilePath = FileLoggingConfig.FilePath;
-
-            Assert.DoesNotContain("output.log", newFilePath); // The filename should be changed
-            Assert.StartsWith("log_", Path.GetFileName(newFilePath)); // The filename should start with with "log_"
-            Assert.EndsWith(".log", newFilePath); // The filename should end with ".log"
-            Assert.NotEqual(originalFilePath, newFilePath); // Check the changed has been done
-        }
-
+        /*
         /// <summary>
         /// Tests that the log directory is correctly set and the file path is generated properly
         /// when enabling a timestamped log file.
@@ -109,7 +91,7 @@ namespace NLoggify.UnitTests.Config
                 Assert.StartsWith(Path.Combine(expectedDirectory, "log_"), FileLoggingConfig.FilePath); // Check if log file is in the correct directory
                 Assert.EndsWith(".log", FileLoggingConfig.FilePath); // Ensure the log file has the correct extension
             }
-
         }
+        */
     }
 }

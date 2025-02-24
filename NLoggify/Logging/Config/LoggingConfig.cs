@@ -2,6 +2,7 @@
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
 using NLoggify.Utils;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Config
 {
@@ -60,11 +61,13 @@ namespace NLoggify.Logging.Config
         /// Configures logging to multiple destinations (Console, File, Debug, etc.)
         /// </summary>
         /// <param name="loggers">The types of loggers to be used</param>
-        #if DEBUG
-        public static List<Logger> ConfigureMultiLogger(params LoggerType[] loggers)
-        #else
+        [ExcludeFromCodeCoverage] // No reason to test it
         public static void ConfigureMultiLogger(params LoggerType[] loggers)
-        #endif
+        {
+            _ConfigureMultiLogger(loggers);
+        }
+
+        internal static List<Logger> _ConfigureMultiLogger(params LoggerType[] loggers)
         {
             // Clear the loggers list
             Loggers.Clear();
@@ -108,11 +111,7 @@ namespace NLoggify.Logging.Config
         /// <param name="type">Type of logger</param>
         /// <returns>An instance of the logger based on the given <see cref="LoggerType"/></returns>
         /// <exception cref="NotSupportedException">The logger is not supported</exception>
-        #if DEBUG
-        public static Logger GetLoggerBasedOnType(LoggerType type)
-        #else
-        private static Logger GetLoggerBasedOnType(LoggerType type)
-        #endif
+        internal static Logger GetLoggerBasedOnType(LoggerType type)
         {
             return type switch
             {

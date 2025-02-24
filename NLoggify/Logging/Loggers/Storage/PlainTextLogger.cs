@@ -6,11 +6,8 @@ namespace NLoggify.Logging.Loggers.Storage
     /// <summary>
     /// Logger that writes logs in plain text format.
     /// </summary>
-    #if DEBUG
-    public class PlainTextLogger : FileLogger
-    #else
+    /// 
     internal class PlainTextLogger : FileLogger
-    #endif
     {
         public PlainTextLogger() : base()
         {

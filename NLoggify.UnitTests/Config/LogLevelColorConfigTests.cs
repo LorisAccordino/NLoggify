@@ -8,7 +8,6 @@ namespace NLoggify.UnitTests.Config
     /// Unit tests for verifying the log level color configuration.
     /// </summary>
     [Collection("SequentialTests")]
-    [DebugOnly]
     [ExcludeFromCodeCoverage]
     public class LogLevelColorConfigTests
     {
