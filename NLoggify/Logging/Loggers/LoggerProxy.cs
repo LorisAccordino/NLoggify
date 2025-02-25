@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
@@ -10,6 +11,7 @@ namespace NLoggify.Logging.Loggers
     internal sealed class LoggerProxy : ILogger, IDisposable
     {
         private static readonly LoggerProxy _instance = new LoggerProxy();
+        private static readonly object _lock = new object(); // Lock object for thread safety
 
 #if DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
@@ -22,15 +24,15 @@ namespace NLoggify.Logging.Loggers
         public static LoggerProxy Instance => _instance;
 
         /// <summary>
-        /// Prevents direct instantiation of the <see cref="LoggerProxy"/> class.
-        /// </summary>
-        private LoggerProxy() { }
-
-        /// <summary>
         /// Gets the current logger instance from <see cref="Logger"/>.
         /// This ensures that if the logger type is changed, all calls are directed to the updated logger.
         /// </summary>
         private Logger CurrentLogger => Logger.Instance;
+
+        /// <summary>
+        /// Prevents the client to instance this
+        /// </summary>
+        private LoggerProxy() { }
 
         /// <summary>
         /// Logs a message with the specified log level.
@@ -42,7 +44,10 @@ namespace NLoggify.Logging.Loggers
 #endif
         public void Log(LogLevel level, string message)
         {
-            CurrentLogger.Log(level, message);
+            lock(_lock)
+            {
+                CurrentLogger.Log(level, message);
+            }
         }
 
         /// <summary>
@@ -71,10 +76,7 @@ namespace NLoggify.Logging.Loggers
         {
             return await CurrentLogger.LogException(level, action, message);
         }
-
-        /// <summary>
-        /// Releases resources held by the current logger.
-        /// </summary>
+        
         [ExcludeFromCodeCoverage] // No reason to test it
         public void Dispose()
         {

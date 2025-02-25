@@ -1,5 +1,4 @@
 ﻿using NLoggify.Logging.Config;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Output
 {
@@ -30,8 +29,5 @@ namespace NLoggify.Logging.Loggers.Output
             debugOutputRedirect = logLine;
 #endif
         }
-
-        [ExcludeFromCodeCoverage] // No reason to test it
-        public override void Dispose() { }
     }
 }

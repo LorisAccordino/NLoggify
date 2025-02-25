@@ -1,11 +1,12 @@
 ﻿using NLoggify.Logging.Config;
+using System.Runtime.CompilerServices;
 
 namespace NLoggify.Logging.Loggers
 {
     /// <summary>
     /// Interface defining the behaviour for loggers.
     /// </summary>
-    public interface ILogger
+    public interface ILogger : IDisposable
     {
 #if DEBUG
         public abstract static string GetDebugOutput(); // Used for debug

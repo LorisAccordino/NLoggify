@@ -1,4 +1,4 @@
-﻿using Nloggify.Tests.Examples;
+﻿using NLoggify.Examples.Simulations;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Loggers;
 
@@ -10,9 +10,18 @@ public class Program
         Console.WriteLine(ascii_art);
 
         // Multi logger configuration
-        LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
+        //LoggingConfig.ConfigureMultiLogger(LoggerType.PlainText, LoggerType.JSON);
+        //LoggingConfig.Configure(LogLevel.Trace, LoggerType.Multi);
+        LoggingConfig.Configure(LogLevel.Trace, LoggerType.Console);
         LoggingConfig.IncludeThreadInfo = true; // Enable thread info
 
+        //LoggingConfig.Configure(LogLevel.Trace, LoggerType.Console);
+        ILogger logger = Logger.GetLogger();
+        //NLoggifyExamples.StressTest(logger);
+        //NLoggifyExamples.BufferedTest(logger);
+        IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
+
+        /*
         // Tests every supported type of logger
         foreach (LoggerType type in Enum.GetValues<LoggerType>())
         {
@@ -24,5 +33,6 @@ public class Program
             NLoggifyExample.Test(Logger.GetLogger());
             Console.WriteLine($"\n===== {type} Logger Test Completed =====\n\n\n");
         }
+        */
     }
 }

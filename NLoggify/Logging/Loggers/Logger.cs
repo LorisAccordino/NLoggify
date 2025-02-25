@@ -1,13 +1,11 @@
 ﻿using NLoggify.Logging.Config;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Emit;
 
 namespace NLoggify.Logging.Loggers
 {
     /// <summary>
     /// Abstract base class for logger representation. The actual implementation of logging (e.g., console, file, etc.) is done in derived classes.
     /// </summary>
-    public abstract class Logger : ILogger, IDisposable
+    public abstract class Logger : ILogger
     {
         private static Logger? _instance = null;  // Static instance for the Singleton pattern
         private static readonly object _lock = new object();            // Lock object for thread safety
@@ -45,7 +43,6 @@ namespace NLoggify.Logging.Loggers
                     return _instance;
                 }
             }
-
 #if DEBUG
             set { _instance = value; }
 #endif
@@ -137,8 +134,8 @@ namespace NLoggify.Logging.Loggers
 #endif
         public virtual void Log(LogLevel level, string message)
         {
-            lock (_lock)
-            {
+            //lock (_lock)
+            //{
                 // Filtering logic: Only log messages that meet or exceed the configured level
                 if (level < LoggingConfig.MinimumLogLevel)
                     return;
@@ -156,7 +153,7 @@ namespace NLoggify.Logging.Loggers
                 // Call the concrete implementation of logging
                 string header = GetLogHeader(level, DateTime.Now.ToString(LoggingConfig.TimestampFormat), threadId, threadName);
                 WriteLog(header, message);
-            }
+            //}
         }
 
         /// <summary>
@@ -231,6 +228,6 @@ namespace NLoggify.Logging.Loggers
         /// This method is used to release any unmanaged resources or perform cleanup tasks when the logger
         /// is no longer needed. It should be called explicitly or automatically via a using block or finalizer.
         /// </remarks>
-        public abstract void Dispose();
+        public virtual void Dispose() { }
     }
 }

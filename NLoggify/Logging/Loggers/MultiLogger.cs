@@ -1,6 +1,6 @@
 ﻿using NLoggify.Logging.Config;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Emit;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -9,24 +9,19 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     internal class MultiLogger : Logger
     {
-        /*
-        [ExcludeFromCodeCoverage] // No reason to test it
-        protected override void WriteLog(string prefix, string message)
-        {
-            foreach (var logger in LoggingConfig.Loggers)
-            {
-                logger.Log(level, message);
-            }
-        }
-        */
+        private static readonly object _lock = new(); // Lock for configuration safety
+
+        /// <summary>
+        /// Initializes the MultiLogger, creating a dedicated thread for each logger.
+        /// </summary>
+        internal MultiLogger() { }
+
+
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Log(LogLevel level, string message)
         {
-            //base.Log(level, message);
-            foreach (var logger in LoggingConfig.Loggers)
-            {
-                logger.Log(level, message);
-            }
+            // Execute each iteration in parallel
+            Parallel.ForEach(LoggingConfig.Loggers, logger => logger.Log(level, message));
         }
 
         // No reason to implement it, no reason to test it :P
@@ -36,9 +31,6 @@ namespace NLoggify.Logging.Loggers
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Disposes all loggers in the composite.
-        /// </summary>
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose()
         {
