@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Emit;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -104,6 +105,29 @@ namespace NLoggify.Logging.Loggers
         }
 
         /// <summary>
+        /// Get the log header to put before the log message. Should be overrided to have a custom behaviour
+        /// </summary>
+        /// /// <param name="level">The severity level of the log message.</param>
+        /// <param name="timestamp">The time when the messaged was logged. This allows for accurate logging based on the exact time of logging.</param>
+        /// <param name="threadId">The id of the calling thread</param>
+        /// <param name="threadName">The name of the calling thread</param>
+        /// <returns>The formatted log header</returns>
+        protected virtual string GetLogHeader(LogLevel level, string timestamp, int threadId = -1, string? threadName = null)
+        {
+            // Handle thread info
+            string threadInfo = "";
+            if (threadId != -1)
+            {
+                threadInfo = $"[Thread {threadId}";
+                threadInfo += !string.IsNullOrEmpty(threadName) ? $" ({threadName})] " : "] ";
+            }
+
+            // Return the entire header: timestamp, (threadspec), level
+            return $"[{timestamp}] {threadInfo}{level}: ";
+        }
+
+
+        /// <summary>
         /// Logs a message with the specified log level.
         /// </summary>
         /// <param name="level">The log level that categorizes the importance of the message.</param>
@@ -111,7 +135,7 @@ namespace NLoggify.Logging.Loggers
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
-        public void Log(LogLevel level, string message)
+        public virtual void Log(LogLevel level, string message)
         {
             lock (_lock)
             {
@@ -119,8 +143,19 @@ namespace NLoggify.Logging.Loggers
                 if (level < LoggingConfig.MinimumLogLevel)
                     return;
 
+
+                // Should track threads?
+                int threadId = -1;
+                string? threadName = "";
+                if (LoggingConfig.IncludeThreadInfo)
+                {
+                    threadId = Thread.CurrentThread.ManagedThreadId;
+                    threadName = Thread.CurrentThread.Name;
+                }
+
                 // Call the concrete implementation of logging
-                WriteLog(level, message, DateTime.Now.ToString(LoggingConfig.TimestampFormat));
+                string header = GetLogHeader(level, DateTime.Now.ToString(LoggingConfig.TimestampFormat), threadId, threadName);
+                WriteLog(header, message);
             }
         }
 
@@ -184,10 +219,10 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Writes the log message to the target output. Must be implemented by derived classes.
         /// </summary>
-        /// <param name="level">The severity level of the log message.</param>
+        /// <param name="header">The header to put before the log message.</param>
         /// <param name="message">The log message to be recorded.</param>
-        /// <param name="timestamp">The time when the messaged was logged. This allows for accurate logging based on the exact time of logging.</param>
-        protected abstract void WriteLog(LogLevel level, string message, string timestamp);
+        protected abstract void WriteLog(string header, string message);
+
 
         /// <summary>
         /// Releases all resources used by the <see cref="Logger"/> class.

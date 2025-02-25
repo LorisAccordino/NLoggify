@@ -13,10 +13,10 @@ namespace NLoggify.Logging.Loggers.Output
 #endif
     internal class DebugLogger : Logger
     {
-        protected override void WriteLog(LogLevel level, string message, string timestamp)
+        protected override void WriteLog(string header, string message)
         {
             // Print the log message with the formatted timestamp
-            string logLine = $"[{timestamp}] {level}: {message}";
+            string logLine = header + message;
             Debug.WriteLine(logLine);
 #if DEBUG
             debugOutputRedirect = logLine;

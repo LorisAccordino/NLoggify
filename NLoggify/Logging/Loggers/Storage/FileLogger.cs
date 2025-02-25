@@ -29,9 +29,9 @@ namespace NLoggify.Logging.Loggers.Storage
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
-        protected override sealed void WriteLog(LogLevel level, string message, string timestamp)
+        protected override sealed void WriteLog(string header, string message)
         {
-            var logEntry = FormatLog(level, message, timestamp);
+            var logEntry = FormatLog(header, message);
 
             lock (_fileLock) // Ensure thread-safety when writing to the file
             {
@@ -43,11 +43,10 @@ namespace NLoggify.Logging.Loggers.Storage
         /// Defines how the log entry should be formatted.
         /// Implemented by subclasses.
         /// </summary>
-        /// <param name="level">The log level.</param>
+        /// <param name="prefix">The prefix to put before the log message.</param>
         /// <param name="message">The log message.</param>
-        /// <param name="timestamp">The formatted timestamp.</param>
         /// <returns>The formatted log entry.</returns>
-        protected abstract string FormatLog(LogLevel level, string message, string timestamp);
+        protected abstract string FormatLog(string prefix, string message);
 
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose() { }

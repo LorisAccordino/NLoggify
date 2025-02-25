@@ -11,6 +11,7 @@ public class Program
 
         // Multi logger configuration
         LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
+        LoggingConfig.IncludeThreadInfo = true; // Enable thread info
 
         // Tests every supported type of logger
         foreach (LoggerType type in Enum.GetValues<LoggerType>())

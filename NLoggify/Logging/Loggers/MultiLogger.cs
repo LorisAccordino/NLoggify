@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Emit;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -8,16 +9,31 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     internal class MultiLogger : Logger
     {
-        /// <summary>
-        /// Logs a message to all configured loggers.
-        /// </summary>
+        /*
         [ExcludeFromCodeCoverage] // No reason to test it
-        protected override void WriteLog(LogLevel level, string message, string timestamp)
+        protected override void WriteLog(string prefix, string message)
         {
             foreach (var logger in LoggingConfig.Loggers)
             {
                 logger.Log(level, message);
             }
+        }
+        */
+        [ExcludeFromCodeCoverage] // No reason to test it
+        public override void Log(LogLevel level, string message)
+        {
+            //base.Log(level, message);
+            foreach (var logger in LoggingConfig.Loggers)
+            {
+                logger.Log(level, message);
+            }
+        }
+
+        // No reason to implement it, no reason to test it :P
+        [ExcludeFromCodeCoverage]
+        protected override void WriteLog(string prefix, string message)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

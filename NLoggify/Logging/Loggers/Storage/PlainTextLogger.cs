@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 namespace NLoggify.Logging.Loggers.Storage
 {
@@ -15,13 +16,10 @@ namespace NLoggify.Logging.Loggers.Storage
             _filePath = Path.ChangeExtension(_filePath, "log");
         }
 
-        /// <summary>
-        /// Formats the log entry as plain text.
-        /// </summary>
         [ExcludeFromCodeCoverage] // No reason to test it
-        protected override string FormatLog(LogLevel level, string message, string timestamp)
+        protected override string FormatLog(string header, string message)
         {
-            string logLine = $"[{timestamp}] {level}: {message}";
+            string logLine = header + message;
 #if DEBUG
             debugOutputRedirect = logLine;
 #endif

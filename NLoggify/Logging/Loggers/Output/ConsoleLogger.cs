@@ -1,5 +1,4 @@
 ﻿using NLoggify.Logging.Config;
-using NLoggify.Logging.Loggers;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Output
@@ -9,20 +8,27 @@ namespace NLoggify.Logging.Loggers.Output
     /// </summary>
     internal class ConsoleLogger : Logger
     {
-        protected override void WriteLog(LogLevel level, string message, string timestamp)
+        private static readonly object _lock = new object(); // Lock object for thread safety
+        public override void Log(LogLevel level, string message)
         {
-            // Change the console color based on the log level
-            Console.ForegroundColor = LogLevelColorConfig.GetColorForLevel(level);
+            lock (_lock)
+            {
+                // Change the console color based on the log level
+                Console.ForegroundColor = LogLevelColorConfig.GetColorForLevel(level);
+                base.Log(level, message);
+                // Reset the console color back to the default
+                Console.ResetColor();
+            }
+        }
 
-            // Print the log message with the formatted timestamp
-            string logLine = $"[{timestamp}] {level}: {message}";
+        protected override void WriteLog(string header, string message)
+        {
+            // Print the log message with the formatted header and message
+            string logLine = header + message;
             Console.WriteLine(logLine);
 #if DEBUG
             debugOutputRedirect = logLine;
 #endif
-
-            // Reset the console color back to the default
-            Console.ResetColor();
         }
 
         [ExcludeFromCodeCoverage] // No reason to test it

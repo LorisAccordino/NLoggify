@@ -34,6 +34,11 @@ namespace NLoggify.Logging.Config
         /// </summary>
         public static string TimestampFormat { get; private set; } = "yyyy-MM-dd HH:mm:ss";
 
+        /// <summary>
+        /// Gets or sets addiontal info about threads involved in the logging session
+        /// </summary>
+        public static bool IncludeThreadInfo { get; set; } = Environment.ProcessorCount > 1;
+
 
         /// <summary>
         /// Updates the logging configuration dynamically at runtime.

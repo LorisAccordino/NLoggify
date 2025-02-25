@@ -15,19 +15,32 @@ namespace NLoggify.Logging.Loggers.Storage
             _filePath = Path.ChangeExtension(_filePath, "json");
         }
 
-        /// <summary>
-        /// Formats the log entry as a JSON object.
-        /// </summary>
+        protected override string GetLogHeader(LogLevel level, string timestamp, int threadId = -1, string? threadName = null)
+        {
+            var logHeader = new Dictionary<string, object>
+            {
+                { "timestamp", timestamp },
+                { "level", level.ToString() }
+            };
+
+            if (threadId != -1)
+            {
+                logHeader["threadInfo"] = new { threadId, threadName };
+            }
+
+            // Header formatted
+            return JsonSerializer.Serialize(logHeader);
+        }
+
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
-        protected override string FormatLog(LogLevel level, string message, string timestamp)
+        protected override string FormatLog(string header, string message)
         {
             var logEntry = new
             {
-                timestamp,
-                level = level.ToString(),
-                message
+                header = JsonDocument.Parse(header).RootElement, // Parse the JSON to avoid double serialization
+                message,
             };
 
             string logLine = JsonSerializer.Serialize(logEntry);
