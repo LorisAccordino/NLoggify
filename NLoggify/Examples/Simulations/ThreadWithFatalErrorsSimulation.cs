@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
 
 namespace Nloggify.Tests.Examples.Simulations

@@ -1,5 +1,4 @@
-﻿using NLoggify.Logging.Config;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers.Storage
 {
@@ -11,19 +10,7 @@ namespace NLoggify.Logging.Loggers.Storage
     {
         //private readonly string _filePath;
         private readonly object _fileLock = new(); // Lock for thread-safe writing
-        protected string _filePath = ""; // Local copy of FileLoggingConfig.FilePath for local manipulation
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileLogger"/> class.
-        /// </summary>
-        ///// <param name="filePath">The file path where logs will be written.</param>
-        protected FileLogger()
-        {
-            // File logging configuration
-            FileLoggingConfig.EnableTimestampedLogFile();
-            _filePath = FileLoggingConfig.FilePath;
-            FileLoggingConfig.EnsureLogDirectoryExists();
-        }
+        protected string _filePath = loggingConfig.FileSection.FullPath; // File path copy for local manipulation
 
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it

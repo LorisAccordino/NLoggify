@@ -1,4 +1,4 @@
-﻿using NLoggify.Logging.Config;
+﻿using NLoggify.Logging.Config.Enums;
 
 namespace NLoggify.Logging.Loggers.Output
 {
@@ -12,11 +12,16 @@ namespace NLoggify.Logging.Loggers.Output
         {
             lock (_lock)
             {
+                // Should use colors?
+                bool colors = loggingConfig.ColorsSection.UseColors;
                 // Change the console color based on the log level
-                Console.ForegroundColor = LogLevelColorConfig.GetColorForLevel(level);
+                if (colors) Console.ForegroundColor = loggingConfig.ColorsSection.GetColorForLevel(level);
+
+                // Log as usual
                 base.Log(level, message);
+                
                 // Reset the console color back to the default
-                Console.ResetColor();
+                if (colors) Console.ResetColor();
             }
         }
 

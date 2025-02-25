@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Enums;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
@@ -12,6 +13,8 @@ namespace NLoggify.Logging.Loggers
         private static readonly object _lock = new object();            // Lock object for thread safety
         private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
         private static readonly object _masterLock = new();             // Master lock for complex operations
+
+        protected static LoggingConfig loggingConfig = null;
 
 #if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
@@ -39,7 +42,7 @@ namespace NLoggify.Logging.Loggers
                     if (_instance == null)
                     {
                         // Concrete classes should initialize the logger instance
-                        _instance = LoggingConfig.CreateLogger();
+                        _instance = loggingConfig.CreateLogger();
                     }
                     return _instance;
                 }
@@ -82,11 +85,16 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
         /// </summary>
+        /// <param name="config">The <see cref="LoggingConfig"/> object that represents the logging configuration<br></br>
+        /// If it <b>is null</b>, it will be used the <b>default</b> logging configuration
+        /// </param>
         /// <returns>Logger instance.</returns>
-        public static ILogger GetLogger()
+        public static ILogger GetLogger(LoggingConfig? config = null)
         {
             lock (_lock)
             {
+                loggingConfig ??= config ?? new LoggingConfig();
+                Reconfigure(); // Force a reconfiguration
                 return LoggerProxy.Instance;
             }
         }
@@ -98,7 +106,7 @@ namespace NLoggify.Logging.Loggers
         {
             lock (_lock)
             {
-                _instance = LoggingConfig.CreateLogger();
+                _instance = loggingConfig.CreateLogger();
             }
         }
 
@@ -138,21 +146,21 @@ namespace NLoggify.Logging.Loggers
             //lock (_lock)
             //{
                 // Filtering logic: Only log messages that meet or exceed the configured level
-                if (level < LoggingConfig.MinimumLogLevel)
+                if (level < loggingConfig.MinimumLogLevel)
                     return;
 
 
                 // Should track threads?
                 int threadId = -1;
                 string? threadName = "";
-                if (LoggingConfig.IncludeThreadInfo)
+                if (loggingConfig.IncludeThreadInfo)
                 {
                     threadId = Thread.CurrentThread.ManagedThreadId;
                     threadName = Thread.CurrentThread.Name;
                 }
 
                 // Call the concrete implementation of logging
-                string header = GetLogHeader(level, DateTime.Now.ToString(LoggingConfig.TimestampFormat), threadId, threadName);
+                string header = GetLogHeader(level, DateTime.Now.ToString(loggingConfig.TimestampFormat), threadId, threadName);
                 WriteLog(header, message);
             //}
         }

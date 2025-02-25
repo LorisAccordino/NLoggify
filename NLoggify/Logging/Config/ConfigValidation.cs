@@ -15,7 +15,7 @@ namespace NLoggify.Logging.Config
         /// <param name="RequireFileName">Is the filename required?</param>
         /// <returns>True if the format is valid, otherwise false.</returns>
         /// <exception cref="IOException">This given path is invalid</exception>
-        public static bool ValidatePath(string path, bool IncludeFileName, bool RequireFileName = false)
+        public static bool ValidatePath(string path, bool IncludeFileName = false, bool RequireFileName = false)
         {
             if (string.IsNullOrEmpty(path)) return false;
 

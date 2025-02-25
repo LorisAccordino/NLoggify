@@ -1,4 +1,4 @@
-﻿namespace NLoggify.Logging.Config
+﻿namespace NLoggify.Logging.Config.Enums
 {
     /// <summary>
     /// Specifies the available types of loggers that can be used in the logging system.

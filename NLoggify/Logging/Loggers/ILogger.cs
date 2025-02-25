@@ -1,4 +1,4 @@
-﻿using NLoggify.Logging.Config;
+﻿using NLoggify.Logging.Config.Enums;
 using System.Runtime.CompilerServices;
 
 namespace NLoggify.Logging.Loggers

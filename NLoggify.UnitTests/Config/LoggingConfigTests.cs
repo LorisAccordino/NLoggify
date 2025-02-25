@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
@@ -25,11 +26,13 @@ namespace NLoggify.UnitTests.Config
             var expectedType = LoggerType.PlainText;
 
             // Act
-            LoggingConfig.Configure(expectedLevel, expectedType);
+            LoggingConfig config = new LoggingConfig();
+            config.MinimumLogLevel = expectedLevel;
+            config.LoggerType = expectedType;
 
             // Assert
-            Assert.Equal(expectedLevel, LoggingConfig.MinimumLogLevel);
-            Assert.Equal(expectedType, LoggingConfig.LoggerType);
+            Assert.Equal(expectedLevel, config.MinimumLogLevel);
+            Assert.Equal(expectedType, config.LoggerType);
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace NLoggify.UnitTests.Config
             // Act
             try
             {
-                LoggingConfig.Configure(LogLevel.Info, LoggerType.Console, timestampFormat);
+                ConfigValidation.ValidateTimestampFormat(timestampFormat);
 
                 // Assert
                 if (shouldThrowException) Assert.Fail("Expected exception not thrown.");
@@ -83,7 +86,6 @@ namespace NLoggify.UnitTests.Config
             try
             {
                 GenericUtils.ValidatePath(filePath, true, true);
-                FileLoggingConfig.SetCustomFilePath(filePath);
 
                 // Assert
                 if (shouldThrowException) Assert.Fail("Expected exception not thrown.");

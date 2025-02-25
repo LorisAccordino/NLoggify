@@ -1,4 +1,5 @@
-﻿using NLoggify.Logging.Loggers;
+﻿using NLoggify.Logging.Config.Enums;
+using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
 using NLoggify.Utils;
@@ -7,11 +8,10 @@ using System.Diagnostics.CodeAnalysis;
 namespace NLoggify.Logging.Config
 {
     /// <summary>
-    /// Represents a global configuration settings for the logging system.
+    /// Represents a global configuration for the logging system.
     /// </summary>
-    public static class LoggingConfig
+    public partial class LoggingConfig
     {
-        private static readonly object _lock = new object(); // Lock object for thread-safe operations
         internal static List<Logger> Loggers { get; private set; } = GenericUtils.GetEnumValues<LoggerType>()
             .Where(type => type != LoggerType.Multi)
             .ToList()
@@ -21,45 +21,35 @@ namespace NLoggify.Logging.Config
         /// <summary>
         /// Gets the current minimum log level required for messages to be recorded.
         /// </summary>
-        public static LogLevel MinimumLogLevel { get; private set; } = LogLevel.Info;
+        public LogLevel MinimumLogLevel { get; set; } = LogLevel.Info;
 
         /// <summary>
         /// Gets the currently configured logger type.
         /// </summary>
-        public static LoggerType LoggerType { get; private set; } = LoggerType.Console;
+        public LoggerType LoggerType { get; set; } = LoggerType.Console;
 
         /// <summary>
         /// Gets or sets the format used to display timestamps in the log messages.
         /// The default format is "yyyy-MM-dd HH:mm:ss", but it can be changed to any valid DateTime format string.
         /// </summary>
-        public static string TimestampFormat { get; private set; } = "yyyy-MM-dd HH:mm:ss";
+        public string TimestampFormat 
+        {
+            get => _timestampFormat;
+            set { if (ConfigValidation.ValidateTimestampFormat(value)) _timestampFormat = value; }
+        }
+        private string _timestampFormat = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
         /// Gets or sets addiontal info about threads involved in the logging session
         /// </summary>
-        public static bool IncludeThreadInfo { get; set; } = Environment.ProcessorCount > 1;
-
+        public bool IncludeThreadInfo { get; set; } = Environment.ProcessorCount > 1;
 
         /// <summary>
-        /// Updates the logging configuration dynamically at runtime.
+        /// Get an instance of <see cref="LoggingConfig"/>, the configuration class for the entire log system
         /// </summary>
-        /// <param name="minimumLogLevel">The minimum log level required for messages to be recorded.</param>
-        /// <param name="loggerType">The type of logger to use.</param>
-        /// <param name="timestampFormat">The format to use for logging timestamps (optional).</param>
-        public static void Configure(LogLevel minimumLogLevel, LoggerType loggerType, string timestampFormat = "")
+        public LoggingConfig()
         {
-            lock (_lock)
-            {
-                // Assign log level and type
-                MinimumLogLevel = minimumLogLevel;
-                LoggerType = loggerType;
-
-                // Validate the timestamp format
-                if (ConfigValidation.ValidateTimestampFormat(timestampFormat)) TimestampFormat = timestampFormat;
-
-                // Reconfigure the logger
-                Logger.Reconfigure();
-            }
+            FileSection = new FileLoggingConfig(this);
         }
 
         /// <summary>
@@ -105,7 +95,7 @@ namespace NLoggify.Logging.Config
         /// Creates an instance of the logger based on the current configuration settings.
         /// </summary>
         /// <returns>An instance of a logger corresponding to the configured <see cref="LoggerType"/>.</returns>
-        internal static Logger CreateLogger()
+        internal Logger CreateLogger()
         {
             return GetLoggerBasedOnType(LoggerType);
         }

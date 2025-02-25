@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
 
 namespace NLoggify.UnitTests
@@ -22,9 +23,11 @@ namespace NLoggify.UnitTests
         public void LoggerInstance_ShouldNotBeNull(bool configure)
         {
             // Arrange
+            LoggingConfig config = new LoggingConfig();
             if (configure)
             {
-                LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
+                config.MinimumLogLevel = LogLevel.Info;
+                config.LoggerType = LoggerType.Console;
             }
 
             // Act
@@ -41,11 +44,13 @@ namespace NLoggify.UnitTests
         public void LoggerInstance_ShouldReturnSameInstance()
         {
             // Arrange
-            LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
+            LoggingConfig config = new LoggingConfig();
+            config.MinimumLogLevel = LogLevel.Info;
+            config.LoggerType = LoggerType.Console;
 
             // Act
-            var logger1 = Logger.GetLogger();
-            var logger2 = Logger.GetLogger();
+            var logger1 = Logger.GetLogger(config);
+            var logger2 = Logger.GetLogger(config);
 
             // Assert
             Assert.Same(logger1, logger2); // Must be the same instance
@@ -89,8 +94,10 @@ namespace NLoggify.UnitTests
         public void Logger_ShouldLogProperly(LogLevel configLevel, LogLevel messageLevel, bool shouldLog, LoggerType loggerType)
         {
             // Arrange
-            LoggingConfig.Configure(configLevel, loggerType);
-            var logger = Logger.GetLogger();
+            LoggingConfig config = new LoggingConfig();
+            config.MinimumLogLevel = configLevel;
+            config.LoggerType = loggerType;
+            var logger = Logger.GetLogger(config);
 
             // Act
             logger.Log(messageLevel, "Test message");
@@ -153,8 +160,10 @@ namespace NLoggify.UnitTests
         public async Task LogException_ShouldCatchAsyncExceptions(bool throwException)
         {
             // Arrange
-            LoggingConfig.Configure(LogLevel.Info, LoggerType.Console);
-            var logger = Logger.GetLogger();
+            LoggingConfig config = new LoggingConfig();
+            config.MinimumLogLevel = LogLevel.Info;
+            config.LoggerType = LoggerType.Console;
+            var logger = Logger.GetLogger(config);
 
             // Act
             bool exceptionCaught = await logger.LogException(LogLevel.Error, async () =>

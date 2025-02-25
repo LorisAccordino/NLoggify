@@ -48,6 +48,22 @@
         }
 
         /// <summary>
+        /// Ensures that the given string is a valid filename by replacing invalid characters.
+        /// </summary>
+        /// <param name="filename">The filename to validate.</param>
+        /// <returns>A valid filename or an empty string if the correction is impossible.</returns>
+        //[ExcludeFromCodeCoverage] // No reason to test it
+        public static string MakeValidFilename(string filename)
+        {
+            if (string.IsNullOrWhiteSpace(filename)) return string.Empty;
+
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+            string validFilename = new string(filename.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
+
+            return string.IsNullOrWhiteSpace(validFilename) ? string.Empty : validFilename;
+        }
+
+        /// <summary>
         /// Get the values of the given enum
         /// </summary>
         /// <typeparam name="T">Type of the enum to cast</typeparam>
