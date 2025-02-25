@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.5] - 2025-02-25
+### Fixed:
+- **Synchronization bug fix**: Fixed thread synchronization issues causing performance degradation during logging, ensuring smooth operations across threads.
+
+### Added:
+- **Stress test simulations**: Added stress tests for CPU, I/O, and logging, designed to evaluate system performance under load.
+- **New performance test scenarios**: Implemented stress simulations that push CPU and I/O resources to test logging capabilities.
+
+### Improved:
+- **Thread synchronization fixes**: Improved thread synchronization, boosting performance and ensuring thread-safe contexts.
+- **Automatic multithreading support**: Introduced automatic multithreading for reduced I/O operation overhead and enhanced efficiency.
+- **Optimized logging performance**: Enhanced logging management with better thread handling, reducing latency under heavy load.
+
+---
+
+## [1.0.4] - 2025-02-25
+### Fixed
+- Minor code optimizations to improve formatting and flexibility.
+### Added
+- Thread information during logging
+
 ## [1.0.4] - 2025-02-25
 ### Fixed
 - Minor code optimizations to improve formatting and flexibility.
