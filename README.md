@@ -25,7 +25,7 @@ To use NLoggify in your project, follow these steps:
 2. Initialize NLoggify by configuring the logging settings in your application.
 
 Here is a simple example to get you started:
-```C#
+```Csharp
 using NLoggify.Logging.Loggers;
 
 // Initialize the logger
