@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLoggify", "NLoggify\NLoggi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLoggify.UnitTests", "NLoggify.UnitTests\NLoggify.UnitTests.csproj", "{3906A5ED-7F1E-4366-9079-DB0CE090916B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nloggify.Tests", "Nloggify.Tests\Nloggify.Tests.csproj", "{746FCA05-5026-4D27-B1C7-F007A5D163A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLoggify.Tests", "Nloggify.Tests\NLoggify.Tests.csproj", "{746FCA05-5026-4D27-B1C7-F007A5D163A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
