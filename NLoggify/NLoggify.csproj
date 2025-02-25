@@ -48,5 +48,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.2" />
+  </ItemGroup>
+
 
 </Project>
