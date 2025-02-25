@@ -13,7 +13,7 @@ NLoggify is a lightweight, customizable logging library for .NET that supports m
 You can install NLoggify via [NuGet](https://www.nuget.org/packages/NLoggify) using the following command:
 
 ```bash
-dotnet add package NLoggify --version 1.0.3
+dotnet add package NLoggify --version 1.0.4
 ```
 
 Alternatively, you can use the NuGet Package Manager in Visual Studio to search for NLoggify and install it.

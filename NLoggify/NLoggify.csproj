@@ -24,9 +24,9 @@
 	<PackageProjectUrl>https://lorisaccordino.github.io/NLoggify</PackageProjectUrl>
 	<Company>Loris Accordino</Company>
 	<Authors>Loris Accordino</Authors>
-	<AssemblyVersion>1.0.3</AssemblyVersion>
-	<FileVersion>1.0.3</FileVersion>
-	<Version>1.0.3</Version>
+	<AssemblyVersion>1.0.4</AssemblyVersion>
+	<FileVersion>1.0.4</FileVersion>
+	<Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
