@@ -1,5 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -17,9 +18,13 @@ namespace NLoggify.Logging.Loggers
         protected static readonly object _configLock = new object(); // Config logging for config operations
         /***********************/
 
-        protected static LoggingConfig LoggingConfig { get; private set; } = new LoggingConfig(); // Initialize yet to avoid problems in derived classes
+        /// <summary>
+        /// The current configuration of the entire logging system
+        /// </summary>
+        public static LoggingConfig CurrentConfig { get; private set; } = new LoggingConfig();
+        
         private static bool hasBeenConfigured = false;
-        //private static LoggingConfig _loggingConfig = null; // Dummy object to avoid inconsistency in derived classes
+        //private static CurrentConfig _loggingConfig = null; // Dummy object to avoid inconsistency in derived classes
 
 #if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
@@ -37,9 +42,7 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Gets the singleton instance of the Logger.
         /// </summary>
-#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
-#endif
         internal static Logger Instance
         {
             get
@@ -50,14 +53,11 @@ namespace NLoggify.Logging.Loggers
                     if (_instance == null)
                     {
                         // Concrete classes should initialize the logger instance
-                        _instance = LoggingConfig.CreateLogger();
+                        _instance = CurrentConfig.CreateLogger();
                     }
                     return _instance;
                 }
             }
-#if DEBUG
-            set { _instance = value; }
-#endif
         }
 
 
@@ -97,7 +97,7 @@ namespace NLoggify.Logging.Loggers
         /// If it is <b>null</b>, it will be used the <b>default</b> (or the <b>current</b>, if already set) logging configuration
         /// </param>
         /// <returns>Logger instance.</returns>
-        public static ILogger GetLogger(LoggingConfig? config = null)
+        public static Logger GetLogger(LoggingConfig? config = null)
         {
             lock (_configLock)
             {
@@ -105,28 +105,29 @@ namespace NLoggify.Logging.Loggers
                 {
                     if (config != null)
                     {
-                        if (hasBeenConfigured == false || LoggingConfig.AllowReconfiguration)
+                        if (hasBeenConfigured == false || CurrentConfig.AllowReconfiguration)
                         {
-                            LoggingConfig = config;
+                            CurrentConfig = config;
                             hasBeenConfigured = true;
                         }
                         else
-                            throw new InvalidOperationException("Cannot change the logger configuration at runtime! \n You could set LoggingConfig.AllowReconfiguration == true to achieve that, but it is NOT recommended to change logging config at runtime.");
+                            throw new InvalidOperationException("Cannot change the logger configuration at runtime! \n You could set CurrentConfig.AllowReconfiguration == true to achieve that, but it is NOT recommended to change logging config at runtime.");
                     }
 
                     // Set up singleton instances
-                    _instance = LoggingConfig.CreateLogger();
+                    _instance = CurrentConfig.CreateLogger();
                     return LoggerWrapper.Instance;
                 }
             }
         }
 
+        /*
         /// <summary>
         /// Forces a reconfiguration of the logger, creating a new instance if settings have changed.
         /// </summary>
-        /// <param name="config">The <see cref="Config.LoggingConfig"/> object that represents the logging configuration</param>
+        /// <param name="config">The <see cref="Config.CurrentConfig"/> object that represents the logging configuration</param>
         [Obsolete("It is not recommended to change the configuration at runtime. Do it only in extreme situations!", false)]
-        internal static void Reconfigure(LoggingConfig config)
+        internal static void Reconfigure(CurrentConfig config)
         {
             lock (_configLock)
             {
@@ -134,12 +135,13 @@ namespace NLoggify.Logging.Loggers
 
                 // Reset configuration state (and configuration)
                 hasBeenConfigured = false; // Necessary to not throw exception in Logger.GetLogger();
-                LoggingConfig = config;
+                CurrentConfig = config;
 
                 // Get a new logger config
                 GetLogger(config);
             }
         }
+        */
 
         /// <summary>
         /// Get the log header to put before the log message. Should be overrided to have a custom behaviour
@@ -177,21 +179,21 @@ namespace NLoggify.Logging.Loggers
             lock (_lock)
             {
                 // Filtering logic: Only log messages that meet or exceed the configured level
-                if (level < LoggingConfig.MinimumLogLevel)
+                if (level < CurrentConfig.MinimumLogLevel)
                     return;
 
 
                 // Should track threads?
                 int threadId = -1;
                 string? threadName = "";
-                if (LoggingConfig.IncludeThreadInfo)
+                if (CurrentConfig.IncludeThreadInfo)
                 {
                     threadId = Thread.CurrentThread.ManagedThreadId;
                     threadName = Thread.CurrentThread.Name;
                 }
 
                 // Call the concrete implementation of logging
-                string header = GetLogHeader(level, DateTime.Now.ToString(LoggingConfig.TimestampFormat), threadId, threadName);
+                string header = GetLogHeader(level, DateTime.Now.ToString(CurrentConfig.TimestampFormat), threadId, threadName);
                 WriteLog(header, message);
             }
         }

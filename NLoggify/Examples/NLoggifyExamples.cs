@@ -2,12 +2,14 @@
 using NLoggify.Examples.Simulations;
 using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Nloggify.Tests.Examples
 {
     /// <summary>
     /// Provides utility methods as example to test the library features and see how they work.
     /// </summary>
+    [ExcludeFromCodeCoverage] // No reason to test it
     public static class NLoggifyExamples
     {
         /// <summary>

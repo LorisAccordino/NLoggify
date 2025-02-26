@@ -1,8 +1,12 @@
-﻿namespace NLoggify.Utils
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
+
+namespace NLoggify.Utils
 {
     /// <summary>
     /// Utility class that provides miscellanous utility methods.
     /// </summary>
+    [ExcludeFromCodeCoverage] // No reason to test it
     internal static class GenericUtils
     {
         /// <summary>
@@ -52,7 +56,6 @@
         /// </summary>
         /// <param name="filename">The filename to validate.</param>
         /// <returns>A valid filename or an empty string if the correction is impossible.</returns>
-        //[ExcludeFromCodeCoverage] // No reason to test it
         public static string MakeValidFilename(string filename)
         {
             if (string.IsNullOrWhiteSpace(filename)) return string.Empty;
@@ -71,6 +74,20 @@
         public static IEnumerable<T> GetEnumValues<T>()
         {
             return Enum.GetValues(typeof(T)).Cast<T>();
+        }
+
+        /// <summary>
+        /// Gets a deep copy of a generic <see langword="T"/> object
+        /// </summary>
+        /// <typeparam name="T">The object to deep copy</typeparam>
+        /// <param name="obj"></param>
+        /// <returns>A deep copy of the <see langword="T"/> object</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the object is null</exception>
+        public static T DeepCopy<T>(T obj)
+        {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            var json = JsonSerializer.Serialize(obj);
+            return JsonSerializer.Deserialize<T>(json);
         }
     }
 }

@@ -2,6 +2,7 @@
 using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
+using NLoggify.Utils;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Config
@@ -9,7 +10,7 @@ namespace NLoggify.Logging.Config
     /// <summary>
     /// Represents a global configuration for the logging system.
     /// </summary>
-    public partial class LoggingConfig
+    public partial class LoggingConfig : ICloneable
     {
         /*internal List<Logger> Loggers { get; private set; } = GenericUtils.GetEnumValues<LoggerType>()
             .Where(type => type != LoggerType.Multi)
@@ -50,7 +51,7 @@ namespace NLoggify.Logging.Config
         /// If <see langword="false"></see>, it is not allowed to configure the logger again once done <br></br>
         /// <b>Note:</b> It is reccommended to <b>avoid reconfigurations</b> at runtime to prevent threading and I/O problems.
         /// </summary>
-        public bool AllowReconfiguration { get; set; } = false;
+        public bool AllowReconfiguration { get; set; } = true;
 
 
 
@@ -128,6 +129,15 @@ namespace NLoggify.Logging.Config
                 LoggerType.Multi => new MultiLogger(),
                 _ => throw new NotSupportedException("The specified logger type is not supported.")
             };
+        }
+
+        /// <summary>
+        /// Gets a deep copy of <see langword="this"/> object
+        /// </summary>
+        /// <returns>A copy of <see langword="this"/> object</returns>
+        public object Clone()
+        {
+            return GenericUtils.DeepCopy(this);
         }
     }
 }

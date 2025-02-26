@@ -10,7 +10,7 @@ namespace NLoggify.Logging.Loggers.Storage
     {
         //private readonly string _filePath;
         private readonly object _fileLock = new(); // Lock for thread-safe writing
-        protected string _filePath = LoggingConfig.FileSection.FullPath; // File path copy for local manipulation
+        protected string _filePath = CurrentConfig.FileSection.FullPath; // File path copy for local manipulation
 
         protected FileLogger() : base()
         {

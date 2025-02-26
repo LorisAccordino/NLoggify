@@ -1,6 +1,7 @@
 ﻿using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace NLoggify.Examples.Simulations
@@ -8,6 +9,7 @@ namespace NLoggify.Examples.Simulations
     /// <summary>
     /// Provides utility methods for simulating intensive operations like CPU stress tests, intensive I/O operations, buffered logging, multithread stress etc.
     /// </summary>
+    [ExcludeFromCodeCoverage] // No reason to test it
     public static class IntensiveSimulations
     {
         /// <summary>

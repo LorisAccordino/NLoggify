@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
 
@@ -8,6 +9,7 @@ namespace Nloggify.Tests.Examples.Simulations
     /// Simulates a thread that can generate fatal errors with an increasingly probability over the time.
     /// The errors escalation has a logarithmic trend.
     /// </summary>
+    [ExcludeFromCodeCoverage] // No reason to test it
     public static class ThreadWithFatalErrorSimulation
     {
         private static readonly Random _random = new Random();

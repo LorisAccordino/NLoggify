@@ -1,12 +1,14 @@
 ﻿using Nloggify.Tests.Examples.Utils;
 using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Nloggify.Tests.Examples.Simulations
 {
     /// <summary>
     /// Provides utility methods for simulating random failures, delays, and uncertainty in tests.
     /// </summary>
+    [ExcludeFromCodeCoverage] // No reason to test it
     public static class GenericSimulations
     {
         private static readonly Random _random = new Random();

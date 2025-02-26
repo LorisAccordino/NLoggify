@@ -1,6 +1,7 @@
 ﻿using Nloggify.Tests.Examples.Utils;
 using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Nloggify.Tests.Examples.Simulations
 {
@@ -8,6 +9,7 @@ namespace Nloggify.Tests.Examples.Simulations
     /// A class that simulates the activity of concurrent users performing actions.
     /// Contains methods to simulate multiple users performing actions with random delays in parallel.
     /// </summary>
+    [ExcludeFromCodeCoverage] // No reason to test it
     public static class MultithreadSimulations
     {
         /// <summary>

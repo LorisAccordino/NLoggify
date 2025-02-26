@@ -5,7 +5,9 @@ namespace NLoggify.Logging.Loggers
 {
     /// <summary>
     /// Wrapper for the logger instance, ensuring that all references always point to the current logger.
-    /// This allows dynamic updates to the logger configuration while maintaining a consistent reference.
+    /// This allows dynamic updates to the logger configuration while maintaining a consistent reference. <br></br>
+    /// This also allows to have multiple logging output, such as <see cref="LoggerType.Debug"/>, 
+    /// <see cref="LoggerType.Console"/>, <see cref="LoggerType.PlainText"/>, <see cref="LoggerType.JSON"/> and many others
     /// </summary>
     internal sealed class LoggerWrapper : Logger
     {

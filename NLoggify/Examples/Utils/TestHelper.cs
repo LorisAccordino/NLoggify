@@ -1,8 +1,11 @@
-﻿namespace Nloggify.Tests.Examples.Utils
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Nloggify.Tests.Examples.Utils
 {
     /// <summary>
     /// A static helper class that provides utility methods for test simulations and logging.
     /// </summary>
+    [ExcludeFromCodeCoverage] // No reason to test it
     public static class TestHelper
     {
         private static readonly Random _random = new Random();

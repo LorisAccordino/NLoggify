@@ -3,7 +3,7 @@ using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
 
-namespace NLoggify.UnitTests
+namespace NLoggify.UnitTests.Loggers
 {
     /// <summary>
     /// Unit tests for verifying the behavior of the logger and its configuration.
@@ -12,6 +12,12 @@ namespace NLoggify.UnitTests
     [ExcludeFromCodeCoverage]
     public class LoggerTests
     {
+        /*** DEFINED MEMBERS TO HELP TESTS ***/
+        private readonly static LoggingConfig defaultConfig = new LoggingConfig();
+        private readonly static LoggingConfig infoConsoleConfig = new LoggingConfig() { MinimumLogLevel = LogLevel.Info, LoggerType = LoggerType.Console };
+        private static Logger logger = Logger.GetLogger(defaultConfig);
+        /*************************************/
+
         /// <summary>
         /// Ensures that <see cref="Logger.GetLogger"/> always returns a not null value,
         /// both before and after configuration.
@@ -24,16 +30,10 @@ namespace NLoggify.UnitTests
         {
             // Arrange
             LoggingConfig config = null;
-            if (configure)
-            {
-                config = new LoggingConfig();
-                config.MinimumLogLevel = LogLevel.Info;
-                config.LoggerType = LoggerType.Console;
-            }
+            if (configure) config = infoConsoleConfig;
 
             // Act
-            var logger = Logger.GetLogger();
-            Logger.Reconfigure(config);
+            logger = Logger.GetLogger(config);
 
             // Assert
             Assert.NotNull(logger);
@@ -45,39 +45,15 @@ namespace NLoggify.UnitTests
         [Fact]
         public void LoggerInstance_ShouldReturnSameInstance()
         {
-            // Arrange
-            LoggingConfig config = new LoggingConfig();
-            config.MinimumLogLevel = LogLevel.Info;
-            config.LoggerType = LoggerType.Console;
-
-            // Act
-            var logger1 = Logger.GetLogger();
-            Logger.Reconfigure(config);
-            var logger2 = Logger.GetLogger();
+            // Arrange & Act
+            var logger1 = Logger.GetLogger(infoConsoleConfig);
+            var logger2 = Logger.GetLogger(infoConsoleConfig);
 
             // Assert
             Assert.Same(logger1, logger2); // Must be the same instance
         }
 
 #if DEBUG
-        /// <summary>
-        /// Tests the instance (directly) to check its behaviour
-        /// </summary>
-        [Fact]
-        public void Instance_ShouldCreateNewInstance_WhenFirstAccessed()
-        {
-            // Arrange
-            Logger.Instance = null; // Make it null, for debug its behaviour
-            var initialInstance = Logger.Instance;  // First access, should initialize the instance
-
-            // Act
-            var secondInstance = Logger.Instance;  // Second access, should return the same instance
-
-            // Assert
-            Assert.NotNull(initialInstance);  // Make sure the instance is not null
-            Assert.Same(initialInstance, secondInstance);  // Make sure both the access return the same instance
-        }
-
         /// <summary>
         /// Tests if the logger respects the configured log level and logs the message accordingly.
         /// This test runs on multiple logger types.
@@ -96,25 +72,19 @@ namespace NLoggify.UnitTests
         [InlineData(LogLevel.Info, LogLevel.Critical, true, LoggerType.Console)]  // Critical is always logged
         public void Logger_ShouldLogProperly(LogLevel configLevel, LogLevel messageLevel, bool shouldLog, LoggerType loggerType)
         {
-            Logger.RunExclusive(() =>
-            {
-                // Arrange
-                LoggingConfig config = new LoggingConfig();
-                config.MinimumLogLevel = configLevel;
-                config.LoggerType = loggerType;
-                var logger = Logger.GetLogger();
-                Logger.Reconfigure(config);
+            // Arrange
+            LoggingConfig config = new LoggingConfig() { MinimumLogLevel = configLevel, LoggerType = loggerType };
+            logger = Logger.GetLogger(config);
 
-                // Act
-                logger.Log(messageLevel, "Test message");
+            // Act
+            logger.Log(messageLevel, "Test message");
 
-                // Assert
-                var output = Logger.GetDebugOutput(); // Simulated output for Console and Memory loggers
-                if (shouldLog)
-                    Assert.Contains("Test message", output);
-                else
-                    Assert.DoesNotContain("Test message", output);
-            });
+            // Assert
+            var output = Logger.GetDebugOutput(); // Simulated output for Console and Memory loggers
+            if (shouldLog)
+                Assert.Contains("Test message", output);
+            else
+                Assert.DoesNotContain("Test message", output);
         }
 
         /// <summary>
@@ -167,12 +137,7 @@ namespace NLoggify.UnitTests
         public async Task LogException_ShouldCatchAsyncExceptions(bool throwException)
         {
             // Arrange
-            LoggingConfig config = new LoggingConfig();
-            config.MinimumLogLevel = LogLevel.Info;
-            config.LoggerType = LoggerType.Console;
-
-            var logger = Logger.GetLogger();
-            Logger.Reconfigure(config);
+            logger = Logger.GetLogger(infoConsoleConfig);
 
             // Act
             bool exceptionCaught = await logger.LogException(LogLevel.Error, async () =>
