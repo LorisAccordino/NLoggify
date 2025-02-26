@@ -85,7 +85,7 @@ namespace NLoggify.UnitTests.Config
             // Act
             try
             {
-                GenericUtils.ValidatePath(filePath, true, true);
+                if (!ConfigValidation.ValidatePath(filePath, true, true)) throw new ArgumentException();
 
                 // Assert
                 if (shouldThrowException) Assert.Fail("Expected exception not thrown.");
@@ -103,7 +103,8 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_AddsMultipleLoggers()
         {
             // Act
-            var loggers = LoggingConfig._ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
+            LoggingConfig config = new LoggingConfig();
+            var loggers = config._ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
 
             // Assert
             Assert.Equal(2, loggers.Count);
@@ -118,8 +119,9 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_DuplicateLogger_ThrowsException()
         {
             // Act & Assert
+            LoggingConfig config = new LoggingConfig();
             var ex = Assert.Throws<ArgumentException>(() =>
-                LoggingConfig.ConfigureMultiLogger(LoggerType.Console, LoggerType.Console)
+                config.ConfigureMultiLogger(LoggerType.Console, LoggerType.Console)
             );
 
             Assert.Contains("has already been added.", ex.Message);
@@ -132,8 +134,9 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_MultiLogger_ThrowsException()
         {
             // Act & Assert
+            LoggingConfig config = new LoggingConfig();
             var ex = Assert.Throws<ArgumentException>(() =>
-                LoggingConfig.ConfigureMultiLogger(LoggerType.Multi)
+                config.ConfigureMultiLogger(LoggerType.Multi)
             );
 
             Assert.Contains("A MultiLogger", ex.Message);
@@ -146,7 +149,8 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_NoLoggers_ResultsInEmptyList()
         {
             // Act
-            var loggers = LoggingConfig._ConfigureMultiLogger();
+            LoggingConfig config = new LoggingConfig();
+            var loggers = config._ConfigureMultiLogger();
 
             // Assert
             Assert.Empty(loggers);
@@ -159,11 +163,12 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_ClearsPreviousLoggers()
         {
             // Arrange
-            var loggers = LoggingConfig._ConfigureMultiLogger(LoggerType.Console);
+            LoggingConfig config = new LoggingConfig();
+            var loggers = config._ConfigureMultiLogger(LoggerType.Console);
             Assert.Single(loggers); // Verify there's one logger
 
             // Act
-            loggers = LoggingConfig._ConfigureMultiLogger(LoggerType.PlainText); // Reconfigure with a different logger
+            loggers = config._ConfigureMultiLogger(LoggerType.PlainText); // Reconfigure with a different logger
 
             // Assert
             Assert.Single(loggers); // Should still have only one logger

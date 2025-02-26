@@ -14,15 +14,20 @@ namespace NLoggify.Logging.Loggers
         private static readonly object _masterLock = new();             // Master lock for complex operations
 
         protected static LoggingConfig loggingConfig = new LoggingConfig(); // Initialize yet to avoid problems in derived classes
-        private static LoggingConfig _loggingConfig = null; // Dummy object to avoid inconsistency in derived classes
+        
+        // Internal just for unit tests, it could (should) be private
+        internal static LoggingConfig _loggingConfig = null; // Dummy object to avoid inconsistency in derived classes
 
 #if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
         public static string GetDebugOutput() 
         {
-            var output = debugOutputRedirect;
-            debugOutputRedirect = "";
-            return output; 
+            lock (_masterLock)
+            {
+                var output = debugOutputRedirect;
+                debugOutputRedirect = "";
+                return output;
+            }
         }
 #endif
 
@@ -86,14 +91,23 @@ namespace NLoggify.Logging.Loggers
         /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
         /// </summary>
         /// <param name="config">The <see cref="LoggingConfig"/> object that represents the logging configuration<br></br>
-        /// If it <b>is null</b>, it will be used the <b>default</b> logging configuration
+        /// If it is <b>null</b>, it will be used the <b>default</b> (or the <b>current</b>, if already set) logging configuration
         /// </param>
         /// <returns>Logger instance.</returns>
         public static ILogger GetLogger(LoggingConfig? config = null)
         {
             lock (_masterLock)
             {
-                loggingConfig = _loggingConfig ??= config ?? new LoggingConfig();
+                if (config != null)
+                {
+                    if (_loggingConfig == null)
+                        loggingConfig = _loggingConfig = config;
+                    else
+                        throw new InvalidOperationException("Cannot cannot change the logger configuration at runtime! \n You can use Logger.Reconfigure(), but it is NEVER recommended to change logging config at runtime.");
+                }
+
+
+                //loggingConfig = _loggingConfig ??= config ?? new LoggingConfig();
                 Reconfigure(); // Force a reconfiguration
                 return LoggerProxy.Instance;
             }
