@@ -46,6 +46,15 @@ namespace NLoggify.Logging.Config
         public bool IncludeThreadInfo { get; set; } = Environment.ProcessorCount > 1;
 
         /// <summary>
+        /// Indicates whether or not to allow the reconfiguration of logging settings. <br></br>
+        /// If <see langword="false"></see>, it is not allowed to configure the logger again once done <br></br>
+        /// <b>Note:</b> It is reccommended to <b>avoid reconfigurations</b> at runtime to prevent threading and I/O problems.
+        /// </summary>
+        public bool AllowReconfiguration { get; set; } = false;
+
+
+
+        /// <summary>
         /// Get an instance of <see cref="LoggingConfig"/>, the configuration class for the entire log system
         /// </summary>
         public LoggingConfig()

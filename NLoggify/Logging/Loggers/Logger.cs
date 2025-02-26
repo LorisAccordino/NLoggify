@@ -9,10 +9,13 @@ namespace NLoggify.Logging.Loggers
     public abstract class Logger : ILogger
     {
         private static Logger? _instance = null;  // Static instance for the Singleton pattern
-        private readonly object _lock = new object();            // Lock object for thread safety
         private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
-        private static readonly object _masterLock = new object();      // Master lock for complex operations
-        private static readonly object _configLock = new object();      // Config logging for configuration phases
+
+        /*** SYNCHRONIZATION ***/
+        private readonly object _lock = new object(); // Lock object for thread safety
+        protected static readonly object _masterLock = new object(); // Master lock for complex sync operations
+        protected static readonly object _configLock = new object(); // Config logging for config operations
+        /***********************/
 
         protected static LoggingConfig LoggingConfig { get; private set; } = new LoggingConfig(); // Initialize yet to avoid problems in derived classes
         private static bool hasBeenConfigured = false;
@@ -96,24 +99,25 @@ namespace NLoggify.Logging.Loggers
         /// <returns>Logger instance.</returns>
         public static ILogger GetLogger(LoggingConfig? config = null)
         {
-            lock (_masterLock)
+            lock (_configLock)
             {
-                if (config != null)
+                lock (_masterLock)
                 {
-                    if (hasBeenConfigured == false)
+                    if (config != null)
                     {
-                        LoggingConfig = config;
-                        hasBeenConfigured = true;
+                        if (hasBeenConfigured == false || LoggingConfig.AllowReconfiguration)
+                        {
+                            LoggingConfig = config;
+                            hasBeenConfigured = true;
+                        }
+                        else
+                            throw new InvalidOperationException("Cannot change the logger configuration at runtime! \n You could set LoggingConfig.AllowReconfiguration == true to achieve that, but it is NOT recommended to change logging config at runtime.");
                     }
-                    else
-                        throw new InvalidOperationException("Cannot cannot change the logger configuration at runtime! \n You could use Logger.Reconfigure(), but it is NOT recommended to change logging config at runtime.");
+
+                    // Set up singleton instances
+                    _instance = LoggingConfig.CreateLogger();
+                    return LoggerWrapper.Instance;
                 }
-
-                //Reconfigure(null); // Force a reconfiguration
-
-                // Set up singleton instances
-                _instance = LoggingConfig.CreateLogger();
-                return LoggerProxy.Instance;
             }
         }
 
@@ -202,7 +206,7 @@ namespace NLoggify.Logging.Loggers
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
-        public bool LogException(LogLevel level, Action action, string message = "")
+        public virtual bool LogException(LogLevel level, Action action, string message = "")
         {
             lock (_lock)
             {
@@ -228,7 +232,7 @@ namespace NLoggify.Logging.Loggers
         /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
         /// <param name="message">The log message to be recorded.</param>
         /// <returns>True if the exception was thrown, otherwise false</returns>
-        public async Task<bool> LogException(LogLevel level, Func<Task> action, string message = "")
+        public virtual async Task<bool> LogException(LogLevel level, Func<Task> action, string message = "")
         {
             await _asyncLock.WaitAsync(); // Wait that no threads are executing the method
 
@@ -254,7 +258,7 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         /// <param name="header">The header to put before the log message.</param>
         /// <param name="message">The log message to be recorded.</param>
-        protected abstract void WriteLog(string header, string message);
+        protected virtual void WriteLog(string header, string message) { }
 
 
         /// <summary>
