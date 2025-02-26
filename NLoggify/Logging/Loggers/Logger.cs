@@ -11,12 +11,12 @@ namespace NLoggify.Logging.Loggers
         private static Logger? _instance = null;  // Static instance for the Singleton pattern
         private readonly object _lock = new object();            // Lock object for thread safety
         private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
-        private static readonly object _masterLock = new();             // Master lock for complex operations
+        private static readonly object _masterLock = new object();      // Master lock for complex operations
+        private static readonly object _configLock = new object();      // Config logging for configuration phases
 
-        protected static LoggingConfig loggingConfig = new LoggingConfig(); // Initialize yet to avoid problems in derived classes
-        
-        // Internal just for unit tests, it could (should) be private
-        internal static LoggingConfig _loggingConfig = null; // Dummy object to avoid inconsistency in derived classes
+        protected static LoggingConfig LoggingConfig { get; private set; } = new LoggingConfig(); // Initialize yet to avoid problems in derived classes
+        private static bool hasBeenConfigured = false;
+        //private static LoggingConfig _loggingConfig = null; // Dummy object to avoid inconsistency in derived classes
 
 #if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
@@ -47,7 +47,7 @@ namespace NLoggify.Logging.Loggers
                     if (_instance == null)
                     {
                         // Concrete classes should initialize the logger instance
-                        _instance = loggingConfig.CreateLogger();
+                        _instance = LoggingConfig.CreateLogger();
                     }
                     return _instance;
                 }
@@ -90,7 +90,7 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
         /// </summary>
-        /// <param name="config">The <see cref="LoggingConfig"/> object that represents the logging configuration<br></br>
+        /// <param name="config">The <see cref="Config.LoggingConfig"/> object that represents the logging configuration<br></br>
         /// If it is <b>null</b>, it will be used the <b>default</b> (or the <b>current</b>, if already set) logging configuration
         /// </param>
         /// <returns>Logger instance.</returns>
@@ -100,15 +100,19 @@ namespace NLoggify.Logging.Loggers
             {
                 if (config != null)
                 {
-                    if (_loggingConfig == null)
-                        loggingConfig = _loggingConfig = config;
+                    if (hasBeenConfigured == false)
+                    {
+                        LoggingConfig = config;
+                        hasBeenConfigured = true;
+                    }
                     else
-                        throw new InvalidOperationException("Cannot cannot change the logger configuration at runtime! \n You can use Logger.Reconfigure(), but it is NEVER recommended to change logging config at runtime.");
+                        throw new InvalidOperationException("Cannot cannot change the logger configuration at runtime! \n You could use Logger.Reconfigure(), but it is NOT recommended to change logging config at runtime.");
                 }
 
+                //Reconfigure(null); // Force a reconfiguration
 
-                //loggingConfig = _loggingConfig ??= config ?? new LoggingConfig();
-                Reconfigure(); // Force a reconfiguration
+                // Set up singleton instances
+                _instance = LoggingConfig.CreateLogger();
                 return LoggerProxy.Instance;
             }
         }
@@ -116,11 +120,20 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Forces a reconfiguration of the logger, creating a new instance if settings have changed.
         /// </summary>
-        internal static void Reconfigure()
+        /// <param name="config">The <see cref="Config.LoggingConfig"/> object that represents the logging configuration</param>
+        [Obsolete("It is not recommended to change the configuration at runtime. Do it only in extreme situations!", false)]
+        internal static void Reconfigure(LoggingConfig config)
         {
-            lock (_masterLock)
+            lock (_configLock)
             {
-                _instance = loggingConfig.CreateLogger();
+                if (config == null) return;
+
+                // Reset configuration state (and configuration)
+                hasBeenConfigured = false; // Necessary to not throw exception in Logger.GetLogger();
+                LoggingConfig = config;
+
+                // Get a new logger config
+                GetLogger(config);
             }
         }
 
@@ -160,21 +173,21 @@ namespace NLoggify.Logging.Loggers
             lock (_lock)
             {
                 // Filtering logic: Only log messages that meet or exceed the configured level
-                if (level < loggingConfig.MinimumLogLevel)
+                if (level < LoggingConfig.MinimumLogLevel)
                     return;
 
 
                 // Should track threads?
                 int threadId = -1;
                 string? threadName = "";
-                if (loggingConfig.IncludeThreadInfo)
+                if (LoggingConfig.IncludeThreadInfo)
                 {
                     threadId = Thread.CurrentThread.ManagedThreadId;
                     threadName = Thread.CurrentThread.Name;
                 }
 
                 // Call the concrete implementation of logging
-                string header = GetLogHeader(level, DateTime.Now.ToString(loggingConfig.TimestampFormat), threadId, threadName);
+                string header = GetLogHeader(level, DateTime.Now.ToString(LoggingConfig.TimestampFormat), threadId, threadName);
                 WriteLog(header, message);
             }
         }

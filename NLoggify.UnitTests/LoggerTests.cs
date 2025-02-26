@@ -32,8 +32,8 @@ namespace NLoggify.UnitTests
             }
 
             // Act
-            Logger._loggingConfig = null; // To avoid exception (ONLY IN UNIT TESTS!)
-            var logger = Logger.GetLogger(config);
+            var logger = Logger.GetLogger();
+            Logger.Reconfigure(config);
 
             // Assert
             Assert.NotNull(logger);
@@ -51,8 +51,8 @@ namespace NLoggify.UnitTests
             config.LoggerType = LoggerType.Console;
 
             // Act
-            Logger._loggingConfig = null; // To avoid exception (ONLY IN UNIT TESTS!)
-            var logger1 = Logger.GetLogger(config);
+            var logger1 = Logger.GetLogger();
+            Logger.Reconfigure(config);
             var logger2 = Logger.GetLogger();
 
             // Assert
@@ -102,8 +102,8 @@ namespace NLoggify.UnitTests
                 LoggingConfig config = new LoggingConfig();
                 config.MinimumLogLevel = configLevel;
                 config.LoggerType = loggerType;
-                Logger._loggingConfig = null; // To avoid exception (ONLY IN UNIT TESTS!)
-                var logger = Logger.GetLogger(config);
+                var logger = Logger.GetLogger();
+                Logger.Reconfigure(config);
 
                 // Act
                 logger.Log(messageLevel, "Test message");
@@ -171,8 +171,8 @@ namespace NLoggify.UnitTests
             config.MinimumLogLevel = LogLevel.Info;
             config.LoggerType = LoggerType.Console;
 
-            Logger._loggingConfig = null; // To avoid exception (ONLY IN UNIT TESTS!)
-            var logger = Logger.GetLogger(config);
+            var logger = Logger.GetLogger();
+            Logger.Reconfigure(config);
 
             // Act
             bool exceptionCaught = await logger.LogException(LogLevel.Error, async () =>

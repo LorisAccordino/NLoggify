@@ -16,9 +16,9 @@ namespace NLoggify.Logging.Loggers.Output
             lock (_lock)
             {
                 // Should use colors?
-                bool colors = loggingConfig.ColorsSection.UseColors;
+                bool colors = LoggingConfig.ColorsSection.UseColors;
                 // Change the console color based on the log level
-                if (colors) Console.ForegroundColor = loggingConfig.ColorsSection.GetColorForLevel(level);
+                if (colors) Console.ForegroundColor = LoggingConfig.ColorsSection.GetColorForLevel(level);
 
                 // Log as usual
                 base.Log(level, message);

@@ -16,7 +16,7 @@ namespace NLoggify.Logging.Config
         /// </summary>
         public class FileLoggingConfig
         {
-            private LoggingConfig loggingConfig; // Reference to loggingConfig
+            private LoggingConfig loggingConfig; // Reference to LoggingConfig
 
             /// <summary>
             /// Gets the directory path used for file-based logging.
