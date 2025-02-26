@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using NLoggify.Logging.Config;
 
 namespace NLoggify.Logging.Loggers.Storage
 {
@@ -11,6 +11,12 @@ namespace NLoggify.Logging.Loggers.Storage
         //private readonly string _filePath;
         private readonly object _fileLock = new(); // Lock for thread-safe writing
         protected string _filePath = loggingConfig.FileSection.FullPath; // File path copy for local manipulation
+
+        protected FileLogger() : base()
+        {
+            // Ensure directory does exist
+            ConfigValidation.EnsureDirectoryExists(_filePath);
+        }
 
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it

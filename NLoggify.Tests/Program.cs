@@ -1,4 +1,4 @@
-﻿using NLoggify.Examples.Simulations;
+﻿using Nloggify.Tests.Examples;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
@@ -11,28 +11,15 @@ public class Program
         Console.WriteLine(ascii_art);
 
         LoggingConfig config = new LoggingConfig();
-        config.LoggerType = LoggerType.Console;
+        config.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
+        config.LoggerType = LoggerType.Multi;
         config.MinimumLogLevel = LogLevel.Trace;
         config.IncludeThreadInfo = true;
 
-        //LoggingConfig.Configure(LogLevel.Trace, LoggerType.Console);
-        ILogger logger = Logger.GetLogger();
+        ILogger logger = Logger.GetLogger(config);
+        //NloggifyExamples.Test(logger);
         //NLoggifyExamples.StressTest(logger);
-        //NLoggifyExamples.BufferedTest(logger);
-        IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
-
-        /*
-        // Tests every supported type of logger
-        foreach (LoggerType type in Enum.GetValues<LoggerType>())
-        {
-            // Configure the logger to use the current logger type to with the minimum log level set to Trace.
-            LoggingConfig.Configure(LogLevel.Trace, type);
-
-            // Current logger test
-            Console.WriteLine($"===== {type} Logger Test Started =====\n");
-            NLoggifyExample.Test(Logger.GetLogger());
-            Console.WriteLine($"\n===== {type} Logger Test Completed =====\n\n\n");
-        }
-        */
+        NLoggifyExamples.BufferedTest(logger);
+        //IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
     }
 }

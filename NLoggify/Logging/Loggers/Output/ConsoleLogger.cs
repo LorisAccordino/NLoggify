@@ -8,6 +8,9 @@ namespace NLoggify.Logging.Loggers.Output
     internal class ConsoleLogger : Logger
     {
         private static readonly object _lock = new object(); // Lock object for thread safety
+
+        internal ConsoleLogger() : base() { }
+
         public override void Log(LogLevel level, string message)
         {
             lock (_lock)

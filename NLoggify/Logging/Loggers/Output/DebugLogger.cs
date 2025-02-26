@@ -1,7 +1,4 @@
-﻿using NLoggify.Logging.Config;
-using NLoggify.Logging.Loggers;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
 
 namespace NLoggify.Logging.Loggers.Output
 {
@@ -13,6 +10,8 @@ namespace NLoggify.Logging.Loggers.Output
 #endif
     internal class DebugLogger : Logger
     {
+        internal DebugLogger() : base() { }
+
         protected override void WriteLog(string header, string message)
         {
             // Print the log message with the formatted timestamp

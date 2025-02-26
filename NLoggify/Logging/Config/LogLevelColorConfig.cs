@@ -15,6 +15,8 @@ namespace NLoggify.Logging.Config
         /// </summary>
         public class LogLevelColorConfig
         {
+            private LoggingConfig loggingConfig; // Reference to loggingConfig (it can be useful!)
+
             /// <summary>
             /// Indicates whether use or not colors in the console logging mode
             /// </summary>
@@ -70,8 +72,11 @@ namespace NLoggify.Logging.Config
                 }
             }
 
-            // Prevents access from outside
-            private LogLevelColorConfig() { }
+            // Get reference to LoggingConfig
+            internal LogLevelColorConfig(LoggingConfig loggingConfig)
+            {
+                this.loggingConfig = loggingConfig;
+            }
         }
     }
 }

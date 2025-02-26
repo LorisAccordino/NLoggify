@@ -1,6 +1,4 @@
-﻿using NLoggify.Logging.Config;
-using NLoggify.Logging.Config.Enums;
-using System.Collections.Concurrent;
+﻿using NLoggify.Logging.Config.Enums;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
@@ -10,19 +8,19 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     internal class MultiLogger : Logger
     {
-        private static readonly object _lock = new(); // Lock for configuration safety
+        //private static readonly object _lock = new(); // Lock for configuration safety
 
         /// <summary>
         /// Initializes the MultiLogger, creating a dedicated thread for each logger.
         /// </summary>
-        internal MultiLogger() { }
+        internal MultiLogger() : base() { }
 
 
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Log(LogLevel level, string message)
         {
             // Execute each iteration in parallel
-            Parallel.ForEach(LoggingConfig.Loggers, logger => logger.Log(level, message));
+            Parallel.ForEach(loggingConfig.Loggers, logger => logger.Log(level, message));
         }
 
         // No reason to implement it, no reason to test it :P
@@ -35,7 +33,7 @@ namespace NLoggify.Logging.Loggers
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose()
         {
-            foreach (var logger in LoggingConfig.Loggers)
+            foreach (var logger in loggingConfig.Loggers)
             {
                 logger.Dispose();
             }

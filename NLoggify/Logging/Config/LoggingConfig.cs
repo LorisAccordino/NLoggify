@@ -2,7 +2,6 @@
 using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
-using NLoggify.Utils;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Config
@@ -12,11 +11,13 @@ namespace NLoggify.Logging.Config
     /// </summary>
     public partial class LoggingConfig
     {
-        internal static List<Logger> Loggers { get; private set; } = GenericUtils.GetEnumValues<LoggerType>()
+        /*internal List<Logger> Loggers { get; private set; } = GenericUtils.GetEnumValues<LoggerType>()
             .Where(type => type != LoggerType.Multi)
             .ToList()
             .Select(GetLoggerBasedOnType)
-            .ToList(); // List of enabled loggers (if multilogging is going on)
+            .ToList(); // List of enabled loggers (if multilogging is going on)*/
+
+        internal List<Logger> Loggers { get; private set; } = new List<Logger>();
 
         /// <summary>
         /// Gets the current minimum log level required for messages to be recorded.
@@ -50,6 +51,7 @@ namespace NLoggify.Logging.Config
         public LoggingConfig()
         {
             FileSection = new FileLoggingConfig(this);
+            ColorsSection = new LogLevelColorConfig(this);
         }
 
         /// <summary>
@@ -57,12 +59,12 @@ namespace NLoggify.Logging.Config
         /// </summary>
         /// <param name="loggers">The types of loggers to be used</param>
         [ExcludeFromCodeCoverage] // No reason to test it
-        public static void ConfigureMultiLogger(params LoggerType[] loggers)
+        public void ConfigureMultiLogger(params LoggerType[] loggers)
         {
             _ConfigureMultiLogger(loggers);
         }
 
-        internal static List<Logger> _ConfigureMultiLogger(params LoggerType[] loggers)
+        internal List<Logger> _ConfigureMultiLogger(params LoggerType[] loggers)
         {
             // Clear the loggers list
             Loggers.Clear();

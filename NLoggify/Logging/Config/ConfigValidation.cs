@@ -1,4 +1,5 @@
 ﻿using NLoggify.Utils;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Config
 {
@@ -44,6 +45,17 @@ namespace NLoggify.Logging.Config
 
             // Valid format
             return true;
+        }
+
+        /// <summary>
+        /// Ensures that a given directory exists.
+        /// If the directory does not exist, it is automatically created.
+        /// </summary>
+        [ExcludeFromCodeCoverage] // No reason to test it
+        public static void EnsureDirectoryExists(string filePath)
+        {
+            string directory = Path.GetDirectoryName(filePath) ?? throw new ArgumentException("Given directory null!",filePath);
+            Directory.CreateDirectory(directory);
         }
     }
 }
