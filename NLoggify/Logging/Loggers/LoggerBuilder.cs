@@ -33,18 +33,25 @@ namespace NLoggify.Logging.Loggers
             // Check for any duplicates
             if (loggers.Any(logger => logger.GetType() == typeof(TLogger)) && !RiskySettings.AllowMultipleSameLoggers)
                 throw new InvalidOperationException($"{typeof(TLogger).Name} is already registered! \n" +
-                    "[Warning]: If you need to have multiple loggers pointing on the same output destination (Console, File etc...), \n" +
+                    "[Warning]: If you need to have multiple loggers pointing on the same output destination (Console, File etc...), " +
                     "you can enable this feature by setting RiskySettings.AllowMultipleSameLoggers = true. At your own risk!");
 
             loggers.Add(createLogger()); // Add the new logger
             return this;
         }
 
-        /*public LoggerBuilder WriteToDebug(LoggerConfig? config = null)
+        public LoggerBuilder WriteToDebug(LoggerConfig? config = null)
         {
             return WriteToLogger(() => new DebugLogger(config));
-        }*/
+        }
 
+        public LoggerBuilder WriteToConsole(LoggerConfig? config = null)
+        {
+            return WriteToLogger(() => new ConsoleLogger(config as ConsoleLoggerConfig ?? new ConsoleLoggerConfig(config)));
+        }
+
+
+        /*
         public LoggerBuilder WriteToConsole(ConsoleLoggerConfig config)
         {
             return WriteToLogger(() => new ConsoleLogger(config));
@@ -59,6 +66,7 @@ namespace NLoggify.Logging.Loggers
         {
             return WriteToConsole(new LoggerConfig());
         }
+        */
 
         public LoggerBuilder WriteToPlainTextFile(FileLoggerConfig? config = null)
         {

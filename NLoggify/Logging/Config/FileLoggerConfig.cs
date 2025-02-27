@@ -45,5 +45,29 @@ namespace NLoggify.Logging.Config
         /// Gets the full path of the log file
         /// </summary>
         public string FullPath { get => Path.Combine(DirectoryPath, LogFileName); }
+
+
+        /// <summary>
+        /// Build a <see cref="FileLoggerConfig"/> object with default configuration values
+        /// </summary>
+        public FileLoggerConfig() : base() { }
+
+        /// <summary>
+        /// Build a <see cref="FileLoggerConfig"/> object from another already existing base <see cref="LoggerConfig"/> configuration. <br></br>
+        /// The specific properties of <see langword="this"/> will be set as default values
+        /// </summary>
+        /// <param name="otherConfig">The already existing configuration object</param>
+        public FileLoggerConfig(LoggerConfig otherConfig) : base(otherConfig) { }
+
+        /// <summary>
+        /// Build a <see cref="FileLoggerConfig"/> object from another already existing specific <see cref="FileLoggerConfig"/> configuration. <br></br>
+        /// </summary>
+        /// <param name="otherConfig">The already existing configuration object</param>
+        public FileLoggerConfig(FileLoggerConfig otherConfig) : base(otherConfig)
+        {
+            if (otherConfig == null) return; // Skip the initialization
+            DirectoryPath = otherConfig.DirectoryPath;
+            FileNamePrefix = otherConfig.FileNamePrefix;
+        }
     }
 }

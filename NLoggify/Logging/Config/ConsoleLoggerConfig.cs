@@ -30,7 +30,7 @@ namespace NLoggify.Logging.Config
         /// <summary>
         /// Build a <see cref="ConsoleLoggerConfig"/> object with default configuration values
         /// </summary>
-        public ConsoleLoggerConfig() { }
+        public ConsoleLoggerConfig() : base() { }
 
         /// <summary>
         /// Build a <see cref="ConsoleLoggerConfig"/> object from another already existing base <see cref="LoggerConfig"/> configuration. <br></br>
@@ -45,6 +45,7 @@ namespace NLoggify.Logging.Config
         /// <param name="otherConfig">The already existing configuration object</param>
         public ConsoleLoggerConfig(ConsoleLoggerConfig otherConfig) : base(otherConfig)
         {
+            if (otherConfig == null) return; // Skip the initialization
             UseColors = otherConfig.UseColors;
             LogLevelColors = otherConfig.LogLevelColors;
         }

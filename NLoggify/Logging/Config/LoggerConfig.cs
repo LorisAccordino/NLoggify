@@ -43,8 +43,9 @@ namespace NLoggify.Logging.Config
         /// Build a <see cref="LoggerConfig"/> object from another already existing configuration
         /// </summary>
         /// <param name="otherConfig">The already existing configuration object</param>
-        public LoggerConfig(LoggerConfig otherConfig)
+        public LoggerConfig(LoggerConfig otherConfig) : this()
         {
+            if (otherConfig == null) return; // Skip the initialization
             MinimumLogLevel = otherConfig.MinimumLogLevel;
             TimestampFormat = otherConfig.TimestampFormat;
             IncludeThreadInfo = otherConfig.IncludeThreadInfo;
