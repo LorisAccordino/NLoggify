@@ -11,7 +11,7 @@ namespace Nloggify.Tests.Examples.Simulations
     [ExcludeFromCodeCoverage] // No reason to test it
     public static class GenericSimulations
     {
-        private static readonly Random _random = new Random();
+        private static readonly Random random = new Random();
 
         /// <summary>
         /// Simulates a system initialization process with random delays and potential warnings.
@@ -37,7 +37,7 @@ namespace Nloggify.Tests.Examples.Simulations
                 TestHelper.RandomDelay(minDelayMilliseconds, maxDelayMilliseconds);
 
                 // Simulate a warning based on the configurable chance
-                if (_random.Next(1, 101) <= warningChance) // Chance of warning occurring during the module load
+                if (random.Next(1, 101) <= warningChance) // Chance of warning occurring during the module load
                     logger.Log(LogLevel.Warning, $"Potential issue detected while loading module {i}/{moduleCount}.");
 
                 // Log the successful loading of the module
@@ -61,7 +61,7 @@ namespace Nloggify.Tests.Examples.Simulations
         public static void SimulateFailure(int failureChance)
         {
             if (failureChance < 0 || failureChance > 100) throw new ArgumentOutOfRangeException(nameof(failureChance), "Failure chance must be between 0 and 100.");
-            if (_random.Next(1, 101) <= failureChance) throw new InvalidOperationException("Simulated failure occurred.");
+            if (random.Next(1, 101) <= failureChance) throw new InvalidOperationException("Simulated failure occurred.");
         }
 
 
@@ -90,13 +90,13 @@ namespace Nloggify.Tests.Examples.Simulations
             TestHelper.RandomDelay(initialDelayMin, initialDelayMax);
 
             // Simulate initial connection attempt with configurable failure chance
-            if (_random.Next(1, 101) <= initialFailureChance) // Failure on first attempt based on the configured chance
+            if (random.Next(1, 101) <= initialFailureChance) // Failure on first attempt based on the configured chance
             {
                 logger.Log(LogLevel.Error, "Failed to connect to database! Retrying...");
                 TestHelper.RandomDelay(retryDelayMin, retryDelayMax);
 
                 // Simulate retry attempt with its own failure chance
-                if (_random.Next(1, 101) <= retryFailureChance) // Failure on retry based on the configured chance
+                if (random.Next(1, 101) <= retryFailureChance) // Failure on retry based on the configured chance
                 {
                     logger.Log(LogLevel.Critical, "Database connection could not be established.");
                     logger.LogException(LogLevel.Critical, () => throw new Exception("Database connection failure."));

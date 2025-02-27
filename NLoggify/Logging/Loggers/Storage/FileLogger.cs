@@ -8,14 +8,18 @@ namespace NLoggify.Logging.Loggers.Storage
     /// </summary>
     internal abstract class FileLogger : Logger
     {
-        //private readonly string _filePath;
-        private readonly object _fileLock = new(); // Lock for thread-safe writing
-        protected string _filePath = CurrentConfig.FileSection.FullPath; // File path copy for local manipulation
+        private readonly object fileLock = new(); // Lock for thread-safe writing
+        protected string filePath = ""; // File path copy for local manipulation
 
-        protected FileLogger() : base()
+        private readonly FileLoggerConfig config;
+
+        protected FileLogger(FileLoggerConfig? config = null) : base(config)
         {
+            this.config = config ?? new FileLoggerConfig();
+            filePath = this.config.FullPath;
+
             // Ensure directory does exist
-            ConfigValidation.EnsureDirectoryExists(_filePath);
+            ConfigValidator.EnsureDirectoryExists(filePath);
         }
 
 #if !DEBUG
@@ -25,9 +29,9 @@ namespace NLoggify.Logging.Loggers.Storage
         {
             var logEntry = FormatLog(header, message);
 
-            lock (_fileLock) // Ensure thread-safety when writing to the file
+            lock (fileLock) // Ensure thread-safety when writing to the file
             {
-                File.AppendAllText(_filePath, logEntry + Environment.NewLine);
+                File.AppendAllText(filePath, logEntry + Environment.NewLine);
             }
         }
 

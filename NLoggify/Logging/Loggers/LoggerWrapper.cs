@@ -11,39 +11,45 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     internal sealed class LoggerWrapper : Logger
     {
-        private static readonly LoggerWrapper _instance = new LoggerWrapper();
-        //private static readonly object _lock = new object(); // Lock object for thread safety
+        private static List<Logger> loggers = new List<Logger>();
+        //private static readonly object lock = new object(); // Lock object for thread safety
 
         /// <summary>
         /// Gets the singleton instance of <see cref="LoggerWrapper"/>.
         /// </summary>
-        public new static LoggerWrapper Instance => _instance;
+        public new static LoggerWrapper Instance => instance;
+        private static readonly LoggerWrapper instance = new LoggerWrapper();
 
         /// <summary>
         /// Gets the current logger instance from <see cref="Logger"/>.
         /// This ensures that if the logger type is changed, all calls are directed to the updated logger.
         /// </summary>
-        private Logger CurrentLogger => Logger.Instance;
+        //private Logger CurrentLogger => Logger.Instance;
 
         /// <summary>
         /// Prevents the client to instance this
         /// </summary>
         private LoggerWrapper() { }
 
+        internal static void RegisterLogger(Logger logger)
+        {
+            loggers.Add(logger);
+        }
+
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
         public override void Log(LogLevel level, string message)
         {
-            lock(_masterLock)
+            lock(sharedLock)
             {
-                lock(_configLock)
-                {
-                    CurrentLogger.Log(level, message);
-                }
+                // Execute each iteration in parallel
+                Parallel.ForEach(loggers, logger => logger.Log(level, message));
+                //CurrentLogger.Log(level, message);
             }
         }
 
+        /*
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
@@ -56,11 +62,17 @@ namespace NLoggify.Logging.Loggers
         {
             return await CurrentLogger.LogException(level, action, message);
         }
+        */
         
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose()
         {
-            CurrentLogger.Dispose();
+            //CurrentLogger.Dispose();
+
+            foreach (var logger in loggers)
+            {
+                logger.Dispose();
+            }
         }
     }
 }

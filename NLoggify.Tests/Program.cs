@@ -10,7 +10,7 @@ public class Program
         string ascii_art = "\r\n  _   _ _                      _  __       \r\n | \\ | | |    ___   __ _  __ _(_)/ _|_   _ \r\n |  \\| | |   / _ \\ / _` |/ _` | | |_| | | |\r\n | |\\  | |__| (_) | (_| | (_| | |  _| |_| |\r\n |_| \\_|_____\\___/ \\__, |\\__, |_|_|  \\__, |\r\n                   |___/ |___/       |___/ \r\n";
         Console.WriteLine(ascii_art);
 
-        LoggingConfig config = new LoggingConfig();
+        LoggerConfig config = new LoggerConfig();
         config.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
         config.LoggerType = LoggerType.Multi;
         config.MinimumLogLevel = LogLevel.Trace;

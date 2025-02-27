@@ -10,7 +10,7 @@ namespace NLoggify.Logging.Config
     /// <summary>
     /// Represents a global configuration for the logging system.
     /// </summary>
-    public partial class LoggingConfig : ICloneable
+    public class LoggerConfig : ICloneable
     {
         /*internal List<Logger> Loggers { get; private set; } = GenericUtils.GetEnumValues<LoggerType>()
             .Where(type => type != LoggerType.Multi)
@@ -36,10 +36,10 @@ namespace NLoggify.Logging.Config
         /// </summary>
         public string TimestampFormat 
         {
-            get => _timestampFormat;
-            set { if (ConfigValidation.ValidateTimestampFormat(value)) _timestampFormat = value; }
+            get => timestampFormat;
+            set { if (ConfigValidator.ValidateTimestampFormat(value)) timestampFormat = value; }
         }
-        private string _timestampFormat = "yyyy-MM-dd HH:mm:ss";
+        private string timestampFormat = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
         /// Gets or sets addiontal info about threads involved in the logging session
@@ -55,14 +55,6 @@ namespace NLoggify.Logging.Config
 
 
 
-        /// <summary>
-        /// Get an instance of <see cref="LoggingConfig"/>, the configuration class for the entire log system
-        /// </summary>
-        public LoggingConfig()
-        {
-            FileSection = new FileLoggingConfig(this);
-            ColorsSection = new LogLevelColorConfig(this);
-        }
 
         /// <summary>
         /// Configures logging to multiple destinations (Console, File, Debug, etc.)
@@ -126,7 +118,7 @@ namespace NLoggify.Logging.Config
                 LoggerType.Console => new ConsoleLogger(),
                 LoggerType.PlainText => new PlainTextLogger(),
                 LoggerType.JSON => new JsonLogger(),
-                LoggerType.Multi => new MultiLogger(),
+                //LoggerType.Multi => new MultiLogger(),
                 _ => throw new NotSupportedException("The specified logger type is not supported.")
             };
         }

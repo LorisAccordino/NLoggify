@@ -13,8 +13,8 @@ namespace NLoggify.UnitTests.Loggers
     public class LoggerTests
     {
         /*** DEFINED MEMBERS TO HELP TESTS ***/
-        private readonly static LoggingConfig defaultConfig = new LoggingConfig();
-        private readonly static LoggingConfig infoConsoleConfig = new LoggingConfig() { MinimumLogLevel = LogLevel.Info, LoggerType = LoggerType.Console };
+        private readonly static LoggerConfig defaultConfig = new LoggerConfig();
+        private readonly static LoggerConfig infoConsoleConfig = new LoggerConfig() { MinimumLogLevel = LogLevel.Info, LoggerType = LoggerType.Console };
         private static Logger logger = Logger.GetLogger(defaultConfig);
         /*************************************/
 
@@ -29,7 +29,7 @@ namespace NLoggify.UnitTests.Loggers
         public void LoggerInstance_ShouldNotBeNull(bool configure)
         {
             // Arrange
-            LoggingConfig config = null;
+            LoggerConfig config = null;
             if (configure) config = infoConsoleConfig;
 
             // Act
@@ -73,7 +73,7 @@ namespace NLoggify.UnitTests.Loggers
         public void Logger_ShouldLogProperly(LogLevel configLevel, LogLevel messageLevel, bool shouldLog, LoggerType loggerType)
         {
             // Arrange
-            LoggingConfig config = new LoggingConfig() { MinimumLogLevel = configLevel, LoggerType = loggerType };
+            LoggerConfig config = new LoggerConfig() { MinimumLogLevel = configLevel, LoggerType = loggerType };
             logger = Logger.GetLogger(config);
 
             // Act

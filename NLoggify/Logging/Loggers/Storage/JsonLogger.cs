@@ -1,5 +1,5 @@
-﻿using NLoggify.Logging.Config.Enums;
-using System.Diagnostics.CodeAnalysis;
+﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Enums;
 using System.Text.Json;
 
 namespace NLoggify.Logging.Loggers.Storage
@@ -9,10 +9,10 @@ namespace NLoggify.Logging.Loggers.Storage
     /// </summary>
     internal class JsonLogger : FileLogger
     {
-        public JsonLogger() : base()
+        public JsonLogger(FileLoggerConfig? config = null) : base(config)
         {
             // Change the extension to .json
-            _filePath = Path.ChangeExtension(_filePath, "json");
+            filePath = Path.ChangeExtension(filePath, "json");
         }
 
         protected override string GetLogHeader(LogLevel level, string timestamp, int threadId = -1, string? threadName = null)

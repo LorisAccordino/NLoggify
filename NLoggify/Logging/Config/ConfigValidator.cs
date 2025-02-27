@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace NLoggify.Logging.Config
 {
     /// <summary>
-    /// Static class that provides method to validate configurations parameters
+    /// Static class that provides methods to validate configurations parameters
     /// </summary>
-    internal static class ConfigValidation
+    internal static class ConfigValidator
     {
         /// <summary>
         /// Validates whether the provided path is a valid filepath (it could be either null or inexistent)

@@ -12,7 +12,7 @@ namespace Nloggify.Tests.Examples.Simulations
     [ExcludeFromCodeCoverage] // No reason to test it
     public static class ThreadWithFatalErrorSimulation
     {
-        private static readonly Random _random = new Random();
+        private static readonly Random random = new Random();
 
         /// <summary>
         /// Simulate a thread that risks of generating a fatal error with increasingly probability over the time.
@@ -44,8 +44,8 @@ namespace Nloggify.Tests.Examples.Simulations
                     LogMessageBasedOnProbability(logger, failureProbability);
 
                     // If the probability is high enough, generate a fatal error
-                    //if (_random.NextDouble() < failureProbability)
-                    if ((_random.NextDouble() < failureProbability / 5 && failureProbability >= 0.2f) || failureProbability >= 1.0f)
+                    //if (random.NextDouble() < failureProbability)
+                    if ((random.NextDouble() < failureProbability / 5 && failureProbability >= 0.2f) || failureProbability >= 1.0f)
                     {
                         logger.Log(LogLevel.Fatal, $"CRASH! Fatal error at {elapsedTime} ms. The system is shutting down!");
                         logger.LogException(LogLevel.Fatal, () => throw new Exception("Fatal error: the system has been compromised."), "The thread has ended due to a fatal error:");

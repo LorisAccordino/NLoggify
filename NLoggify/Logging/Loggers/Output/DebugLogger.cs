@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using NLoggify.Logging.Config;
+using System.Diagnostics;
 
 namespace NLoggify.Logging.Loggers.Output
 {
@@ -10,7 +11,7 @@ namespace NLoggify.Logging.Loggers.Output
 #endif
     internal class DebugLogger : Logger
     {
-        internal DebugLogger() : base() { }
+        internal DebugLogger(LoggerConfig? config = null) : base(config) { }
 
         protected override void WriteLog(string header, string message)
         {

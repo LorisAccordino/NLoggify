@@ -1,6 +1,5 @@
 ﻿using NLoggify.Logging.Config;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 
 namespace NLoggify.Logging.Loggers.Storage
 {
@@ -10,10 +9,10 @@ namespace NLoggify.Logging.Loggers.Storage
     /// 
     internal class PlainTextLogger : FileLogger
     {
-        public PlainTextLogger() : base()
+        public PlainTextLogger(FileLoggerConfig? config = null) : base(config)
         {
             // Change the extension to .log
-            _filePath = Path.ChangeExtension(_filePath, "log");
+            filePath = Path.ChangeExtension(filePath, "log");
         }
 
         [ExcludeFromCodeCoverage] // No reason to test it

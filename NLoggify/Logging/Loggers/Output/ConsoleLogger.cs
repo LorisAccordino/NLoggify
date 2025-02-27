@@ -1,4 +1,5 @@
-﻿using NLoggify.Logging.Config.Enums;
+﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Enums;
 
 namespace NLoggify.Logging.Loggers.Output
 {
@@ -7,18 +8,23 @@ namespace NLoggify.Logging.Loggers.Output
     /// </summary>
     internal class ConsoleLogger : Logger
     {
-        private static readonly object _lock = new object(); // Lock object for thread safety
+        private static readonly object localLock = new object(); // Lock object for thread safety
 
-        internal ConsoleLogger() : base() { }
+        private readonly ConsoleLoggerConfig config;
+
+        public ConsoleLogger(ConsoleLoggerConfig? config = null) : base(config)
+        {
+            this.config = config ?? new ConsoleLoggerConfig();
+        }
 
         public override void Log(LogLevel level, string message)
         {
-            lock (_lock)
+            lock (localLock)
             {
                 // Should use colors?
-                bool colors = CurrentConfig.ColorsSection.UseColors;
+                bool colors = config.UseColors;
                 // Change the console color based on the log level
-                if (colors) Console.ForegroundColor = CurrentConfig.ColorsSection.GetColorForLevel(level);
+                if (colors) Console.ForegroundColor = config.GetColorForLevel(level);
 
                 // Log as usual
                 base.Log(level, message);

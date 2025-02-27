@@ -1,6 +1,5 @@
 ﻿using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Enums;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -9,28 +8,31 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     public abstract class Logger : ILogger
     {
-        private static Logger? _instance = null;  // Static instance for the Singleton pattern
-        private static readonly SemaphoreSlim _asyncLock = new(1, 1);   // Async lock object for async operations
+        //private static Logger? instance = null;  // Static instance for the Singleton pattern
 
         /*** SYNCHRONIZATION ***/
-        private readonly object _lock = new object(); // Lock object for thread safety
-        protected static readonly object _masterLock = new object(); // Master lock for complex sync operations
-        protected static readonly object _configLock = new object(); // Config logging for config operations
+        private readonly object localLock = new object(); // Lock object for thread safety
+        private readonly SemaphoreSlim asyncLock = new(1, 1);   // Async lock object for async operations
+        protected static readonly object sharedLock = new object(); // Shared lock for complex sync operations
+        //protected static readonly object configLock = new object(); // Config logging for config operations
         /***********************/
 
+        private readonly LoggerConfig config;
+
+        /*
         /// <summary>
         /// The current configuration of the entire logging system
         /// </summary>
-        public static LoggingConfig CurrentConfig { get; private set; } = new LoggingConfig();
-        
-        private static bool hasBeenConfigured = false;
-        //private static CurrentConfig _loggingConfig = null; // Dummy object to avoid inconsistency in derived classes
+        public static LoggerConfig CurrentConfig { get; private set; } = new LoggerConfig(); // Initialize yet to avoid problems in derived classes
+        */
+
+        private static bool isConfigured = false;
 
 #if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
         public static string GetDebugOutput() 
         {
-            lock (_masterLock)
+            lock (sharedLock)
             {
                 var output = debugOutputRedirect;
                 debugOutputRedirect = "";
@@ -39,28 +41,35 @@ namespace NLoggify.Logging.Loggers
         }
 #endif
 
+        /*
         /// <summary>
         /// Gets the singleton instance of the Logger.
         /// </summary>
+#if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
+#endif
         internal static Logger Instance
         {
             get
             {
                 // Ensure that the instance is created only once, and in a thread-safe manner
-                lock (_masterLock)
+                lock (sharedLock)
                 {
-                    if (_instance == null)
+                    if (instance == null)
                     {
                         // Concrete classes should initialize the logger instance
-                        _instance = CurrentConfig.CreateLogger();
+                        instance = CurrentConfig.CreateLogger();
                     }
-                    return _instance;
+                    return instance;
                 }
             }
+#if DEBUG
+            set { instance = value; }
+#endif
         }
+        */
 
-
+        /*
         /// <summary>
         /// Executes the given action with exclusive access to the logger.
         /// No other logging operations will be allowed while this executes.
@@ -68,7 +77,7 @@ namespace NLoggify.Logging.Loggers
         /// <param name="action">The action to execute exclusively.</param>
         public static void RunExclusive(Action action)
         {
-            lock (_masterLock)
+            lock (sharedLock)
             {
                 action();
             }
@@ -83,87 +92,62 @@ namespace NLoggify.Logging.Loggers
         /// <returns>The result of the executed function.</returns>
         public static T RunExclusive<T>(Func<T> func)
         {
-            lock (_masterLock)
+            lock (sharedLock)
             {
                 return func();
             }
         }
+        */
 
-
+        /*
         /// <summary>
         /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
         /// </summary>
-        /// <param name="config">The <see cref="Config.LoggingConfig"/> object that represents the logging configuration<br></br>
+        /// <param name="config">The <see cref="LoggerConfig"/> object that represents the logging configuration<br></br>
         /// If it is <b>null</b>, it will be used the <b>default</b> (or the <b>current</b>, if already set) logging configuration
         /// </param>
         /// <returns>Logger instance.</returns>
-        public static Logger GetLogger(LoggingConfig? config = null)
+        public static Logger GetLogger(LoggerConfig? config = null)
         {
-            lock (_configLock)
+            lock (configLock)
             {
-                lock (_masterLock)
+                lock (sharedLock)
                 {
                     if (config != null)
                     {
-                        if (hasBeenConfigured == false || CurrentConfig.AllowReconfiguration)
+                        if (isConfigured == false || CurrentConfig.AllowReconfiguration)
                         {
                             CurrentConfig = config;
-                            hasBeenConfigured = true;
+                            isConfigured = true;
                         }
                         else
                             throw new InvalidOperationException("Cannot change the logger configuration at runtime! \n You could set CurrentConfig.AllowReconfiguration == true to achieve that, but it is NOT recommended to change logging config at runtime.");
                     }
 
                     // Set up singleton instances
-                    _instance = CurrentConfig.CreateLogger();
+                    instance = CurrentConfig.CreateLogger();
                     return LoggerWrapper.Instance;
                 }
             }
         }
-
-        /*
-        /// <summary>
-        /// Forces a reconfiguration of the logger, creating a new instance if settings have changed.
-        /// </summary>
-        /// <param name="config">The <see cref="Config.CurrentConfig"/> object that represents the logging configuration</param>
-        [Obsolete("It is not recommended to change the configuration at runtime. Do it only in extreme situations!", false)]
-        internal static void Reconfigure(CurrentConfig config)
-        {
-            lock (_configLock)
-            {
-                if (config == null) return;
-
-                // Reset configuration state (and configuration)
-                hasBeenConfigured = false; // Necessary to not throw exception in Logger.GetLogger();
-                CurrentConfig = config;
-
-                // Get a new logger config
-                GetLogger(config);
-            }
-        }
         */
 
-        /// <summary>
-        /// Get the log header to put before the log message. Should be overrided to have a custom behaviour
-        /// </summary>
-        /// /// <param name="level">The severity level of the log message.</param>
-        /// <param name="timestamp">The time when the messaged was logged. This allows for accurate logging based on the exact time of logging.</param>
-        /// <param name="threadId">The id of the calling thread</param>
-        /// <param name="threadName">The name of the calling thread</param>
-        /// <returns>The formatted log header</returns>
-        protected virtual string GetLogHeader(LogLevel level, string timestamp, int threadId = -1, string? threadName = null)
-        {
-            // Handle thread info
-            string threadInfo = "";
-            if (threadId != -1)
-            {
-                threadInfo = $"[Thread {threadId}";
-                threadInfo += !string.IsNullOrEmpty(threadName) ? $" ({threadName})] " : "] ";
-            }
 
-            // Return the entire header: timestamp, (threadspec), level
-            return $"[{timestamp}] {threadInfo}{level}: ";
+        internal Logger(LoggerConfig? config = null)
+        {
+            this.config = config ?? new LoggerConfig();
         }
+
+        public static LoggerConfigBuilder Configure()
+        {
+            if (isConfigured)
+                throw new InvalidOperationException("Logger is already configured! Use Logger.Reconfigure() if necessary.");
+            else
+                isConfigured = true;
+
+            return new LoggerConfigBuilder();
+        }
+
 
 
         /// <summary>
@@ -176,24 +160,24 @@ namespace NLoggify.Logging.Loggers
 #endif
         public virtual void Log(LogLevel level, string message)
         {
-            lock (_lock)
+            lock (localLock)
             {
                 // Filtering logic: Only log messages that meet or exceed the configured level
-                if (level < CurrentConfig.MinimumLogLevel)
+                if (level < config.MinimumLogLevel)
                     return;
 
 
                 // Should track threads?
                 int threadId = -1;
                 string? threadName = "";
-                if (CurrentConfig.IncludeThreadInfo)
+                if (config.IncludeThreadInfo)
                 {
                     threadId = Thread.CurrentThread.ManagedThreadId;
                     threadName = Thread.CurrentThread.Name;
                 }
 
                 // Call the concrete implementation of logging
-                string header = GetLogHeader(level, DateTime.Now.ToString(CurrentConfig.TimestampFormat), threadId, threadName);
+                string header = GetLogHeader(level, DateTime.Now.ToString(config.TimestampFormat), threadId, threadName);
                 WriteLog(header, message);
             }
         }
@@ -210,7 +194,7 @@ namespace NLoggify.Logging.Loggers
 #endif
         public virtual bool LogException(LogLevel level, Action action, string message = "")
         {
-            lock (_lock)
+            lock (localLock)
             {
                 // Try to execute the given code
                 try
@@ -236,7 +220,7 @@ namespace NLoggify.Logging.Loggers
         /// <returns>True if the exception was thrown, otherwise false</returns>
         public virtual async Task<bool> LogException(LogLevel level, Func<Task> action, string message = "")
         {
-            await _asyncLock.WaitAsync(); // Wait that no threads are executing the method
+            await asyncLock.WaitAsync(); // Wait that no threads are executing the method
 
             try
             {
@@ -251,8 +235,31 @@ namespace NLoggify.Logging.Loggers
             }
             finally
             {
-                _asyncLock.Release(); // Release the lock for the next thread
+                asyncLock.Release(); // Release the lock for the next thread
             }
+        }
+
+
+        /// <summary>
+        /// Get the log header to put before the log message. Should be overrided to have a custom behaviour
+        /// </summary>
+        /// /// <param name="level">The severity level of the log message.</param>
+        /// <param name="timestamp">The time when the messaged was logged. This allows for accurate logging based on the exact time of logging.</param>
+        /// <param name="threadId">The id of the calling thread</param>
+        /// <param name="threadName">The name of the calling thread</param>
+        /// <returns>The formatted log header</returns>
+        protected virtual string GetLogHeader(LogLevel level, string timestamp, int threadId = -1, string? threadName = null)
+        {
+            // Handle thread info
+            string threadInfo = "";
+            if (threadId != -1)
+            {
+                threadInfo = $"[Thread {threadId}";
+                threadInfo += !string.IsNullOrEmpty(threadName) ? $" ({threadName})] " : "] ";
+            }
+
+            // Return the entire header: timestamp, (threadspec), level
+            return $"[{timestamp}] {threadInfo}{level}: ";
         }
 
         /// <summary>

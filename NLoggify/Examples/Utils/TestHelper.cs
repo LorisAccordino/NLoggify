@@ -8,7 +8,7 @@ namespace Nloggify.Tests.Examples.Utils
     [ExcludeFromCodeCoverage] // No reason to test it
     public static class TestHelper
     {
-        private static readonly Random _random = new Random();
+        private static readonly Random random = new Random();
 
         /// <summary>
         /// Simulates a random delay within a specified range to introduce execution uncertainty.
@@ -23,7 +23,7 @@ namespace Nloggify.Tests.Examples.Utils
         {
             if (minMilliseconds > maxMilliseconds) throw new ArgumentException("minMilliseconds cannot be greater than maxMilliseconds.");
 
-            int delay = _random.Next(minMilliseconds, maxMilliseconds + 1);
+            int delay = random.Next(minMilliseconds, maxMilliseconds + 1);
             Thread.Sleep(delay);
             return delay;
         }

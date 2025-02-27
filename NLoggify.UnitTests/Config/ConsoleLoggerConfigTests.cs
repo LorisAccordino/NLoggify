@@ -9,7 +9,7 @@ namespace NLoggify.UnitTests.Config
     /// </summary>
     [Collection("SequentialTests")]
     [ExcludeFromCodeCoverage]
-    public class LogLevelColorConfigTests
+    public class ConsoleLoggerConfigTests
     {
         /// <summary>
         /// Verifies that an unknown log level returns the default ConsoleColor.White.
@@ -21,7 +21,7 @@ namespace NLoggify.UnitTests.Config
             var unknownLogLevel = (LogLevel)999; // Unexisting log level
 
             // Act
-            ConsoleColor actualColor = new LoggingConfig().ColorsSection.GetColorForLevel(unknownLogLevel);
+            ConsoleColor actualColor = new ConsoleLoggerConfig().GetColorForLevel(unknownLogLevel);
 
             // Assert
             Assert.Equal(ConsoleColor.White, actualColor);
@@ -38,9 +38,9 @@ namespace NLoggify.UnitTests.Config
             ConsoleColor newColor = ConsoleColor.Magenta;
 
             // Act
-            LoggingConfig config = new LoggingConfig();
-            config.ColorsSection.ConfigureLogLevelColor(testLevel, newColor);
-            ConsoleColor actualColor = config.ColorsSection.GetColorForLevel(testLevel);
+            ConsoleLoggerConfig config = new ConsoleLoggerConfig();
+            config.ConfigureLogLevelColor(testLevel, newColor);
+            ConsoleColor actualColor = config.GetColorForLevel(testLevel);
 
             // Assert
             Assert.Equal(newColor, actualColor);
@@ -60,12 +60,12 @@ namespace NLoggify.UnitTests.Config
         };
 
             // Act
-            LoggingConfig.LogLevelColorConfig colorsConfig = new LoggingConfig().ColorsSection;
-            colorsConfig.ConfigureLogLevelColors(customColors);
+            ConsoleLoggerConfig config = new ConsoleLoggerConfig();
+            config.ConfigureLogLevelColors(customColors);
 
             // Assert
-            Assert.Equal(ConsoleColor.DarkBlue, colorsConfig.GetColorForLevel(LogLevel.Info));
-            Assert.Equal(ConsoleColor.Gray, colorsConfig.GetColorForLevel(LogLevel.Error));
+            Assert.Equal(ConsoleColor.DarkBlue, config.GetColorForLevel(LogLevel.Info));
+            Assert.Equal(ConsoleColor.Gray, config.GetColorForLevel(LogLevel.Error));
         }
     }
 }

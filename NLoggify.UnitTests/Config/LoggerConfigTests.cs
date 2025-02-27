@@ -3,7 +3,6 @@ using NLoggify.Logging.Config.Enums;
 using NLoggify.Logging.Loggers;
 using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
-using NLoggify.Utils;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.UnitTests.Config
@@ -13,7 +12,7 @@ namespace NLoggify.UnitTests.Config
     /// </summary>
     [Collection("SequentialTests")]
     [ExcludeFromCodeCoverage]
-    public class LoggingConfigTests
+    public class LoggerConfigTests
     {
         /// <summary>
         /// Tests if the logger is correctly configured with the specified settings.
@@ -26,7 +25,7 @@ namespace NLoggify.UnitTests.Config
             var expectedType = LoggerType.PlainText;
 
             // Act
-            LoggingConfig config = new LoggingConfig();
+            LoggerConfig config = new LoggerConfig();
             config.MinimumLogLevel = expectedLevel;
             config.LoggerType = expectedType;
 
@@ -50,7 +49,7 @@ namespace NLoggify.UnitTests.Config
             // Act
             try
             {
-                ConfigValidation.ValidateTimestampFormat(timestampFormat);
+                ConfigValidator.ValidateTimestampFormat(timestampFormat);
 
                 // Assert
                 if (shouldThrowException) Assert.Fail("Expected exception not thrown.");
@@ -85,7 +84,7 @@ namespace NLoggify.UnitTests.Config
             // Act
             try
             {
-                if (!ConfigValidation.ValidatePath(filePath, true, true)) throw new ArgumentException();
+                if (!ConfigValidator.ValidatePath(filePath, true, true)) throw new ArgumentException();
 
                 // Assert
                 if (shouldThrowException) Assert.Fail("Expected exception not thrown.");
@@ -103,7 +102,7 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_AddsMultipleLoggers()
         {
             // Act
-            LoggingConfig config = new LoggingConfig();
+            LoggerConfig config = new LoggerConfig();
             var loggers = config._ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText);
 
             // Assert
@@ -119,7 +118,7 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_DuplicateLogger_ThrowsException()
         {
             // Act & Assert
-            LoggingConfig config = new LoggingConfig();
+            LoggerConfig config = new LoggerConfig();
             var ex = Assert.Throws<ArgumentException>(() =>
                 config.ConfigureMultiLogger(LoggerType.Console, LoggerType.Console)
             );
@@ -134,7 +133,7 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_MultiLogger_ThrowsException()
         {
             // Act & Assert
-            LoggingConfig config = new LoggingConfig();
+            LoggerConfig config = new LoggerConfig();
             var ex = Assert.Throws<ArgumentException>(() =>
                 config.ConfigureMultiLogger(LoggerType.Multi)
             );
@@ -149,7 +148,7 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_NoLoggers_ResultsInEmptyList()
         {
             // Act
-            LoggingConfig config = new LoggingConfig();
+            LoggerConfig config = new LoggerConfig();
             var loggers = config._ConfigureMultiLogger();
 
             // Assert
@@ -163,7 +162,7 @@ namespace NLoggify.UnitTests.Config
         public void ConfigureMultiLogger_ClearsPreviousLoggers()
         {
             // Arrange
-            LoggingConfig config = new LoggingConfig();
+            LoggerConfig config = new LoggerConfig();
             var loggers = config._ConfigureMultiLogger(LoggerType.Console);
             Assert.Single(loggers); // Verify there's one logger
 
@@ -187,7 +186,7 @@ namespace NLoggify.UnitTests.Config
         public void GetLoggerBasedOnType_ReturnsCorrectLogger(LoggerType type, Type expectedType)
         {
             // Act
-            var logger = LoggingConfig.GetLoggerBasedOnType(type);
+            var logger = LoggerConfig.GetLoggerBasedOnType(type);
 
             // Assert
             Assert.NotNull(logger);
@@ -204,7 +203,7 @@ namespace NLoggify.UnitTests.Config
             var invalidType = (LoggerType)999; // A non valid value
 
             // Act & Assert
-            Assert.Throws<NotSupportedException>(() => LoggingConfig.GetLoggerBasedOnType(invalidType));
+            Assert.Throws<NotSupportedException>(() => LoggerConfig.GetLoggerBasedOnType(invalidType));
         }
     }
 }
