@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Advanced;
 using NLoggify.Logging.Config.Enums;
 
 namespace NLoggify.Logging.Loggers
@@ -11,7 +12,7 @@ namespace NLoggify.Logging.Loggers
         //private static Logger? instance = null;  // Static instance for the Singleton pattern
 
         /*** SYNCHRONIZATION ***/
-        private readonly object localLock = new object(); // Lock object for thread safety
+        protected readonly object localLock = new object(); // Lock object for thread safety
         private readonly SemaphoreSlim asyncLock = new(1, 1);   // Async lock object for async operations
         protected static readonly object sharedLock = new object(); // Shared lock for complex sync operations
         //protected static readonly object configLock = new object(); // Config logging for config operations
@@ -25,8 +26,6 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         public static LoggerConfig CurrentConfig { get; private set; } = new LoggerConfig(); // Initialize yet to avoid problems in derived classes
         */
-
-        private static bool isConfigured = false;
 
 #if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
@@ -138,14 +137,35 @@ namespace NLoggify.Logging.Loggers
             this.config = config ?? new LoggerConfig();
         }
 
-        public static LoggerConfigBuilder Configure()
+        /// <summary>
+        /// Get the <see cref="LoggerBuilder"/> reference to configure the logging system
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Cannot reconfigure the logging system, unless <see cref="RiskySettings.AllowReconfiguration"/> = <see langword="true"/></exception>
+        public static LoggerBuilder Configure()
         {
-            if (isConfigured)
-                throw new InvalidOperationException("Logger is already configured! Use Logger.Reconfigure() if necessary.");
-            else
-                isConfigured = true;
+            if (LoggerBuilder.IsConfigured && !RiskySettings.AllowReconfiguration)
+                throw new InvalidOperationException("Logger is already configured! Use Logger.GetLogger() to get the logger reference. \n" +
+                    "[Warning]: It is not reccommended to hot-reload the logging sytsem with reconfiguration at runtime, but, if you really need it, \n" +
+                    "you can enable this feature by setting RiskySettings.AllowReconfiguration = true. At your own risk!");
 
-            return new LoggerConfigBuilder();
+            return LoggerBuilder.Instance;
+        }
+
+        /// <summary>
+        /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
+        /// </summary>
+        /// <returns>Logger instance of the entire logging system.</returns>
+        public static Logger GetLogger()
+        {
+            if (!LoggerBuilder.IsConfigured)
+            {
+                // Default configuration
+                Configure().WriteToConsole().Build();
+                LoggerWrapper.Instance.Log(LogLevel.Warning, "Logger not configured. Using default ConsoleLogger");
+            }
+
+            return LoggerWrapper.Instance;
         }
 
 

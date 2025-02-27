@@ -10,14 +10,14 @@ namespace NLoggify.Logging.Loggers
     internal class MultiLogger : Logger
     {
         //private static readonly object lock = new(); // Lock for configuration safety
-        private readonly LoggerConfig config;
+        private List<Logger> loggers = new List<Logger>();
 
         /// <summary>
         /// Initializes the MultiLogger, creating a dedicated thread for each logger.
         /// </summary>
-        internal MultiLogger(LoggerConfig config) : base(config)
+        internal MultiLogger(List<Logger> loggers) : base()
         {
-            this.config = config;
+            this.loggers = loggers;
         }
 
 
@@ -25,20 +25,22 @@ namespace NLoggify.Logging.Loggers
         public override void Log(LogLevel level, string message)
         {
             // Execute each iteration in parallel
-            Parallel.ForEach(config.Loggers, logger => logger.Log(level, message));
+            Parallel.ForEach(loggers, logger => logger.Log(level, message));
         }
 
+        /*
         // No reason to implement it, no reason to test it :P
         [ExcludeFromCodeCoverage]
         protected override void WriteLog(string prefix, string message)
         {
             throw new NotImplementedException();
         }
+        */
 
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose()
         {
-            foreach (var logger in config.Loggers)
+            foreach (var logger in loggers)
             {
                 logger.Dispose();
             }

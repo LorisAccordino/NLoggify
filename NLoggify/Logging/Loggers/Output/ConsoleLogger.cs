@@ -8,37 +8,35 @@ namespace NLoggify.Logging.Loggers.Output
     /// </summary>
     internal class ConsoleLogger : Logger
     {
-        private static readonly object localLock = new object(); // Lock object for thread safety
 
         private readonly ConsoleLoggerConfig config;
+        private readonly bool useColors;
+        private LogLevel messageLogLevel;
 
         public ConsoleLogger(ConsoleLoggerConfig? config = null) : base(config)
         {
             this.config = config ?? new ConsoleLoggerConfig();
+            useColors = this.config.UseColors;
         }
 
         public override void Log(LogLevel level, string message)
         {
-            lock (localLock)
-            {
-                // Should use colors?
-                bool colors = config.UseColors;
-                // Change the console color based on the log level
-                if (colors) Console.ForegroundColor = config.GetColorForLevel(level);
-
-                // Log as usual
-                base.Log(level, message);
-                
-                // Reset the console color back to the default
-                if (colors) Console.ResetColor();
-            }
+            lock (localLock) messageLogLevel = level;
+            base.Log(level, message);
         }
 
         protected override void WriteLog(string header, string message)
         {
+            // Change the console color based on the log level
+            if (useColors) Console.ForegroundColor = config.GetColorForLevel(messageLogLevel);
+
             // Print the log message with the formatted header and message
             string logLine = header + message;
             Console.WriteLine(logLine);
+
+            // Reset the console color back to the default
+            if (useColors) Console.ResetColor();
+
 #if DEBUG
             debugOutputRedirect = logLine;
 #endif

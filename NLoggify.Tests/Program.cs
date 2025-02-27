@@ -11,12 +11,13 @@ public class Program
         Console.WriteLine(ascii_art);
 
         LoggerConfig config = new LoggerConfig();
-        config.ConfigureMultiLogger(LoggerType.Console, LoggerType.PlainText, LoggerType.JSON);
-        config.LoggerType = LoggerType.Multi;
+        //config.LoggerType = LoggerType.Multi;
         config.MinimumLogLevel = LogLevel.Trace;
         config.IncludeThreadInfo = true;
 
-        ILogger logger = Logger.GetLogger(config);
+        Logger.Configure().Build();
+
+        ILogger logger = Logger.GetLogger();
         //NloggifyExamples.Test(logger);
         //NLoggifyExamples.StressTest(logger);
         NLoggifyExamples.BufferedTest(logger);

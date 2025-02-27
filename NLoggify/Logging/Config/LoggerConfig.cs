@@ -1,9 +1,5 @@
 ﻿using NLoggify.Logging.Config.Enums;
-using NLoggify.Logging.Loggers;
-using NLoggify.Logging.Loggers.Output;
-using NLoggify.Logging.Loggers.Storage;
 using NLoggify.Utils;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Config
 {
@@ -12,14 +8,6 @@ namespace NLoggify.Logging.Config
     /// </summary>
     public class LoggerConfig : ICloneable
     {
-        /*internal List<Logger> Loggers { get; private set; } = GenericUtils.GetEnumValues<LoggerType>()
-            .Where(type => type != LoggerType.Multi)
-            .ToList()
-            .Select(GetLoggerBasedOnType)
-            .ToList(); // List of enabled loggers (if multilogging is going on)*/
-
-        internal List<Logger> Loggers { get; private set; } = new List<Logger>();
-
         /// <summary>
         /// Gets the current minimum log level required for messages to be recorded.
         /// </summary>
@@ -28,7 +16,7 @@ namespace NLoggify.Logging.Config
         /// <summary>
         /// Gets the currently configured logger type.
         /// </summary>
-        public LoggerType LoggerType { get; set; } = LoggerType.Console;
+        //public LoggerType LoggerType { get; set; } = LoggerType.Console;
 
         /// <summary>
         /// Gets or sets the format used to display timestamps in the log messages.
@@ -46,82 +34,6 @@ namespace NLoggify.Logging.Config
         /// </summary>
         public bool IncludeThreadInfo { get; set; } = Environment.ProcessorCount > 1;
 
-        /// <summary>
-        /// Indicates whether or not to allow the reconfiguration of logging settings. <br></br>
-        /// If <see langword="false"></see>, it is not allowed to configure the logger again once done <br></br>
-        /// <b>Note:</b> It is reccommended to <b>avoid reconfigurations</b> at runtime to prevent threading and I/O problems.
-        /// </summary>
-        public bool AllowReconfiguration { get; set; } = true;
-
-
-
-
-        /// <summary>
-        /// Configures logging to multiple destinations (Console, File, Debug, etc.)
-        /// </summary>
-        /// <param name="loggers">The types of loggers to be used</param>
-        [ExcludeFromCodeCoverage] // No reason to test it
-        public void ConfigureMultiLogger(params LoggerType[] loggers)
-        {
-            _ConfigureMultiLogger(loggers);
-        }
-
-        internal List<Logger> _ConfigureMultiLogger(params LoggerType[] loggers)
-        {
-            // Clear the loggers list
-            Loggers.Clear();
-
-            // Set to track the added logger types
-            var addedLoggerTypes = new HashSet<LoggerType>();
-
-            foreach (var loggerType in loggers)
-            {
-                // Check if the type has already been added
-                if (addedLoggerTypes.Contains(loggerType))
-                {
-                    throw new ArgumentException($"The logger type '{loggerType}' has already been added.");
-                }
-
-                // Check if it's trying to adding a MultiLogger
-                if (loggerType == LoggerType.Multi)
-                {
-                    throw new ArgumentException("A MultiLogger cannot be added to the logger configuration.");
-                }
-
-                // Add the logger type to the list
-                Loggers.Add(GetLoggerBasedOnType(loggerType));
-                addedLoggerTypes.Add(loggerType);
-            }
-            return Loggers;
-        }
-
-        /// <summary>
-        /// Creates an instance of the logger based on the current configuration settings.
-        /// </summary>
-        /// <returns>An instance of a logger corresponding to the configured <see cref="LoggerType"/>.</returns>
-        internal Logger CreateLogger()
-        {
-            return GetLoggerBasedOnType(LoggerType);
-        }
-
-        /// <summary>
-        /// Gets an instance of the logger based on the given <see cref="LoggerType"/>
-        /// </summary>
-        /// <param name="type">Type of logger</param>
-        /// <returns>An instance of the logger based on the given <see cref="LoggerType"/></returns>
-        /// <exception cref="NotSupportedException">The logger is not supported</exception>
-        internal static Logger GetLoggerBasedOnType(LoggerType type)
-        {
-            return type switch
-            {
-                LoggerType.Debug => new DebugLogger(),
-                LoggerType.Console => new ConsoleLogger(),
-                LoggerType.PlainText => new PlainTextLogger(),
-                LoggerType.JSON => new JsonLogger(),
-                //LoggerType.Multi => new MultiLogger(),
-                _ => throw new NotSupportedException("The specified logger type is not supported.")
-            };
-        }
 
         /// <summary>
         /// Gets a deep copy of <see langword="this"/> object
