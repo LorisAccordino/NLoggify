@@ -15,7 +15,7 @@ namespace NLoggify.Logging.Loggers
         /// <summary>
         /// Initializes the MultiLogger, creating a dedicated thread for each logger.
         /// </summary>
-        internal MultiLogger(List<Logger> loggers) : base()
+        internal MultiLogger(List<Logger> loggers)
         {
             this.loggers = loggers;
         }

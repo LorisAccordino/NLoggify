@@ -9,7 +9,9 @@ namespace NLoggify.Logging.Loggers.Storage
     /// 
     internal class PlainTextLogger : FileLogger
     {
-        public PlainTextLogger(FileLoggerConfig? config = null) : base(config)
+        internal PlainTextLogger() : this(new FileLoggerConfig()) { }
+        internal PlainTextLogger(LoggerConfig config) : this(new FileLoggerConfig(config)) { }
+        internal PlainTextLogger(FileLoggerConfig config) : base(config)
         {
             // Change the extension to .log
             filePath = Path.ChangeExtension(filePath, "log");

@@ -19,9 +19,8 @@ namespace NLoggify.Logging.Loggers
         public static LoggerWrapper Instance => instance;
         private static readonly LoggerWrapper instance = new LoggerWrapper();
 
-        // Gets the internal log to wrap
-        internal LoggerWrapper() { }
 
+        // Sets the internal log to wrap
         internal void SetInternalLogger(ILogger internalLogger)
         {
             this.internalLogger = internalLogger;

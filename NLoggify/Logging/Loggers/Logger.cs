@@ -132,7 +132,9 @@ namespace NLoggify.Logging.Loggers
         */
 
 
-        internal Logger(LoggerConfig? config = null)
+        internal Logger() : this(new LoggerConfig()) { }
+
+        internal Logger(LoggerConfig config)
         {
             this.config = config ?? new LoggerConfig();
         }

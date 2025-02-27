@@ -50,7 +50,7 @@ namespace NLoggify.Logging.Config
         /// <summary>
         /// Build a <see cref="FileLoggerConfig"/> object with default configuration values
         /// </summary>
-        public FileLoggerConfig() : base() { }
+        public FileLoggerConfig() { }
 
         /// <summary>
         /// Build a <see cref="FileLoggerConfig"/> object from another already existing base <see cref="LoggerConfig"/> configuration. <br></br>

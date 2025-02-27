@@ -30,7 +30,7 @@ namespace NLoggify.Logging.Config
         /// <summary>
         /// Build a <see cref="ConsoleLoggerConfig"/> object with default configuration values
         /// </summary>
-        public ConsoleLoggerConfig() : base() { }
+        public ConsoleLoggerConfig() { }
 
         /// <summary>
         /// Build a <see cref="ConsoleLoggerConfig"/> object from another already existing base <see cref="LoggerConfig"/> configuration. <br></br>

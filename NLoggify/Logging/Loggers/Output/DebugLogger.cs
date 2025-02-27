@@ -11,7 +11,8 @@ namespace NLoggify.Logging.Loggers.Output
 #endif
     internal class DebugLogger : Logger
     {
-        internal DebugLogger(LoggerConfig? config = null) : base(config) { }
+        internal DebugLogger() { }
+        internal DebugLogger(LoggerConfig config) : base(config) { }
 
         protected override void WriteLog(string header, string message)
         {

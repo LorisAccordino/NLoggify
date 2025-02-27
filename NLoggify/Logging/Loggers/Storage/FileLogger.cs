@@ -13,7 +13,9 @@ namespace NLoggify.Logging.Loggers.Storage
 
         private readonly FileLoggerConfig config;
 
-        protected FileLogger(FileLoggerConfig? config = null) : base(config)
+        protected FileLogger() : this(new FileLoggerConfig()) { }
+        protected FileLogger(LoggerConfig config) : this(new FileLoggerConfig(config)) { }
+        protected FileLogger(FileLoggerConfig config) : base(config)
         {
             this.config = config ?? new FileLoggerConfig();
             filePath = this.config.FullPath;
