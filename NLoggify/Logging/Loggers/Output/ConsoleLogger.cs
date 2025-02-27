@@ -13,11 +13,15 @@ namespace NLoggify.Logging.Loggers.Output
         private readonly bool useColors;
         private LogLevel messageLogLevel;
 
-        public ConsoleLogger(ConsoleLoggerConfig? config = null) : base(config)
+        public ConsoleLogger() : this(new ConsoleLoggerConfig()) { }
+        public ConsoleLogger(LoggerConfig config) : this(new ConsoleLoggerConfig(config)) { }
+
+        public ConsoleLogger(ConsoleLoggerConfig config) : base(config)
         {
             this.config = config ?? new ConsoleLoggerConfig();
             useColors = this.config.UseColors;
         }
+
 
         public override void Log(LogLevel level, string message)
         {

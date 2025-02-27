@@ -17,9 +17,14 @@
         public static bool AllowReconfiguration { get; set; } = false;
 
         /// <summary>
+        /// Allows to set a default logger fallback behavior, without worrying about thrown exceptions
+        /// </summary>
+        public static bool AllowDefaultLogger { get; set; } = true;
+
+        /// <summary>
         /// Allows async logging mode for advanced purposes
         /// </summary>
-        //public static bool AllowAsyncLogging { get; set; } = false;
+        //public static bool AlloAsyncLogging { get; set; } = false;
     }
 
 }

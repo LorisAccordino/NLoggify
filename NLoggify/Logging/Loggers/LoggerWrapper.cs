@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config.Enums;
+using NLoggify.Logging.Loggers.Output;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers
@@ -9,7 +10,7 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     internal sealed class LoggerWrapper : Logger
     {
-        private ILogger internalLogger;
+        private ILogger internalLogger = new ConsoleLogger(); // Console logger as default
         //private static readonly object lock = new object(); // Lock object for thread safety
 
         /// <summary>

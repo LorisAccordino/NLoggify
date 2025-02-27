@@ -2,6 +2,7 @@
 using NLoggify.Logging.Loggers.Storage;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Advanced;
+using NLoggify.Logging.Config.Enums;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -27,7 +28,7 @@ namespace NLoggify.Logging.Loggers
 
         /*** LOGGER OUTPUTS ***/
 
-        private LoggerBuilder WriteToLogger<TLogger>(Func<TLogger> createLogger) where TLogger : Logger
+        public LoggerBuilder WriteToLogger<TLogger>(Func<TLogger> createLogger) where TLogger : Logger
         {
             // Check for any duplicates
             if (loggers.Any(logger => logger.GetType() == typeof(TLogger)) && !RiskySettings.AllowMultipleSameLoggers)
@@ -39,24 +40,34 @@ namespace NLoggify.Logging.Loggers
             return this;
         }
 
-        public LoggerBuilder WriteToDebug(LoggerConfig? config = null)
+        /*public LoggerBuilder WriteToDebug(LoggerConfig? config = null)
         {
-            return WriteToLogger(() => new DebugLogger(config ?? new LoggerConfig()));
+            return WriteToLogger(() => new DebugLogger(config));
+        }*/
+
+        public LoggerBuilder WriteToConsole(ConsoleLoggerConfig config)
+        {
+            return WriteToLogger(() => new ConsoleLogger(config));
         }
 
-        public LoggerBuilder WriteToConsole(ConsoleLoggerConfig? config = null)
+        public LoggerBuilder WriteToConsole(LoggerConfig config)
         {
-            return WriteToLogger(() => new ConsoleLogger(config ?? new ConsoleLoggerConfig()));
+            return WriteToConsole(new ConsoleLoggerConfig(config));
+        }
+
+        public LoggerBuilder WriteToConsole()
+        {
+            return WriteToConsole(new LoggerConfig());
         }
 
         public LoggerBuilder WriteToPlainTextFile(FileLoggerConfig? config = null)
         {
-            return WriteToLogger(() => new PlainTextLogger(config ?? new FileLoggerConfig()));
+            return WriteToLogger(() => new PlainTextLogger(config));
         }
 
         public LoggerBuilder WriteToJsonFile(FileLoggerConfig? config = null)
         {
-            return WriteToLogger(() => new JsonLogger(config ?? new FileLoggerConfig()));
+            return WriteToLogger(() => new JsonLogger(config));
         }
 
 
@@ -68,7 +79,16 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         public void Build()
         {
-            if (loggers.Count == 0) throw new InvalidOperationException("Empty loggers list! You must call LoggerBuilder.WriteToXXX() at least once to get a consistent logger");
+            if (loggers.Count == 0)
+            {
+                if (RiskySettings.AllowDefaultLogger)
+                {
+                    LoggerWrapper.Instance.Log(LogLevel.Warning, "No logger output configured. Using default ConsoleLogger.");
+                    WriteToConsole();
+                }
+                else
+                    throw new InvalidOperationException("Empty loggers list! You must call LoggerBuilder.WriteToXXX() at least once to get a consistent logger");
+            }
 
             ILogger internalLogger = loggers.Count == 1 ? loggers[0] : new MultiLogger(loggers);
             LoggerWrapper.Instance.SetInternalLogger(internalLogger);

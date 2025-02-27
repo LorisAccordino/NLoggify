@@ -6,7 +6,7 @@ namespace NLoggify.Logging.Config
     /// <summary>
     /// Represents a global configuration for the logging system.
     /// </summary>
-    public class LoggerConfig : ICloneable
+    public class LoggerConfig //: ICloneable
     {
         /// <summary>
         /// Gets the current minimum log level required for messages to be recorded.
@@ -34,14 +34,31 @@ namespace NLoggify.Logging.Config
         /// </summary>
         public bool IncludeThreadInfo { get; set; } = Environment.ProcessorCount > 1;
 
+        /// <summary>
+        /// Build a <see cref="LoggerConfig"/> object with default configuration values
+        /// </summary>
+        public LoggerConfig() { }
 
+        /// <summary>
+        /// Build a <see cref="LoggerConfig"/> object from another already existing configuration
+        /// </summary>
+        /// <param name="otherConfig">The already existing configuration object</param>
+        public LoggerConfig(LoggerConfig otherConfig)
+        {
+            MinimumLogLevel = otherConfig.MinimumLogLevel;
+            TimestampFormat = otherConfig.TimestampFormat;
+            IncludeThreadInfo = otherConfig.IncludeThreadInfo;
+        }
+
+        /*
         /// <summary>
         /// Gets a deep copy of <see langword="this"/> object
         /// </summary>
         /// <returns>A copy of <see langword="this"/> object</returns>
         public object Clone()
         {
-            return GenericUtils.DeepCopy(this);
+            return MemberwiseClone();
         }
+        */
     }
 }

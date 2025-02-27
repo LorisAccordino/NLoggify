@@ -158,13 +158,8 @@ namespace NLoggify.Logging.Loggers
         /// <returns>Logger instance of the entire logging system.</returns>
         public static Logger GetLogger()
         {
-            if (!LoggerBuilder.IsConfigured)
-            {
-                // Default configuration
-                Configure().WriteToConsole().Build();
-                LoggerWrapper.Instance.Log(LogLevel.Warning, "Logger not configured. Using default ConsoleLogger");
-            }
-
+            // Default configuration
+            if (!LoggerBuilder.IsConfigured) Configure().Build();
             return LoggerWrapper.Instance;
         }
 

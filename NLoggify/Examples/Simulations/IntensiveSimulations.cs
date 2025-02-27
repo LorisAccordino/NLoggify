@@ -117,8 +117,7 @@ namespace NLoggify.Examples.Simulations
                 {
                     // Log CPU usage every second (adjust interval as needed)
                     double totalCpuUsage = GetCpuUsage();
-                    double processCpuUsage = GetProcessCpuUsage();
-                    LogCpuCriticality(logger, totalCpuUsage, processCpuUsage);
+                    LogCpuCriticality(logger, totalCpuUsage);
                     Thread.Sleep(logIntervalMilliseconds); // Log every second
                 }
             });
@@ -185,19 +184,9 @@ namespace NLoggify.Examples.Simulations
         }
 
         /// <summary>
-        /// Retrieves the CPU usage percentage of the current process
-        /// </summary>
-        /// <returns></returns>
-        private static double GetProcessCpuUsage()
-        {
-            using PerformanceCounter processCounter = new("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName);
-            return processCounter.NextValue();
-        }
-
-        /// <summary>
         /// Logs CPU criticality level based on CPU usage percentage.
         /// </summary>
-        private static void LogCpuCriticality(ILogger logger, double totalCpuUsage, double processCpuUsage)
+        private static void LogCpuCriticality(ILogger logger, double totalCpuUsage)
         {
             LogLevel level = totalCpuUsage switch
             {
@@ -207,7 +196,7 @@ namespace NLoggify.Examples.Simulations
                 _ => LogLevel.Critical
             };
 
-            logger.Log(level, $"CPU Usage: {totalCpuUsage:F2}% (Process: {processCpuUsage:F2}%)");
+            logger.Log(level, $"CPU Usage: {totalCpuUsage:F2}%");
         }
     }
 }
