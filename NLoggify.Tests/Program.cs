@@ -20,22 +20,27 @@ public class Program
         FileLoggerConfig fileLoggerConfig = new FileLoggerConfig(config);
         fileLoggerConfig.FileNamePrefix = "ahahh";
 
-        //Logger.Configure().WriteToConsole(config);
-        //Logger.Configure().WriteToConsole(consoleConfig);
-        //Logger.Configure().WriteToConsole(fileLoggerConfig);
-        Logger.Configure().WriteToConsole();
-        LoggerBuilder builder = Logger.Configure();
+        Logger.Configure()
+            .WriteToConsole(config)
+            .WriteToDebug(config);
 
-        //builder.WriteToConsole(); // Usa il default (ConsoleLoggerConfig)
-        //builder.WriteToConsole(new LoggerConfig()); // Converte in ConsoleLoggerConfig
-        //builder.WriteToConsole(new ConsoleLoggerConfig()); // Usa direttamente ConsoleLoggerConfig
 
+        
+        Task.Run(() =>
+        {
+            ILogger logger = Logger.GetLogger();
+        });
+
+        Task.Run(() =>
+        {
+            ILogger logger = Logger.GetLogger();
+        });
 
         ILogger logger = Logger.GetLogger();
 
-        //NLoggifyExamples.Test(logger);
+        NLoggifyExamples.Test(logger);
         //NLoggifyExamples.StressTest(logger);
         //NLoggifyExamples.BufferedTest(logger);
-        IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
+        //IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
     }
 }

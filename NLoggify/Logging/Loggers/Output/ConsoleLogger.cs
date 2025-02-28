@@ -14,7 +14,7 @@ namespace NLoggify.Logging.Loggers.Output
         private LogLevel messageLogLevel;
 
         internal ConsoleLogger() : this(new ConsoleLoggerConfig()) { }
-        internal ConsoleLogger(LoggerConfig config) : this(new ConsoleLoggerConfig(config)) { }
+        internal ConsoleLogger(LoggerConfig config) : this(config as ConsoleLoggerConfig ?? new ConsoleLoggerConfig(config)) { }
         internal ConsoleLogger(ConsoleLoggerConfig config) : base(config)
         {
             this.config = config ?? new ConsoleLoggerConfig();

@@ -1,5 +1,4 @@
-﻿using NLoggify.Logging.Config;
-using NLoggify.Logging.Config.Enums;
+﻿using NLoggify.Logging.Config.Enums;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers

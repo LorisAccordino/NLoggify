@@ -161,7 +161,14 @@ namespace NLoggify.Logging.Loggers
         public static Logger GetLogger()
         {
             // Default configuration
-            if (!LoggerBuilder.IsConfigured) Configure().Build();
+            if (!LoggerBuilder.IsConfigured)
+            {
+                LoggerWrapper.Instance.Log(LogLevel.Warning, "LoggerBuilder.Build() has not been called. Building logger with default configuration...");
+                Thread.Sleep(500);
+                LoggerWrapper.Instance.Log(LogLevel.Info, "Waiting 3 seconds to make the user awared...");
+                Thread.Sleep(3000);
+                Configure().Build();
+            }
             return LoggerWrapper.Instance;
         }
 

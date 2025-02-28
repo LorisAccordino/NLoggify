@@ -28,7 +28,7 @@ namespace NLoggify.Logging.Loggers
 
         /*** LOGGER OUTPUTS ***/
 
-        public LoggerBuilder WriteToLogger<TLogger>(Func<TLogger> createLogger) where TLogger : Logger
+        internal LoggerBuilder WriteToLogger<TLogger>(Func<TLogger> createLogger) where TLogger : Logger
         {
             // Check for any duplicates
             if (loggers.Any(logger => logger.GetType() == typeof(TLogger)) && !RiskySettings.AllowMultipleSameLoggers)
@@ -40,14 +40,24 @@ namespace NLoggify.Logging.Loggers
             return this;
         }
 
+        /// <summary>
+        /// Write log messages to the <see cref="System.Diagnostics.Debug"/> output
+        /// </summary>
+        /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
+        /// <returns></returns>
         public LoggerBuilder WriteToDebug(LoggerConfig? config = null)
         {
             return WriteToLogger(() => new DebugLogger(config));
         }
 
+        /// <summary>
+        /// Write log messages to the <see cref="Console"/> output
+        /// </summary>
+        /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
+        /// <returns></returns>
         public LoggerBuilder WriteToConsole(LoggerConfig? config = null)
         {
-            return WriteToLogger(() => new ConsoleLogger(config as ConsoleLoggerConfig ?? new ConsoleLoggerConfig(config)));
+            return WriteToLogger(() => new ConsoleLogger(config));
         }
 
 
@@ -68,12 +78,22 @@ namespace NLoggify.Logging.Loggers
         }
         */
 
-        public LoggerBuilder WriteToPlainTextFile(FileLoggerConfig? config = null)
+        /// <summary>
+        /// Write log messages to a <see cref="File"/> output
+        /// </summary>
+        /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
+        /// <returns></returns>
+        public LoggerBuilder WriteToPlainTextFile(LoggerConfig? config = null)
         {
             return WriteToLogger(() => new PlainTextLogger(config));
         }
 
-        public LoggerBuilder WriteToJsonFile(FileLoggerConfig? config = null)
+        /// <summary>
+        /// Write log messages to a JSON <see cref="File"/> output
+        /// </summary>
+        /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
+        /// <returns></returns>
+        public LoggerBuilder WriteToJsonFile(LoggerConfig? config = null)
         {
             return WriteToLogger(() => new JsonLogger(config));
         }

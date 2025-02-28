@@ -10,7 +10,7 @@ namespace NLoggify.Logging.Loggers.Storage
     internal class JsonLogger : FileLogger
     {
         internal JsonLogger() : this(new FileLoggerConfig()) { }
-        internal JsonLogger(LoggerConfig config) : this(new FileLoggerConfig(config)) { }
+        internal JsonLogger(LoggerConfig config) : this(config as FileLoggerConfig ?? new FileLoggerConfig(config)) { }
         internal JsonLogger(FileLoggerConfig config) : base(config)
         {
             // Change the extension to .json
