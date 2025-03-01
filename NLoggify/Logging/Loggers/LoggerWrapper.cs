@@ -8,33 +8,43 @@ namespace NLoggify.Logging.Loggers
     /// Wrapper for the logger instance, ensuring that all references always point to the current logger.
     /// This allows dynamic updates to the logger configuration while maintaining a consistent reference.
     /// </summary>
-    internal sealed class LoggerWrapper : Logger
+    internal class LoggerWrapper : Logger
     {
         private ILogger internalLogger = new ConsoleLogger(); // Console logger as default
         //private static readonly object lock = new object(); // Lock object for thread safety
 
+        /*
         /// <summary>
         /// Gets the singleton instance of <see cref="LoggerWrapper"/>.
         /// </summary>
-        public static LoggerWrapper Instance => instance;
-        private static readonly LoggerWrapper instance = new LoggerWrapper();
+        //public static LoggerWrapper Instance => instance;
+        //private static readonly LoggerWrapper instance = new LoggerWrapper();
+        */
 
+        internal LoggerWrapper(ILogger internalLogger)
+        {
+            this.internalLogger = internalLogger;
+        }
 
+        /*
         // Sets the internal log to wrap
         internal void SetInternalLogger(ILogger internalLogger)
         {
             this.internalLogger = internalLogger;
         }
+        */
 
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
         public override void Log(LogLevel level, string message)
         {
-            lock(sharedLock)
+            /*lock(sharedLock)
             {
                 internalLogger.Log(level, message);
-            }
+            }*/
+
+            internalLogger.Log(level, message);
         }
 
         /*

@@ -1,10 +1,9 @@
 ﻿using NLoggify.Logging.Loggers.Output;
 using NLoggify.Logging.Loggers.Storage;
-using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Advanced;
-using NLoggify.Logging.Config.Enums;
+using NLoggify.Logging.Loggers;
 
-namespace NLoggify.Logging.Loggers
+namespace NLoggify.Logging.Config
 {
     /// <summary>
     /// Configuration builder for the logging system. It uses the "Builder" pattern to enable the creation
@@ -12,18 +11,47 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     public class LoggerBuilder
     {
+        /// <summary>
+        /// Indicate whether suppress logger configuration/building warnings or not
+        /// </summary>
+        public static bool SuppressWarnings { get; set; } = false;
+
+        /// <summary>
+        /// Default logger (with default configuration), in case of no configuration
+        /// </summary>
+        /// <returns></returns>
+        public static LoggerBuilder Default() => new LoggerBuilder().WriteToConsole();
+
         // Singleton instance
-        internal static LoggerBuilder Instance => instance;
+        private static LoggerBuilder Instance => instance;
         private static readonly LoggerBuilder instance = new LoggerBuilder();
 
-        // Flag to indicate whether the logger has been configured or not
+        // Flags to indicate the configuration and building state
         internal static bool IsConfigured { get; private set; } = false;
+        internal static bool IsBuilt { get; private set; } = false;
 
         // List of (already configured) loggers to use for log management.
         private List<Logger> loggers = new List<Logger>();
 
         // Private constructor to prevent direct instantiation of the class
         internal LoggerBuilder() { }
+
+        /// <summary>
+        /// Get the <see cref="LoggerBuilder"/> reference to configure the logging system
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Cannot reconfigure the logging system, unless <see cref="RiskySettings.AllowReconfiguration"/> = <see langword="true"/></exception>
+        public static LoggerBuilder Configure()
+        {
+            if (IsConfigured && !RiskySettings.AllowReconfiguration)
+                throw new InvalidOperationException("Logger already configured! Use Logger.GetLogger() to get the logger reference. \n" +
+                    "[Warning]: It is not reccommended to hot-reload the logging system with reconfiguration at runtime, but, if you really need it, \n" +
+                    "you can enable this feature by setting RiskySettings.AllowReconfiguration = true. At your own risk!");
+
+            // Mark as configured
+            IsConfigured = true;
+            return Instance;
+        }
 
 
         /*** LOGGER OUTPUTS ***/
@@ -45,58 +73,28 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
         /// <returns></returns>
-        public LoggerBuilder WriteToDebug(LoggerConfig? config = null)
-        {
-            return WriteToLogger(() => new DebugLogger(config));
-        }
+        public LoggerBuilder WriteToDebug(LoggerConfig? config = null) => WriteToLogger(() => new DebugLogger(config));
 
         /// <summary>
         /// Write log messages to the <see cref="Console"/> output
         /// </summary>
         /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
         /// <returns></returns>
-        public LoggerBuilder WriteToConsole(LoggerConfig? config = null)
-        {
-            return WriteToLogger(() => new ConsoleLogger(config));
-        }
-
-
-        /*
-        public LoggerBuilder WriteToConsole(ConsoleLoggerConfig config)
-        {
-            return WriteToLogger(() => new ConsoleLogger(config));
-        }
-
-        public LoggerBuilder WriteToConsole(LoggerConfig config)
-        {
-            return WriteToConsole(new ConsoleLoggerConfig(config));
-        }
-
-        public LoggerBuilder WriteToConsole()
-        {
-            return WriteToConsole(new LoggerConfig());
-        }
-        */
+        public LoggerBuilder WriteToConsole(LoggerConfig? config = null) => WriteToLogger(() => new ConsoleLogger(config));
 
         /// <summary>
         /// Write log messages to a <see cref="File"/> output
         /// </summary>
         /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
         /// <returns></returns>
-        public LoggerBuilder WriteToPlainTextFile(LoggerConfig? config = null)
-        {
-            return WriteToLogger(() => new PlainTextLogger(config));
-        }
+        public LoggerBuilder WriteToPlainTextFile(LoggerConfig? config = null) => WriteToLogger(() => new PlainTextLogger(config));
 
         /// <summary>
         /// Write log messages to a JSON <see cref="File"/> output
         /// </summary>
         /// <param name="config">The optional configuration (the default config will be used if <see langword="null"/>)</param>
         /// <returns></returns>
-        public LoggerBuilder WriteToJsonFile(LoggerConfig? config = null)
-        {
-            return WriteToLogger(() => new JsonLogger(config));
-        }
+        public LoggerBuilder WriteToJsonFile(LoggerConfig? config = null) => WriteToLogger(() => new JsonLogger(config));
 
 
 
@@ -107,7 +105,8 @@ namespace NLoggify.Logging.Loggers
         /// </summary>
         public void Build()
         {
-            if (loggers.Count == 0)
+            if (loggers.Count == 0) throw new InvalidOperationException("Logger configuration started but no output specified.");
+            /*if (loggers.Count == 0)
             {
                 if (RiskySettings.AllowDefaultLogger)
                 {
@@ -116,13 +115,13 @@ namespace NLoggify.Logging.Loggers
                 }
                 else
                     throw new InvalidOperationException("Empty loggers list! You must call LoggerBuilder.WriteToXXX() at least once to get a consistent logger");
-            }
+            }*/
 
             ILogger internalLogger = loggers.Count == 1 ? loggers[0] : new MultiLogger(loggers);
             LoggerWrapper.Instance.SetInternalLogger(internalLogger);
 
-            // Mark the logging system as configured
-            IsConfigured = true;
+            // Mark as built
+            IsBuilt = true;
         }
     }
 }

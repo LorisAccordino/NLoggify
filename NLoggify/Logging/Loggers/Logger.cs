@@ -146,14 +146,10 @@ namespace NLoggify.Logging.Loggers
         /// <exception cref="InvalidOperationException">Cannot reconfigure the logging system, unless <see cref="RiskySettings.AllowReconfiguration"/> = <see langword="true"/></exception>
         public static LoggerBuilder Configure()
         {
-            if (LoggerBuilder.IsConfigured && !RiskySettings.AllowReconfiguration)
-                throw new InvalidOperationException("Logger is already configured! Use Logger.GetLogger() to get the logger reference. \n" +
-                    "[Warning]: It is not reccommended to hot-reload the logging sytsem with reconfiguration at runtime, but, if you really need it, \n" +
-                    "you can enable this feature by setting RiskySettings.AllowReconfiguration = true. At your own risk!");
-
-            return LoggerBuilder.Instance;
+            return LoggerBuilder.Configure();
         }
 
+        /*
         /// <summary>
         /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
         /// </summary>
@@ -163,15 +159,23 @@ namespace NLoggify.Logging.Loggers
             // Default configuration
             if (!LoggerBuilder.IsConfigured)
             {
-                LoggerWrapper.Instance.Log(LogLevel.Warning, "LoggerBuilder.Build() has not been called. Building logger with default configuration...");
-                Thread.Sleep(500);
-                LoggerWrapper.Instance.Log(LogLevel.Info, "Waiting 3 seconds to make the user awared...");
-                Thread.Sleep(3000);
-                Configure().Build();
+                if (!LoggerBuilder.SuppressWarnings)
+                {
+                    LoggerWrapper.Instance.Log(LogLevel.Warning, "Logger not configured. Using default ConsoleLogger");
+                    LoggerWrapper.Instance.Log(LogLevel.Info, "You can suppress warnings by setting LoggerBuilder.SuppressWarnings = true");
+                }
+
+                Configure().WriteToConsole().Build(); // Default logger
             }
+
+
+            // If Configure() was called, but Build() was not, throw an exception
+            if (!LoggerBuilder.IsBuilt) 
+                throw new InvalidOperationException("Logger configuration started but Build() was not called.");
+
             return LoggerWrapper.Instance;
         }
-
+        */
 
 
         /// <summary>

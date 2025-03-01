@@ -20,12 +20,12 @@ public class Program
         FileLoggerConfig fileLoggerConfig = new FileLoggerConfig(config);
         fileLoggerConfig.FileNamePrefix = "ahahh";
 
-        Logger.Configure()
+        /*Logger.Configure()
             .WriteToConsole(config)
-            .WriteToDebug(config);
+            .WriteToDebug(config);*/
 
 
-        
+        /*
         Task.Run(() =>
         {
             ILogger logger = Logger.GetLogger();
@@ -35,6 +35,7 @@ public class Program
         {
             ILogger logger = Logger.GetLogger();
         });
+        */
 
         ILogger logger = Logger.GetLogger();
 

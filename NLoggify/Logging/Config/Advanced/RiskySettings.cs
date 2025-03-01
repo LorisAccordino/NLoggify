@@ -19,7 +19,7 @@
         /// <summary>
         /// Allows to set a default logger fallback behavior, without worrying about thrown exceptions
         /// </summary>
-        public static bool AllowDefaultLogger { get; set; } = true;
+        //public static bool AllowDefaultLogger { get; set; } = true;
 
         /// <summary>
         /// Allows async logging mode for advanced purposes

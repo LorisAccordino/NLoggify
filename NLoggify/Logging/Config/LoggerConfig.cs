@@ -1,5 +1,4 @@
 ﻿using NLoggify.Logging.Config.Enums;
-using NLoggify.Utils;
 
 namespace NLoggify.Logging.Config
 {
