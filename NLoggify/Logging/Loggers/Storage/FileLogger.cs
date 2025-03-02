@@ -41,9 +41,9 @@ namespace NLoggify.Logging.Loggers.Storage
         /// Defines how the log entry should be formatted.
         /// Implemented by subclasses.
         /// </summary>
-        /// <param name="prefix">The prefix to put before the log message.</param>
+        /// <param name="header">The header to put before the log message.</param>
         /// <param name="message">The log message.</param>
         /// <returns>The formatted log entry.</returns>
-        protected abstract string FormatLog(string prefix, string message);
+        protected abstract string FormatLog(string header, string message);
     }
 }

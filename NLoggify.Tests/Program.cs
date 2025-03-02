@@ -20,24 +20,13 @@ public class Program
         FileLoggerConfig fileLoggerConfig = new FileLoggerConfig(config);
         fileLoggerConfig.FileNamePrefix = "ahahh";
 
-        /*Logger.Configure()
-            .WriteToConsole(config)
-            .WriteToDebug(config);*/
+        LoggerManager.Configure()
+            .WriteToDebug(config)
+            .WriteToConsole(consoleConfig)
+            .WriteToPlainTextFile(fileLoggerConfig)
+            .Build();
 
-
-        /*
-        Task.Run(() =>
-        {
-            ILogger logger = Logger.GetLogger();
-        });
-
-        Task.Run(() =>
-        {
-            ILogger logger = Logger.GetLogger();
-        });
-        */
-
-        ILogger logger = Logger.GetLogger();
+        ILogger logger = LoggerManager.GetLogger();
 
         NLoggifyExamples.Test(logger);
         //NLoggifyExamples.StressTest(logger);

@@ -8,35 +8,15 @@ namespace NLoggify.Logging.Config
     public static class LoggerManager
     {
         private static ILogger? loggerInstance;
+        private static LoggerBuilder builder = new LoggerBuilder();
 
-        /// <summary>
-        /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
-        /// </summary>
-        /// <returns>Logger instance of the entire logging system.</returns>
-        public static ILogger GetLogger()
-        {
-            if (loggerInstance == null)
-            {
-                ShowWarning();
-                loggerInstance = LoggerBuilder.Default().Build();
-            }
+        /// <summary> Get the <see cref="LoggerBuilder"/> reference to configure the logging system </summary>
+        public static LoggerBuilder Configure() => builder;
 
-            return loggerInstance;
-        }
+        /// <summary> Gets the (singleton) reference of the logger. This has to be used in the entire logging system. </summary>
+        public static ILogger GetLogger() => loggerInstance ?? builder.Default().Build();
 
-        internal static void SetLogger(ILogger logger)
-        {
-            loggerInstance = logger;
-        }
-
-        private static void ShowWarning()
-        {
-            if (!LoggerBuilder.SuppressWarnings)
-            {
-                Console.WriteLine("⚠️ Warning: Logger not configured. Using default ConsoleLogger.");
-                Console.WriteLine("ℹ️ You can suppress warnings by setting LoggerBuilder.SuppressWarnings = true");
-            }
-        }
+        internal static void SetLogger(ILogger logger) => loggerInstance = logger;
     }
 
 }

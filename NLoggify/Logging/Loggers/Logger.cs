@@ -1,5 +1,4 @@
 ﻿using NLoggify.Logging.Config;
-using NLoggify.Logging.Config.Advanced;
 using NLoggify.Logging.Config.Enums;
 
 namespace NLoggify.Logging.Loggers
@@ -20,13 +19,6 @@ namespace NLoggify.Logging.Loggers
 
         private readonly LoggerConfig config;
 
-        /*
-        /// <summary>
-        /// The current configuration of the entire logging system
-        /// </summary>
-        public static LoggerConfig CurrentConfig { get; private set; } = new LoggerConfig(); // Initialize yet to avoid problems in derived classes
-        */
-
 #if DEBUG
         public static string debugOutputRedirect = ""; // Used for debug
         public static string GetDebugOutput() 
@@ -39,34 +31,6 @@ namespace NLoggify.Logging.Loggers
             }
         }
 #endif
-
-        /*
-        /// <summary>
-        /// Gets the singleton instance of the Logger.
-        /// </summary>
-#if !DEBUG
-        [ExcludeFromCodeCoverage] // No reason to test it
-#endif
-        internal static Logger Instance
-        {
-            get
-            {
-                // Ensure that the instance is created only once, and in a thread-safe manner
-                lock (sharedLock)
-                {
-                    if (instance == null)
-                    {
-                        // Concrete classes should initialize the logger instance
-                        instance = CurrentConfig.CreateLogger();
-                    }
-                    return instance;
-                }
-            }
-#if DEBUG
-            set { instance = value; }
-#endif
-        }
-        */
 
         /*
         /// <summary>
@@ -98,39 +62,6 @@ namespace NLoggify.Logging.Loggers
         }
         */
 
-        /*
-        /// <summary>
-        /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
-        /// </summary>
-        /// <param name="config">The <see cref="LoggerConfig"/> object that represents the logging configuration<br></br>
-        /// If it is <b>null</b>, it will be used the <b>default</b> (or the <b>current</b>, if already set) logging configuration
-        /// </param>
-        /// <returns>Logger instance.</returns>
-        public static Logger GetLogger(LoggerConfig? config = null)
-        {
-            lock (configLock)
-            {
-                lock (sharedLock)
-                {
-                    if (config != null)
-                    {
-                        if (isConfigured == false || CurrentConfig.AllowReconfiguration)
-                        {
-                            CurrentConfig = config;
-                            isConfigured = true;
-                        }
-                        else
-                            throw new InvalidOperationException("Cannot change the logger configuration at runtime! \n You could set CurrentConfig.AllowReconfiguration == true to achieve that, but it is NOT recommended to change logging config at runtime.");
-                    }
-
-                    // Set up singleton instances
-                    instance = CurrentConfig.CreateLogger();
-                    return LoggerWrapper.Instance;
-                }
-            }
-        }
-        */
-
 
         internal Logger() : this(new LoggerConfig()) { }
 
@@ -138,45 +69,6 @@ namespace NLoggify.Logging.Loggers
         {
             this.config = config ?? new LoggerConfig();
         }
-
-        /// <summary>
-        /// Get the <see cref="LoggerBuilder"/> reference to configure the logging system
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException">Cannot reconfigure the logging system, unless <see cref="RiskySettings.AllowReconfiguration"/> = <see langword="true"/></exception>
-        public static LoggerBuilder Configure()
-        {
-            return LoggerBuilder.Configure();
-        }
-
-        /*
-        /// <summary>
-        /// Gets the singleton instance of the logger. This has to be used in the entire logging system.
-        /// </summary>
-        /// <returns>Logger instance of the entire logging system.</returns>
-        public static Logger GetLogger()
-        {
-            // Default configuration
-            if (!LoggerBuilder.IsConfigured)
-            {
-                if (!LoggerBuilder.SuppressWarnings)
-                {
-                    LoggerWrapper.Instance.Log(LogLevel.Warning, "Logger not configured. Using default ConsoleLogger");
-                    LoggerWrapper.Instance.Log(LogLevel.Info, "You can suppress warnings by setting LoggerBuilder.SuppressWarnings = true");
-                }
-
-                Configure().WriteToConsole().Build(); // Default logger
-            }
-
-
-            // If Configure() was called, but Build() was not, throw an exception
-            if (!LoggerBuilder.IsBuilt) 
-                throw new InvalidOperationException("Logger configuration started but Build() was not called.");
-
-            return LoggerWrapper.Instance;
-        }
-        */
-
 
         /// <summary>
         /// Logs a message with the specified log level.
