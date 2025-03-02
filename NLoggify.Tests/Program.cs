@@ -16,7 +16,7 @@ public class Program
         config.MinimumLogLevel = LogLevel.Debug;
 
         ConsoleLoggerConfig consoleConfig = new ConsoleLoggerConfig(config);
-        consoleConfig.UseColors = false;
+        //consoleConfig.UseColors = false;
 
         FileLoggerConfig fileLoggerConfig = new FileLoggerConfig(config);
         //fileLoggerConfig.FileNamePrefix = "output";
@@ -30,9 +30,9 @@ public class Program
 
         ILogger logger = LoggerManager.GetLogger();
 
-        NLoggifyExamples.Test(logger);
-        NLoggifyExamples.StressTest(logger);
+        NLoggifyExamples.Test(logger, true);
+        /*NLoggifyExamples.StressTest(logger);
         NLoggifyExamples.BufferedTest(logger);
-        IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
+        IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);*/
     }
 }

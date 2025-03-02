@@ -8,22 +8,14 @@ namespace NLoggify.Logging.Loggers
     /// </summary>
     public abstract class Logger : ILogger
     {
-        //private static Logger? instance = null;  // Static instance for the Singleton pattern
-
-        /*** SYNCHRONIZATION ***/
-        protected readonly object localLock = new object(); // Lock object for thread safety
-        private readonly SemaphoreSlim asyncLock = new(1, 1);   // Async lock object for async operations
-        protected static readonly object sharedLock = new object(); // Shared lock for complex sync operations
-        //protected static readonly object configLock = new object(); // Config logging for config operations
-        /***********************/
-
+        protected readonly object @lock = new object(); // Lock object for thread safety
         private readonly LoggerConfig config;
 
 #if DEBUG
-        public static string debugOutputRedirect = ""; // Used for debug
-        public static string GetDebugOutput() 
+        public string debugOutputRedirect = ""; // Used for debug
+        public string GetDebugOutput() 
         {
-            lock (sharedLock)
+            lock (@lock)
             {
                 var output = debugOutputRedirect;
                 debugOutputRedirect = "";
@@ -49,7 +41,7 @@ namespace NLoggify.Logging.Loggers
 #endif
         public virtual void Log(LogLevel level, string message)
         {
-            lock (localLock)
+            lock (@lock)
             {
                 // Filtering logic: Only log messages that meet or exceed the configured level
                 if (level < config.MinimumLogLevel)
@@ -83,7 +75,7 @@ namespace NLoggify.Logging.Loggers
 #endif
         public virtual bool LogException(LogLevel level, Action action, string message = "")
         {
-            lock (localLock)
+            lock (@lock)
             {
                 // Try to execute the given code
                 try
@@ -99,35 +91,6 @@ namespace NLoggify.Logging.Loggers
                 }
             }
         }
-
-        /// <summary>
-        /// Logs an async exception with a specified log level.
-        /// </summary>
-        /// <param name="level">The log level for the exception.</param>
-        /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
-        /// <param name="message">The log message to be recorded.</param>
-        /// <returns>True if the exception was thrown, otherwise false</returns>
-        public virtual async Task<bool> LogException(LogLevel level, Func<Task> action, string message = "")
-        {
-            await asyncLock.WaitAsync(); // Wait that no threads are executing the method
-
-            try
-            {
-                await action(); // Await the async operation
-                return false; // No exception caught
-            }
-            catch (Exception ex)
-            {
-                // Log the raised exception
-                Log(level, $"{message}\nException: {ex.Message}\n{ex.StackTrace}");
-                return true;
-            }
-            finally
-            {
-                asyncLock.Release(); // Release the lock for the next thread
-            }
-        }
-
 
         /// <summary>
         /// Get the log header to put before the log message. Should be overrided to have a custom behaviour

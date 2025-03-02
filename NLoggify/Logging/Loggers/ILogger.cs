@@ -1,5 +1,4 @@
 ﻿using NLoggify.Logging.Config.Enums;
-using System.Runtime.CompilerServices;
 
 namespace NLoggify.Logging.Loggers
 {
@@ -9,7 +8,7 @@ namespace NLoggify.Logging.Loggers
     public interface ILogger : IDisposable
     {
 #if DEBUG
-        public abstract static string GetDebugOutput(); // Used for debug
+        public abstract string GetDebugOutput(); // Used for debug
 #endif
 
         /// <summary>
@@ -27,14 +26,5 @@ namespace NLoggify.Logging.Loggers
         /// <param name="message">The log message to be recorded.</param>
         /// <returns>True if the exception was thrown, otherwise false</returns>
         bool LogException(LogLevel level, Action action, string message = "");
-
-        /// <summary>
-        /// Logs an async exception with a specified log level.
-        /// </summary>
-        /// <param name="level">The log level for the exception.</param>
-        /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
-        /// <param name="message">The log message to be recorded.</param>
-        /// <returns>True if the exception was thrown, otherwise false</returns>
-        public Task<bool> LogException(LogLevel level, Func<Task> action, string message = "");
     }
 }

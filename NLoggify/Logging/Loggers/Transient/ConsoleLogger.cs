@@ -24,7 +24,7 @@ namespace NLoggify.Logging.Loggers.Transient
 
         public override void Log(LogLevel level, string message)
         {
-            lock (localLock) messageLogLevel = level;
+            lock (@lock) messageLogLevel = level;
             base.Log(level, message);
         }
 
