@@ -27,15 +27,6 @@ namespace NLoggify.Logging.Loggers
             Parallel.ForEach(loggers, logger => logger.Log(level, message));
         }
 
-        /*
-        // No reason to implement it, no reason to test it :P
-        [ExcludeFromCodeCoverage]
-        protected override void WriteLog(string prefix, string message)
-        {
-            throw new NotImplementedException();
-        }
-        */
-
         [ExcludeFromCodeCoverage] // No reason to test it
         public override void Dispose()
         {

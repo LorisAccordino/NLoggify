@@ -1,7 +1,7 @@
 ﻿using NLoggify.Logging.Config;
 using System.Diagnostics;
 
-namespace NLoggify.Logging.Loggers.Output
+namespace NLoggify.Logging.Loggers.Transient
 {
     /// <summary>
     /// A logger that writes log messages to the Debug output (e.g., Output window in Visual Studio).

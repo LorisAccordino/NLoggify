@@ -1,4 +1,5 @@
 ﻿using NLoggify.Logging.Config.Enums;
+using NLoggify.Logging.Config.Validation;
 
 namespace NLoggify.Logging.Config
 {
@@ -11,11 +12,6 @@ namespace NLoggify.Logging.Config
         /// Gets the current minimum log level required for messages to be recorded.
         /// </summary>
         public LogLevel MinimumLogLevel { get; set; } = LogLevel.Info;
-
-        /// <summary>
-        /// Gets the currently configured logger type.
-        /// </summary>
-        //public LoggerType LoggerType { get; set; } = LoggerType.Console;
 
         /// <summary>
         /// Gets or sets the format used to display timestamps in the log messages.

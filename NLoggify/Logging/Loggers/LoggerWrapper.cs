@@ -1,5 +1,5 @@
 ﻿using NLoggify.Logging.Config.Enums;
-using NLoggify.Logging.Loggers.Output;
+using NLoggify.Logging.Loggers.Transient;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.Logging.Loggers

@@ -1,8 +1,6 @@
 ﻿using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Enums;
-using NLoggify.Logging.Loggers;
-using NLoggify.Logging.Loggers.Output;
-using NLoggify.Logging.Loggers.Storage;
+using NLoggify.Logging.Config.Validation;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NLoggify.UnitTests.Config
@@ -22,16 +20,13 @@ namespace NLoggify.UnitTests.Config
         {
             // Arrange
             var expectedLevel = LogLevel.Warning;
-            var expectedType = LoggerType.PlainText;
 
             // Act
             LoggerConfig config = new LoggerConfig();
             config.MinimumLogLevel = expectedLevel;
-            config.LoggerType = expectedType;
 
             // Assert
             Assert.Equal(expectedLevel, config.MinimumLogLevel);
-            Assert.Equal(expectedType, config.LoggerType);
         }
 
         /// <summary>
@@ -65,7 +60,6 @@ namespace NLoggify.UnitTests.Config
         /// </summary>
         /// <param name="filePath">The log file path to be validated.</param>
         /// <param name="shouldThrowException">Indicates whether an exception should be thrown for the given path.</param>
-        /// <param name="hasFilename">Indicates whether to test even the filename or not.</param>
         [Theory]
         [InlineData(null, true)] // Path is null
         [InlineData("", true)] // Empty path is invalid

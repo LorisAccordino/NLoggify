@@ -1,9 +1,9 @@
-﻿using NLoggify.Logging.Loggers.Output;
-using NLoggify.Logging.Loggers.Storage;
-using NLoggify.Logging.Config.Advanced;
+﻿using NLoggify.Logging.Loggers.Transient;
+using NLoggify.Logging.Loggers.Persistent;
 using NLoggify.Logging.Loggers;
+using NLoggify.Logging.Config;
 
-namespace NLoggify.Logging.Config
+namespace NLoggify.Logging.Core
 {
     /// <summary>
     /// Configuration builder for the logging system. It uses the "Builder" pattern to enable the creation
@@ -16,14 +16,10 @@ namespace NLoggify.Logging.Config
         /// </summary>
         public static bool SuppressWarnings { get; set; } = false;
 
-        // Indicate whether the logger has been built or not
-        private bool isBuilt = false;
+        private bool isBuilt = false; // Whether the logger has been built or not
+        private List<Logger> loggers = new List<Logger>(); // List of loggers to use for log management.
 
-        // List of (already configured) loggers to use for log management.
-        private List<Logger> loggers = new List<Logger>();
-
-
-        // Private constructor to prevent direct instantiation of the class
+        // Internal constructor to prevent direct instantiation of the class
         internal LoggerBuilder() { }
 
 
@@ -56,7 +52,7 @@ namespace NLoggify.Logging.Config
 
 
         /// <summary>
-        /// Build the loggers system completely configured
+        /// Build the logging system completely configured
         /// </summary>
         public ILogger Build()
         {
@@ -64,7 +60,6 @@ namespace NLoggify.Logging.Config
             if (isBuilt) throw new InvalidOperationException("Logger already built! You cannot reconfigure or rebuild the logger");
 
             ILogger loggerInstance = loggers.Count == 1 ? loggers[0] : new MultiLogger(loggers);
-            //LoggerWrapper.Instance.SetInternalLogger(internalLogger);
             LoggerManager.SetLogger(loggerInstance);
 
             // Mark as built

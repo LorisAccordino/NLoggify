@@ -1,7 +1,7 @@
 ﻿using NLoggify.Utils;
 using System.Diagnostics.CodeAnalysis;
 
-namespace NLoggify.Logging.Config
+namespace NLoggify.Logging.Config.Validation
 {
     /// <summary>
     /// Static class that provides methods to validate configurations parameters
@@ -54,7 +54,7 @@ namespace NLoggify.Logging.Config
         [ExcludeFromCodeCoverage] // No reason to test it
         public static void EnsureDirectoryExists(string filePath)
         {
-            string directory = Path.GetDirectoryName(filePath) ?? throw new ArgumentException("Given directory null!",filePath);
+            string directory = Path.GetDirectoryName(filePath) ?? throw new ArgumentException("Given directory null!", filePath);
             Directory.CreateDirectory(directory);
         }
     }

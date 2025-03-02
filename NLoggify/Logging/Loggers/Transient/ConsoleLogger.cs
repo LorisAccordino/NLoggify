@@ -1,7 +1,7 @@
 ﻿using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Enums;
 
-namespace NLoggify.Logging.Loggers.Output
+namespace NLoggify.Logging.Loggers.Transient
 {
     /// <summary>
     /// A logger that writes log messages to the console (standard output).

@@ -1,4 +1,5 @@
-﻿using NLoggify.Utils;
+﻿using NLoggify.Logging.Config.Validation;
+using NLoggify.Utils;
 
 namespace NLoggify.Logging.Config
 {

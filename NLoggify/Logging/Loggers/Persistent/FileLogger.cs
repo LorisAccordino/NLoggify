@@ -1,6 +1,7 @@
 ﻿using NLoggify.Logging.Config;
+using NLoggify.Logging.Config.Validation;
 
-namespace NLoggify.Logging.Loggers.Storage
+namespace NLoggify.Logging.Loggers.Persistent
 {
     /// <summary>
     /// Base class for file-based loggers, handling file writing operations.

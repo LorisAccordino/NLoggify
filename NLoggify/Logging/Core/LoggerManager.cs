@@ -1,6 +1,6 @@
 ﻿using NLoggify.Logging.Loggers;
 
-namespace NLoggify.Logging.Config
+namespace NLoggify.Logging.Core
 {
     /// <summary>
     /// A centralized manager that serves as a clean entry point of the entire logging system
@@ -18,5 +18,4 @@ namespace NLoggify.Logging.Config
 
         internal static void SetLogger(ILogger logger) => loggerInstance = logger;
     }
-
 }

@@ -32,37 +32,6 @@ namespace NLoggify.Logging.Loggers
         }
 #endif
 
-        /*
-        /// <summary>
-        /// Executes the given action with exclusive access to the logger.
-        /// No other logging operations will be allowed while this executes.
-        /// </summary>
-        /// <param name="action">The action to execute exclusively.</param>
-        public static void RunExclusive(Action action)
-        {
-            lock (sharedLock)
-            {
-                action();
-            }
-        }
-
-        /// <summary>
-        /// Executes the given function with exclusive access to the logger.
-        /// Ensures no other logging operations run concurrently.
-        /// </summary>
-        /// <typeparam name="T">The return type of the function.</typeparam>
-        /// <param name="func">The function to execute exclusively.</param>
-        /// <returns>The result of the executed function.</returns>
-        public static T RunExclusive<T>(Func<T> func)
-        {
-            lock (sharedLock)
-            {
-                return func();
-            }
-        }
-        */
-
-
         internal Logger() : this(new LoggerConfig()) { }
 
         internal Logger(LoggerConfig config)

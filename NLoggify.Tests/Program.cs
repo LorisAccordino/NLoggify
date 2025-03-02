@@ -2,6 +2,7 @@
 using NLoggify.Examples.Simulations;
 using NLoggify.Logging.Config;
 using NLoggify.Logging.Config.Enums;
+using NLoggify.Logging.Core;
 using NLoggify.Logging.Loggers;
 
 public class Program
@@ -18,19 +19,20 @@ public class Program
         consoleConfig.UseColors = false;
 
         FileLoggerConfig fileLoggerConfig = new FileLoggerConfig(config);
-        fileLoggerConfig.FileNamePrefix = "ahahh";
+        //fileLoggerConfig.FileNamePrefix = "output";
 
         LoggerManager.Configure()
-            .WriteToDebug(config)
+            //.WriteToDebug(config)
             .WriteToConsole(consoleConfig)
             .WriteToPlainTextFile(fileLoggerConfig)
+            .WriteToJsonFile(fileLoggerConfig)
             .Build();
 
         ILogger logger = LoggerManager.GetLogger();
 
         NLoggifyExamples.Test(logger);
-        //NLoggifyExamples.StressTest(logger);
-        //NLoggifyExamples.BufferedTest(logger);
-        //IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
+        NLoggifyExamples.StressTest(logger);
+        NLoggifyExamples.BufferedTest(logger);
+        IntensiveSimulations.CpuStressTestWithLogging(logger, 30, 100);
     }
 }

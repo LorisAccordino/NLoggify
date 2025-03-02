@@ -1,7 +1,7 @@
 ﻿using NLoggify.Logging.Config;
 using System.Diagnostics.CodeAnalysis;
 
-namespace NLoggify.Logging.Loggers.Storage
+namespace NLoggify.Logging.Loggers.Persistent
 {
     /// <summary>
     /// Logger that writes logs in plain text format.

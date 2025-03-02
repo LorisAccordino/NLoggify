@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace NLoggify.UnitTests.Config
 {
     /// <summary>
-    /// Unit tests for verifying the log level color configuration.
+    /// Unit tests for verifying the log level color and other console configuration properties.
     /// </summary>
     [Collection("SequentialTests")]
     [ExcludeFromCodeCoverage]
