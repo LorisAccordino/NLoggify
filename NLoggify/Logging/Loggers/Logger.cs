@@ -69,25 +69,20 @@ namespace NLoggify.Logging.Loggers
         /// <param name="level">The log level for the exception.</param>
         /// <param name="action">The action (that contains a potentially exception) to be executed.</param>
         /// <param name="message">The log message to be recorded.</param>
-        /// <returns>True if the exception was thrown, otherwise false</returns>
 #if !DEBUG
         [ExcludeFromCodeCoverage] // No reason to test it
 #endif
-        public virtual bool LogException(LogLevel level, Action action, string message = "")
+        public virtual void LogException(LogLevel level, Action action, string message = "")
         {
             lock (@lock)
             {
-                // Try to execute the given code
                 try
                 {
                     action();
-                    return false;
                 }
                 catch (Exception ex)
                 {
-                    // Log the raised exception
                     Log(level, $"{message}\nException: {ex.Message}\n{ex.StackTrace}");
-                    return true;
                 }
             }
         }
